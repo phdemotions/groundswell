@@ -101,6 +101,19 @@ export interface RawFork {
   created_at?: string | null
 }
 
+/**
+ * `GET /repos/{owner}/{repo}/commits` row (only the fields ship-cadence reads).
+ * The authored/committed dates live under the nested `commit` object; the SHA is
+ * the top-level `sha`. Everything is optional — the parser degrades to null.
+ */
+export interface RawCommit {
+  sha?: string | null
+  commit?: {
+    author?: { date?: string | null } | null
+    committer?: { date?: string | null } | null
+  } | null
+}
+
 // ============================================================================
 // Parsed domain types (total, normalized, safe to render)
 // ============================================================================
@@ -171,6 +184,17 @@ export interface StargazerEvent {
 export interface ForkEvent {
   fullName: string
   createdAt: string | null
+}
+
+/**
+ * A commit event reduced to what ship-cadence needs: a SHA and the authored
+ * timestamp (falling back to the committer date). `committedAt` is null when
+ * neither date parsed — such rows are dropped from the cadence series rather
+ * than fabricating a date.
+ */
+export interface CommitEvent {
+  sha: string
+  committedAt: string | null
 }
 
 /** Snapshot of the rate-limit headers from the most recent response. */

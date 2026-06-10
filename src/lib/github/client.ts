@@ -25,8 +25,10 @@
  */
 
 import type {
+  CommitEvent,
   ForkEvent,
   RateLimitState,
+  RawCommit,
   RawFork,
   RawReferrer,
   RawRelease,
@@ -360,6 +362,42 @@ export class GitHubClient {
     )
     return raw.map(parseFork)
   }
+
+  /**
+   * `GET /repos/{owner}/{repo}/commits` — paginated commit history for the
+   * ship-cadence backfill (U7). Each row is reduced to its SHA + authored
+   * timestamp.
+   *
+   * Used by the backfill burst (the plan's flagged rate-limit risk), so the walk
+   * is bounded two ways:
+   *   - `since` (ISO 8601) asks GitHub to only return commits at or after a date,
+   *     so a re-run can fetch just the recent tail rather than the whole history;
+   *   - `maxPages` hard-caps the `Link`-header walk so a very long-lived repo
+   *     cannot fan out an unbounded number of requests in one backfill.
+   *
+   * @see https://docs.github.com/en/rest/commits/commits#list-commits
+   */
+  async listCommits(
+    owner: string,
+    repo: string,
+    options: { since?: string; perPage?: number; maxPages?: number } = {}
+  ): Promise<CommitEvent[]> {
+    const perPage = clampPerPage(options.perPage)
+    const params = new URLSearchParams({ per_page: String(perPage) })
+    if (typeof options.since === 'string' && options.since.length > 0) {
+      params.set('since', options.since)
+    }
+    const maxPages =
+      typeof options.maxPages === 'number' && options.maxPages > 0
+        ? Math.floor(options.maxPages)
+        : Number.POSITIVE_INFINITY
+    const raw = await this.paginate<RawCommit>(
+      `/repos/${owner}/${repo}/commits?${params.toString()}`,
+      {},
+      maxPages
+    )
+    return raw.map(parseCommit)
+  }
 }
 
 // ============================================================================
@@ -434,6 +472,27 @@ function parseFork(raw: RawFork): ForkEvent {
     fullName: str(raw?.full_name),
     createdAt: strOrNull(raw?.created_at),
   }
+}
+
+export function parseCommit(raw: RawCommit): CommitEvent {
+  // Prefer the author date (when the work was written); fall back to the
+  // committer date (when it landed). Either is a valid ship-cadence signal; a
+  // commit with neither is surfaced as null and dropped by the cadence builder.
+  const authored = strOrNull(raw?.commit?.author?.date)
+  const committed = strOrNull(raw?.commit?.committer?.date)
+  return {
+    sha: str(raw?.sha),
+    committedAt: authored ?? committed,
+  }
+}
+
+/** Clamp a requested page size into GitHub's `[1, 100]` range; default 100. */
+function clampPerPage(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return MAX_PER_PAGE
+  const floored = Math.floor(value)
+  if (floored < 1) return 1
+  if (floored > MAX_PER_PAGE) return MAX_PER_PAGE
+  return floored
 }
 
 // ============================================================================
