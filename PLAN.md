@@ -1,15 +1,15 @@
 # Groundswell — Next
 
-**Branch:** `main` (own repo). Docs uncommitted, no code yet.
+**Branch:** `feat/scaffold-and-mockups` (own repo, unpushed, 9 commits, tree clean, build green).
 
-**Run first next session:**
-`/ce-work docs/plans/2026-06-10-001-feat-groundswell-traction-showcase-plan.md`
-— start `U1` (scaffold) + `U5` (mockup) in parallel.
+**First next session — the gate:**
+**MOCKUP GATE (Josh):** review `docs/mockups/2026-06-10-showcase-rank1-v2.html` (preview port 4594). Approval REQUIRED before building U9/U10 showcase UI.
 
-**Parallel, Josh (manual):** `U0` ops — mint PAT, set secrets in all 3 Vercel buckets, enable Fluid Compute (ISSUES `GS-001`). Line up 2–3 recruiters for the `U6` validation gate (`GS-002`).
+**On approval, build the UI track** (each: implement → /simplify → /deslop → /thermo-nuclear → commit; mockup-first still applies to U11/U12 with a lighter gate):
+U9 chart primitives (d3-shape + motion, barrel export) → U10 public showcase → U11 curation + auth (`proxy.ts`) → U12 private radar.
 
-**State:** planning complete; v2 plan after a 7-persona doc review. No tests/build yet.
+**Committed (Phase A + derived):** U1 scaffold · U2 schema/RLS · U3 client · U4 capture+watchdog · U5 mockups v1 · U7 backfill · U8 derived · refined mockup v2. Full `pnpm build` green.
 
-**Blockers:** `GS-001` (ops) gates live capture; `GS-002` gates Phase C heavy build.
+**Blockers (Josh, manual):** GS-001 ops → live capture; GS-002 recruiters → U6.
 
-**First code (`U1`):** clone `claritas` (App Router + Supabase 3-client) + overlay `allages` (CI build chain, pnpm-workspace allowBuilds, renovate). Pin Next major first (`GS-004`).
+**Before U9/U10:** fold the GS-007 conventions into `groundswell/CLAUDE.md`.
