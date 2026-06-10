@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groundswell — Public Showcase · Ranked Mockup Options · 2026-06-10 (U5 approval gate)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,650&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+ * GROUNDSWELL — Visual Language v0.1 (proposed) · 2026-06-10
+ * Mockup-first approval gate (Unit U5). NOT production CSS.
+ *
+ * This <style> block IS the design-system contract proposed for v1. Every value
+ * here is intended to map 1:1 to src/app/globals.css Tailwind v4 @theme AFTER
+ * Josh approves a ranked option below. DO NOT edit src/app/globals.css from this
+ * artifact — U1 owns it; tokens merge in post-approval (see Token Spec section).
+ *
+ * ARCHITECTURE (mirrors the locked-visual-language v1.2 fourposts precedent):
+ *   Layer 1 — SCALE     palette · type ramp · spacing · geometry · motion · shadow · data-viz.  Static.
+ *   Layer 2 — SEMANTIC  aliases (--color-action, --color-ink, --viz-series-1…). The only layer a theme swaps.
+ *   Layer 3 — PRIMITIVES .surface, .stat, .kicker, .pill, .chart-frame… Consume SEMANTIC only.
+ *
+ * Two style scopes live in this file:
+ *   (a) .doc-*  — the documentation chrome that wraps the ranked options (NOT the product).
+ *   (b) the token + primitive layers below — the actual proposed Groundswell language.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * LAYER 1 + 2 — TOKENS
+ * ───────────────────────────────────────────────────────────────────────── */
+:root {
+  /* ─── SCALE · Neutrals (warm-tinted ink, never pure #000/#fff) ─────────── */
+  --paper:      #FBFAF7;   /* canonical page background — warm bone */
+  --paper-2:    #F4F2EC;   /* sunken wells, table headers, sparkline tracks */
+  --surface-1:  #FFFFFF;   /* card surface */
+  --surface-2:  #FCFBF8;   /* nested surface */
+  --ink-900:    #1A1C1A;   /* primary text / display */
+  --ink-700:    #34403A;   /* headings on surface */
+  --ink-500:    #5A655E;   /* secondary text */
+  --ink-400:    #828D86;   /* meta, axis labels */
+  --ink-300:    #AEB6B0;   /* disabled, faint */
+  --ink-200:    #D8DCD6;   /* hairline borders */
+  --ink-100:    #ECEEE9;   /* faint fills */
+
+  /* ─── SCALE · Signature — "Swell" teal (growth / ocean-swell metaphor) ─── */
+  --swell-50:   #E8F4F1;
+  --swell-100:  #CDE9E2;
+  --swell-200:  #9FD4C8;
+  --swell-300:  #5FB6A6;
+  --swell-500:  #1E8C7A;   /* primary accent — actions, hero curve */
+  --swell-600:  #137061;   /* hover / pressed accent */
+  --swell-700:  #0E574C;   /* accent text on light */
+  --swell-900:  #0A3A33;   /* deepest — display accents */
+
+  /* ─── SCALE · Honesty accent — amber (perishable / "tracking started") ──
+     Amber is NEVER decorative and NEVER a failure color. It marks a young,
+     not-yet-backfillable signal — an honesty cue, not a warning.            */
+  --amber-50:   #FBF1E0;
+  --amber-200:  #F0D7A8;
+  --amber-500:  #C68A2E;
+  --amber-700:  #8A5A14;
+
+  /* ─── SCALE · Type families ───────────────────────────────────────────
+     Fraunces  — optical serif, the editorial voice ("real, shipped work").
+     Geist     — UI sans, modern + neutral but characterful (not Inter).
+     Geist Mono— numerals/data; tabular figures are load-bearing here.      */
+  --serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --sans:  'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono:  'Geist Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* 7-step type ramp — one scale, no ad-hoc sizes.
+     (weight / size / line-height / family) */
+  --t-hero:        600 clamp(40px, 7vw, 76px)/0.98 var(--serif);  /* aggregate number */
+  --t-display:     600 clamp(28px, 4vw, 40px)/1.05 var(--serif);  /* section / project name */
+  --t-heading:     600 22px/1.18 var(--serif);
+  --t-lede:        400 18px/1.5  var(--serif);   /* italic supporting line */
+  --t-body:        400 15px/1.55 var(--sans);
+  --t-body-strong: 500 15px/1.5  var(--sans);
+  --t-label:       500 13px/1.4  var(--sans);
+  --t-meta:        500 11px/1.3  var(--mono);    /* kickers, axis, eyebrow */
+
+  /* Numeric display — tabular mono, three sizes */
+  --t-data-xl:     500 clamp(34px, 5vw, 52px)/1.0 var(--mono);
+  --t-data-lg:     500 30px/1.05 var(--mono);
+  --t-data-md:     500 17px/1.2  var(--mono);
+  --t-data-sm:     500 12px/1.2  var(--mono);
+
+  /* Letter-spacing — 3 anchors, locked */
+  --ls-tight:  -0.01em;   /* large serif display */
+  --ls-meta:    0.08em;   /* mono kickers */
+  --ls-wide:    0.16em;   /* eyebrow small-caps */
+
+  /* Stroke widths — 3 anchors */
+  --stroke-hairline: 1;
+  --stroke-line:     1.6;   /* chart series, icons */
+  --stroke-emph:     2.5;   /* hero curve */
+
+  /* ─── SCALE · Geometry (radii) ────────────────────────────────────────── */
+  --r-xs:    4px;
+  --r-sm:    8px;
+  --r-md:    12px;
+  --r-lg:    16px;
+  --r-xl:    22px;    /* large surfaces / hero panel */
+  --r-pill:  999px;
+
+  /* ─── SCALE · Spacing — 4pt base, 8pt rhythm ──────────────────────────── */
+  --s-1:  4px;  --s-2:  8px;  --s-3: 12px;  --s-4: 16px;  --s-5: 24px;
+  --s-6: 32px;  --s-7: 40px;  --s-8: 56px;  --s-9: 72px;  --s-10: 96px;  --s-11: 128px;
+
+  /* ─── SCALE · Elevation — multi-stop, directional, NEVER default shadow ── */
+  --shadow-hairline: 0 0 0 1px rgba(26,28,26,0.05);
+  --shadow-1: 0 1px 2px rgba(26,40,34,0.04), 0 0 0 1px rgba(26,40,34,0.05);
+  --shadow-2: 0 2px 6px rgba(26,40,34,0.05), 0 14px 30px -12px rgba(26,40,34,0.10);
+  --shadow-3: 0 30px 60px -20px rgba(10,58,51,0.22);
+  --shadow-focus: 0 0 0 3px rgba(30,140,122,0.28);
+
+  /* ─── SCALE · Motion ──────────────────────────────────────────────────── */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-micro:  180ms;
+  --dur-1:      320ms;
+  --dur-curve:  900ms;   /* hero path draw */
+
+  /* ─── SCALE · Data-viz palette ────────────────────────────────────────
+     Categorical — per-project series. Hue-spaced, equal-luminance so no
+     project visually outranks another; swell-500 leads (the owner's flagship).
+     Sequential — single-hue swell ramp for area fills / heat.               */
+  --viz-cat-1: #1E8C7A;   /* swell — flagship */
+  --viz-cat-2: #3A6EA5;   /* harbor blue */
+  --viz-cat-3: #B5683C;   /* clay */
+  --viz-cat-4: #7A5AA6;   /* iris */
+  --viz-cat-5: #4F8C46;   /* moss */
+  --viz-cat-6: #B59A2E;   /* brass */
+  --viz-seq-1: #CDE9E2;
+  --viz-seq-2: #9FD4C8;
+  --viz-seq-3: #5FB6A6;
+  --viz-seq-4: #1E8C7A;
+  --viz-seq-5: #0E574C;
+  --viz-axis:  #D8DCD6;   /* axis line */
+  --viz-grid:  #ECEEE9;   /* gridline (lighter than axis) */
+  --viz-grid-emph: #D8DCD6;
+  --viz-track: #F0EEE8;   /* sparkline / progress track */
+  --viz-tooltip-bg: #1A1C1A;
+  --viz-tooltip-fg: #FBFAF7;
+  --viz-tracking-start: var(--amber-500);   /* "tracking started" boundary */
+  --viz-backfill-fade:  0.5;                /* opacity of backfilled-region wash */
+
+  /* ─── SEMANTIC (Layer 2) — the only layer a theme/dark-mode redefines ─── */
+  --color-bg:        var(--paper);
+  --color-surface:   var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-ink:       var(--ink-900);
+  --color-ink-2:     var(--ink-500);
+  --color-ink-3:     var(--ink-400);
+  --color-border:    var(--ink-200);
+  --color-action:    var(--swell-500);
+  --color-action-2:  var(--swell-600);
+  --color-accent-ink:var(--swell-700);
+  --color-honest:    var(--amber-500);
+  --color-honest-bg: var(--amber-50);
+  --color-focus:     var(--shadow-focus);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * LAYER 3 — PRIMITIVES (consume SEMANTIC only)
+ * Named, mapped to the Opus Vita taxonomy categories in the Token Spec.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/* eyebrow / kicker (taxonomy: anchors→eyebrow) */
+.kicker {
+  font: var(--t-meta);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+  display: inline-flex; align-items: center; gap: var(--s-2);
+}
+.kicker--accent { color: var(--color-accent-ink); }
+.kicker::before {
+  content: ""; width: 18px; height: 1px; background: currentColor; opacity: .55;
+}
+.kicker--bare::before { display: none; }
+
+/* surface — the only card (taxonomy: content_cards→content_card_standard) */
+.surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-1);
+}
+
+/* stat — display numeral + label (taxonomy: typography_registers→display_register_numeric) */
+.stat-num { font: var(--t-data-xl); color: var(--color-ink); letter-spacing: var(--ls-tight); font-variant-numeric: tabular-nums; }
+.stat-label { font: var(--t-label); color: var(--color-ink-3); }
+
+/* delta pill — momentum modifier (taxonomy: controls→status_pill, momentum variant) */
+.delta {
+  display: inline-flex; align-items: center; gap: 5px;
+  font: var(--t-data-sm); font-weight: 600;
+  padding: 4px 9px 4px 7px; border-radius: var(--r-pill);
+  background: var(--swell-50); color: var(--swell-700);
+  border: 1px solid var(--swell-100);
+}
+.delta svg { width: 11px; height: 11px; }
+.delta--flat { background: var(--ink-100); color: var(--ink-500); border-color: var(--ink-200); }
+
+/* tracking-started chip — honesty cue (taxonomy: state_composites, perishable) */
+.tracking {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: var(--t-data-sm); color: var(--amber-700);
+  background: var(--amber-50); border: 1px solid var(--amber-200);
+  padding: 4px 10px; border-radius: var(--r-pill);
+}
+.tracking .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber-500); }
+
+/* cta (taxonomy: controls) */
+.cta {
+  font: var(--t-body-strong); color: #fff; background: var(--color-action);
+  border: none; border-radius: var(--r-md); padding: 11px 18px;
+  display: inline-flex; align-items: center; gap: var(--s-2); cursor: pointer;
+  transition: background var(--dur-micro) var(--ease-soft), transform var(--dur-micro) var(--ease-soft);
+}
+.cta:hover { background: var(--color-action-2); }
+.cta:active { transform: translateY(1px); }
+.cta--ghost { background: transparent; color: var(--color-accent-ink); border: 1px solid var(--color-border); }
+.cta--ghost:hover { background: var(--swell-50); border-color: var(--swell-200); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * DOC CHROME — wraps the ranked options. Visually quieter than the product.
+ * ───────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body {
+  margin: 0; background: #EDEBE4; color: var(--ink-900);
+  font: var(--t-body); font-family: var(--sans);
+}
+.doc-wrap { max-width: 1180px; margin: 0 auto; padding: var(--s-9) var(--s-5) var(--s-11); }
+.doc-masthead { margin-bottom: var(--s-8); }
+.doc-masthead h1 { font: var(--t-display); margin: var(--s-3) 0 var(--s-2); letter-spacing: var(--ls-tight); }
+.doc-masthead .sub { color: var(--ink-500); max-width: 70ch; font-size: 15px; line-height: 1.6; }
+.doc-section { margin: var(--s-10) 0 0; }
+.doc-section > h2 {
+  font: var(--t-heading); margin: 0 0 var(--s-2);
+  display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap;
+}
+.doc-section > .lead { color: var(--ink-500); max-width: 78ch; margin: 0 0 var(--s-5); line-height: 1.6; }
+.doc-card {
+  background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1); padding: var(--s-6); margin-bottom: var(--s-5);
+}
+.doc-rule { border: none; border-top: 1px solid var(--ink-200); margin: var(--s-8) 0; }
+.doc-prebuild { display: grid; gap: var(--s-4); grid-template-columns: 1fr; }
+@media (min-width: 820px) { .doc-prebuild { grid-template-columns: repeat(3, 1fr); } }
+.doc-prebuild .cell { background: var(--paper); border: 1px solid var(--ink-200); border-radius: var(--r-md); padding: var(--s-5); }
+.doc-prebuild .cell h3 { font: var(--t-label); text-transform: uppercase; letter-spacing: var(--ls-meta); color: var(--swell-700); margin: 0 0 var(--s-3); font-size: 11px; }
+.doc-prebuild .cell p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink-700); }
+.doc-prebuild .cell p + p { margin-top: var(--s-3); }
+
+.rankbar { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; margin-bottom: var(--s-2); }
+.rankbadge {
+  font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform: uppercase;
+  padding: 5px 12px; border-radius: var(--r-pill); font-weight: 600;
+}
+.rankbadge--rec { background: var(--swell-500); color: #fff; }
+.rankbadge--alt { background: var(--ink-900); color: var(--paper); }
+.rankbadge--rej { background: transparent; color: var(--ink-400); border: 1px solid var(--ink-200); }
+.ranktitle { font: var(--t-heading); }
+.when-wins { background: var(--swell-50); border-left: 3px solid var(--swell-500); border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: var(--s-4) var(--s-5); margin: var(--s-5) 0 0; }
+.when-wins.rej { background: var(--paper-2); border-left-color: var(--ink-400); }
+.when-wins h4 { margin: 0 0 var(--s-2); font: var(--t-label); text-transform: uppercase; letter-spacing: var(--ls-meta); color: var(--ink-500); font-size: 11px; }
+.when-wins p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink-700); }
+.when-wins p + p { margin-top: var(--s-2); }
+
+/* Device frame that holds each rendered screen */
+.frame-label { font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--ink-400); margin: var(--s-5) 0 var(--s-2); }
+.device {
+  background: var(--color-bg); border: 1px solid var(--ink-300); border-radius: var(--r-lg);
+  overflow: hidden; box-shadow: var(--shadow-2);
+}
+.device--phone { max-width: 390px; }
+
+/* tables */
+table.matrix { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.matrix th, table.matrix td { text-align: left; padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--ink-200); vertical-align: top; }
+table.matrix thead th { font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--ink-500); background: var(--paper); }
+table.matrix tbody tr:hover { background: var(--paper); }
+table.matrix td:first-child { font-weight: 600; white-space: nowrap; }
+.cell-win { color: var(--swell-700); font-weight: 600; }
+.cell-mid { color: var(--amber-700); }
+.cell-bad { color: #9A3B2E; }
+.q-list { counter-reset: q; list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-3); }
+.q-list li { position: relative; padding: var(--s-4) var(--s-5) var(--s-4) 54px; background: var(--paper); border: 1px solid var(--ink-200); border-radius: var(--r-md); line-height: 1.55; font-size: 14px; }
+.q-list li::before { counter-increment: q; content: "Q" counter(q); position: absolute; left: var(--s-4); top: var(--s-4); font: var(--t-data-sm); font-weight: 600; color: var(--swell-700); background: var(--swell-50); border: 1px solid var(--swell-100); border-radius: var(--r-sm); padding: 2px 7px; }
+.q-list li .ans { display: block; margin-top: 6px; color: var(--ink-500); font-size: 13px; }
+.q-list li .ans b { color: var(--swell-700); }
+.tokenpre { background: #16201C; color: #D7E3DC; border-radius: var(--r-md); padding: var(--s-5); overflow-x: auto; font: 12.5px/1.7 var(--mono); }
+.tokenpre .c { color: #6E8C80; }
+.tokenpre .k { color: #7FD4BE; }
+.tokenpre .v { color: #E6C98A; }
+.legend { display: flex; gap: var(--s-4); flex-wrap: wrap; margin-top: var(--s-3); font-size: 12px; color: var(--ink-500); }
+.legend .sw { display: inline-flex; align-items: center; gap: 6px; }
+.legend .chip { width: 14px; height: 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,.08); }
+.toc { display: flex; gap: var(--s-2) var(--s-4); flex-wrap: wrap; margin-top: var(--s-4); font-size: 13px; }
+.toc a { color: var(--swell-700); text-decoration: none; border-bottom: 1px solid var(--swell-200); padding-bottom: 1px; }
+.toc a:hover { border-color: var(--swell-500); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * SHOWCASE SCREEN CHROME — the actual product, rendered inside .device frames.
+ * Scoped under .gs so doc chrome and product never collide.
+ * ───────────────────────────────────────────────────────────────────────── */
+.gs { font-family: var(--sans); color: var(--color-ink); background: var(--color-bg); }
+.gs ::selection { background: var(--swell-100); }
+.gs a { color: inherit; text-decoration: none; }
+
+/* top bar */
+.gs-top { display: flex; align-items: center; justify-content: space-between; padding: var(--s-4) var(--s-6); border-bottom: 1px solid var(--color-border); }
+.gs-brand { display: flex; align-items: center; gap: var(--s-3); }
+.gs-mark { width: 26px; height: 26px; }
+.gs-brand b { font: var(--t-body-strong); letter-spacing: .01em; }
+.gs-brand .who { font: var(--t-data-sm); color: var(--color-ink-3); }
+.gs-topnav { display: flex; align-items: center; gap: var(--s-5); }
+.gs-topnav a { font: var(--t-label); color: var(--color-ink-2); }
+.gs-topnav a:hover { color: var(--color-ink); }
+.gs-topnav a.on { color: var(--color-ink); position: relative; }
+.gs-topnav a.on::after { content:""; position:absolute; left:0; right:0; bottom:-19px; height:2px; background:var(--color-action); }
+
+/* hero */
+.gs-hero { padding: var(--s-9) var(--s-6) var(--s-7); }
+.gs-hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: var(--s-8); align-items: center; }
+.gs-id { font: var(--t-lede); font-style: italic; color: var(--color-ink-2); margin: var(--s-3) 0 var(--s-5); max-width: 34ch; }
+.gs-anchor-row { display: flex; align-items: flex-end; gap: var(--s-7); flex-wrap: wrap; }
+.gs-anchor .stat-num { display:block; line-height:.95; }
+.gs-anchor .sub { display: flex; align-items: center; gap: var(--s-3); margin-top: var(--s-3); }
+.gs-anchor .stat-label { display:block; margin-bottom: 4px; }
+.gs-hero-actions { display: flex; gap: var(--s-3); margin-top: var(--s-7); }
+.gs-chart-card { padding: var(--s-5) var(--s-5) var(--s-4); }
+.gs-chart-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--s-4); }
+.gs-chart-head .t { font: var(--t-label); color: var(--color-ink); font-weight:600; }
+.gs-chart-foot { display: flex; align-items: center; justify-content: space-between; margin-top: var(--s-3); }
+.gs-chart-foot .ax { font: var(--t-data-sm); color: var(--color-ink-3); }
+
+/* section header */
+.gs-band { padding: var(--s-7) var(--s-6); border-top: 1px solid var(--color-border); }
+.gs-section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--s-5); }
+.gs-section-head h2 { font: var(--t-display); margin: var(--s-2) 0 0; letter-spacing: var(--ls-tight); }
+
+/* project ledger rows */
+.gs-rows { display: grid; gap: var(--s-3); }
+.gs-row { display: grid; grid-template-columns: 1.6fr 130px 96px 0.9fr; align-items: center; gap: var(--s-5); padding: var(--s-4) var(--s-5); }
+.gs-row.head { padding-top: 0; padding-bottom: var(--s-2); border:none; box-shadow:none; background:transparent; }
+.gs-row.head span { font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--color-ink-3); }
+.gs-row.head .r-num { text-align: right; }
+.gs-proj { display: flex; align-items: center; gap: var(--s-4); }
+.gs-proj .badge { width: 38px; height: 38px; border-radius: var(--r-md); display:grid; place-items:center; font: var(--t-data-md); font-weight:600; color:#fff; flex:none; }
+.gs-proj .nm { font: var(--t-heading); font-size: 18px; }
+.gs-proj .dk { font: var(--t-data-sm); color: var(--color-ink-3); margin-top: 2px; }
+.gs-row .r-num { text-align: right; }
+.gs-row .r-num .v { font: var(--t-data-md); color: var(--color-ink); font-variant-numeric: tabular-nums; }
+.gs-row .r-num .l { font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform:uppercase; color: var(--color-ink-3); display:block; margin-top:2px; }
+.gs-row .spark { width: 120px; height: 34px; }
+.gs-row-link { transition: box-shadow var(--dur-micro) var(--ease-soft), transform var(--dur-micro) var(--ease-soft); cursor: pointer; }
+.gs-row-link:hover { box-shadow: var(--shadow-2); transform: translateY(-1px); }
+.gs-row-link:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+/* deep cut */
+.gs-deep { padding: var(--s-8) var(--s-6); border-top: 1px solid var(--color-border); background: var(--color-surface-2); }
+.gs-deep-card { padding: var(--s-7); }
+.gs-deep-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--s-8); align-items: start; }
+.gs-deep .statline { display: flex; gap: var(--s-7); margin: var(--s-5) 0; flex-wrap: wrap; }
+.gs-deep .statline .stat-num { font: var(--t-data-lg); }
+.gs-narr { font: var(--t-body); color: var(--color-ink-2); line-height: 1.65; max-width: 46ch; }
+.gs-narr b { color: var(--color-ink); font-weight: 600; }
+
+/* footer / sourcing */
+.gs-foot { padding: var(--s-7) var(--s-6) var(--s-8); border-top: 1px solid var(--color-border); display:flex; justify-content:space-between; gap:var(--s-6); flex-wrap:wrap; }
+.gs-foot .src { font: var(--t-data-sm); color: var(--color-ink-3); max-width: 52ch; line-height: 1.7; }
+.gs-foot .src b { color: var(--color-ink-2); }
+
+/* skeleton — loading primitive (taxonomy: state_composites→skeleton). Shimmer, never a spinner. */
+.gs .sk { background: linear-gradient(100deg, var(--paper-2) 30%, var(--ink-100) 50%, var(--paper-2) 70%); background-size: 200% 100%; border-radius: var(--r-xs); animation: gsshimmer 1.4s var(--ease-soft) infinite; }
+@keyframes gsshimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* tooltip (static demo render — shows the real design) */
+.gs-tip { position: relative; display: inline-block; }
+.gs-tip-pop { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--viz-tooltip-bg); color: var(--viz-tooltip-fg); border-radius: var(--r-sm); padding: 8px 11px; box-shadow: var(--shadow-3); white-space: nowrap; z-index: var(--z-overlay); }
+.gs-tip-pop .tv { font: var(--t-data-md); display:block; }
+.gs-tip-pop .tl { font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; opacity: .7; }
+.gs-tip-pop::after { content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color: var(--viz-tooltip-bg); }
+
+/* hero path draw animation */
+@keyframes gsdraw { from { stroke-dashoffset: var(--len); } to { stroke-dashoffset: 0; } }
+.gs-draw { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: gsdraw var(--dur-curve) var(--ease-out) .25s forwards; }
+@keyframes gsfade { from { opacity: 0; } to { opacity: 1; } }
+.gs-fadein { opacity: 0; animation: gsfade var(--dur-1) var(--ease-soft) .9s forwards; }
+
+/* responsive: the showcase IS a shareable link → mobile is mandatory */
+@media (max-width: 720px) {
+  .gs-hero-grid, .gs-deep-grid { grid-template-columns: 1fr; gap: var(--s-6); }
+  .gs-anchor-row { gap: var(--s-5); }
+  .gs-row { grid-template-columns: 1fr auto; row-gap: var(--s-3); }
+  .gs-row .spark { grid-column: 1 / -1; width: 100%; }
+  .gs-row.head { display: none; }
+  .gs-topnav a:not(.menu) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .gs-draw { stroke-dashoffset: 0 !important; } .gs-fadein { opacity:1 !important; } }
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<!-- ════════════════════ MASTHEAD ════════════════════ -->
+<header class="doc-masthead">
+  <span class="kicker kicker--accent">Groundswell · Unit U5 · Mockup-first approval gate</span>
+  <h1>Public showcase — ranked design options</h1>
+  <p class="sub">
+    The recruiter-facing screen, designed four ways and ranked. This is the deliverable that gets
+    design sign-off <em>and</em> becomes the artifact for the U6 recruiter-validation gate. The bar is
+    dual-standard: Apple-Design-Award craft <em>and</em> enterprise-credible. The reader is a recruiter or
+    hiring manager — often non-technical, roughly a three-second first read. Numbers throughout are
+    realistic and modest on purpose (hundreds of downloads, single-digit daily deltas, small star counts);
+    the whole point is that modest-but-real reads as <em>credible and intentional</em>, never sparse.
+  </p>
+  <nav class="toc" aria-label="Contents">
+    <a href="#prebuild">Pre-build statements</a>
+    <a href="#tokens">Design tokens</a>
+    <a href="#rank1">Rank 1 · Recommended</a>
+    <a href="#rank2">Rank 2</a>
+    <a href="#rank3">Rank 3</a>
+    <a href="#rank4">Rank 4 · Rejected</a>
+    <a href="#matrix">Trade-off matrix</a>
+    <a href="#resolved">Resolved decisions</a>
+    <a href="#questions">Open questions</a>
+  </nav>
+</header>
+
+<!-- ════════════════════ PRE-BUILD STATEMENTS ════════════════════ -->
+<section class="doc-section" id="prebuild">
+  <h2>The three pre-build statements</h2>
+  <p class="lead">Per the frontend-design protocol: written before any screen, so the direction is committed and redirectable up front. These hold across all four ranked options — the options differ in <em>composition</em>, not in voice.</p>
+  <div class="doc-prebuild">
+    <div class="cell">
+      <h3>1 · Visual thesis</h3>
+      <p>Quiet editorial confidence — warm bone paper, an optical serif (Fraunces) carrying gravitas, tabular monospace numerals that read like instruments, one disciplined "swell" teal for momentum.</p>
+      <p>The feeling is a <em>well-kept lab notebook</em>, not a SaaS dashboard: the craft of the page is itself the proof that this person ships real, careful work. Restraint is the flex.</p>
+    </div>
+    <div class="cell">
+      <h3>2 · Content plan</h3>
+      <p><b>Above the fold:</b> identity line → one large <em>absolute aggregate anchor</em> (total downloads + total stars across all projects) → momentum as a supporting modifier → a single backfilled growth curve that is real at cold-start.</p>
+      <p><b>Below:</b> the project ledger (a handful of real projects, ranked), then the killer-project deep cut (citegeist). Footer: how the numbers are sourced + "tracking started" honesty note.</p>
+    </div>
+    <div class="cell">
+      <h3>3 · Interaction plan</h3>
+      <p><b>Hero curve draws once</b> on load (path-length reveal, ~900ms, then still). <b>Aggregate number counts up</b> from a near value (~600ms) so the eye lands on it. <b>Sparkline rows lift</b> 1px with a shadow on hover/focus and reveal a portal tooltip.</p>
+      <p>All three are gated by <code>prefers-reduced-motion</code>. Nothing loops; nothing decorates. Motion explains where the eye should go, then gets out of the way.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="doc-rule">
+
+<!-- ════════════════════ DESIGN TOKEN SPEC ════════════════════ -->
+<section class="doc-section" id="tokens">
+  <h2>Design tokens <span class="kicker kicker--bare">spec · proposed v0.1</span></h2>
+  <p class="lead">
+    Three layers — scale → semantic → primitives — mirroring the locked-visual-language precedent in
+    <code>fourposts</code>. Every value below is the same one driving the rendered screens lower in this
+    file. On approval these merge into <code>src/app/globals.css</code> as a Tailwind v4 <code>@theme</code>
+    (U1 owns that file; <strong>this artifact does not edit it</strong>). The data-viz palette is a first-class
+    layer because charts are the product, not decoration.
+  </p>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Layer 1 · Scale — type</span>
+    <table class="matrix" style="margin-top:var(--s-3)">
+      <thead><tr><th>Token</th><th>Family</th><th>Weight / size / line</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>--t-hero</td><td>Fraunces</td><td>600 · 40–76px (clamp) · 0.98</td><td>The aggregate anchor numeral context</td></tr>
+        <tr><td>--t-display</td><td>Fraunces</td><td>600 · 28–40px · 1.05</td><td>Section + project names</td></tr>
+        <tr><td>--t-lede</td><td>Fraunces italic</td><td>400 · 18px · 1.5</td><td>Supporting editorial line</td></tr>
+        <tr><td>--t-body</td><td>Geist</td><td>400 · 15px · 1.55</td><td>Body / UI text</td></tr>
+        <tr><td>--t-meta</td><td>Geist Mono</td><td>500 · 11px · 1.3 · 0.16em</td><td>Eyebrows, axis labels, kickers</td></tr>
+        <tr><td>--t-data-xl / lg / md / sm</td><td>Geist Mono</td><td>500 · 52 / 30 / 17 / 12px · tabular</td><td>All numerals — stats, deltas, axes</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:var(--s-4) 0 0; font-size:13px; color:var(--ink-500)">
+      Three families, no more. Fraunces is the point of view (an optical serif — characterful, not the
+      Inter-everywhere default). Geist is the neutral UI voice (and a nod to the Vercel host). Geist Mono
+      carries every number with tabular figures so columns and deltas align to the pixel.
+      Scales: radii <code>4·8·12·16·22·999</code> · spacing 4pt base on an 8pt rhythm
+      <code>4·8·12·16·24·32·40·56·72·96·128</code> · strokes <code>1·1.6·2.5</code> ·
+      letter-spacing <code>-0.01 · 0.08 · 0.16em</code>. Any value off these scales is forbidden.
+    </p>
+  </div>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Layer 1 · Scale — color</span>
+    <div class="legend" style="margin-top:var(--s-4); gap:var(--s-5)">
+      <span class="sw"><span class="chip" style="background:#FBFAF7"></span> paper</span>
+      <span class="sw"><span class="chip" style="background:#F4F2EC"></span> paper-2</span>
+      <span class="sw"><span class="chip" style="background:#1A1C1A"></span> ink-900</span>
+      <span class="sw"><span class="chip" style="background:#5A655E"></span> ink-500</span>
+      <span class="sw"><span class="chip" style="background:#D8DCD6"></span> ink-200</span>
+    </div>
+    <div class="legend" style="margin-top:var(--s-3); gap:var(--s-5)">
+      <span class="sw"><span class="chip" style="background:#E8F4F1"></span> swell-50</span>
+      <span class="sw"><span class="chip" style="background:#5FB6A6"></span> swell-300</span>
+      <span class="sw"><span class="chip" style="background:#1E8C7A"></span> swell-500 <b style="color:var(--swell-700)">· accent</b></span>
+      <span class="sw"><span class="chip" style="background:#0E574C"></span> swell-700</span>
+      <span class="sw"><span class="chip" style="background:#C68A2E"></span> amber-500 <b style="color:var(--amber-700)">· honesty</b></span>
+    </div>
+    <p style="margin:var(--s-4) 0 0; font-size:13px; color:var(--ink-500)">
+      One signature accent (swell teal — growth, the ocean-swell metaphor behind the name). Amber is the
+      <em>only</em> second hue and it is never decorative and never a failure color: it exclusively marks a
+      young, not-yet-backfillable signal ("tracking started"). Neutrals are warm-tinted ink — no pure
+      <code>#000</code>/<code>#fff</code>. Body text <code>ink-900 on paper</code> clears WCAG AA (≈13.5:1);
+      <code>swell-700 on paper</code> ≈ 6.1:1.
+    </p>
+  </div>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Layer 1 · Scale — data-viz palette</span>
+    <p style="margin:var(--s-3) 0 var(--s-4); font-size:13px; color:var(--ink-500)">
+      <b>Categorical</b> (per-project series) — hue-spaced and luminance-matched so no project visually
+      outranks another; swell leads as the flagship. <b>Sequential</b> — single-hue swell ramp for area
+      fills and density. Plus dedicated axis / grid / track / tooltip / tracking-boundary tokens.
+    </p>
+    <div class="legend" style="gap:var(--s-4)">
+      <span class="sw"><span class="chip" style="background:#1E8C7A"></span> cat-1 swell</span>
+      <span class="sw"><span class="chip" style="background:#3A6EA5"></span> cat-2 harbor</span>
+      <span class="sw"><span class="chip" style="background:#B5683C"></span> cat-3 clay</span>
+      <span class="sw"><span class="chip" style="background:#7A5AA6"></span> cat-4 iris</span>
+      <span class="sw"><span class="chip" style="background:#4F8C46"></span> cat-5 moss</span>
+      <span class="sw"><span class="chip" style="background:#B59A2E"></span> cat-6 brass</span>
+    </div>
+    <div class="legend" style="margin-top:var(--s-3); gap:6px; align-items:center">
+      <span style="font-size:12px;color:var(--ink-500);margin-right:6px">sequential</span>
+      <span class="chip" style="background:#CDE9E2;border-radius:3px"></span>
+      <span class="chip" style="background:#9FD4C8;border-radius:3px"></span>
+      <span class="chip" style="background:#5FB6A6;border-radius:3px"></span>
+      <span class="chip" style="background:#1E8C7A;border-radius:3px"></span>
+      <span class="chip" style="background:#0E574C;border-radius:3px"></span>
+    </div>
+    <div class="legend" style="margin-top:var(--s-3); gap:var(--s-5)">
+      <span class="sw"><span class="chip" style="background:#D8DCD6"></span> --viz-axis</span>
+      <span class="sw"><span class="chip" style="background:#ECEEE9"></span> --viz-grid</span>
+      <span class="sw"><span class="chip" style="background:#F0EEE8"></span> --viz-track</span>
+      <span class="sw"><span class="chip" style="background:#1A1C1A"></span> --viz-tooltip-bg</span>
+      <span class="sw"><span class="chip" style="background:#C68A2E"></span> --viz-tracking-start</span>
+    </div>
+  </div>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Layer 2 · Semantic &amp; Layer 3 · Primitives</span>
+    <p style="margin:var(--s-3) 0; font-size:13px; color:var(--ink-500)">
+      Semantic aliases are the <em>only</em> layer a future dark theme would redefine. Primitives consume
+      semantic tokens exclusively — never raw scale — which is what makes the v1 light-lock cheap to revisit
+      later. Primitives map onto the Opus Vita primitive taxonomy categories:
+    </p>
+    <table class="matrix">
+      <thead><tr><th>Primitive</th><th>Taxonomy category → type</th><th>Role on the showcase</th></tr></thead>
+      <tbody>
+        <tr><td>.kicker</td><td>anchors → <code>eyebrow</code></td><td>Mono small-caps section/context label + rule</td></tr>
+        <tr><td>.surface</td><td>content_cards → <code>content_card_standard</code></td><td>The only card; project rows + deep-cut panel</td></tr>
+        <tr><td>.stat-num / .stat-label</td><td>typography_registers → <code>display_register_numeric</code></td><td>The aggregate anchor + per-project totals</td></tr>
+        <tr><td>.delta</td><td>controls → <code>status_pill</code> (momentum variant)</td><td>Supporting "+N this month" modifier</td></tr>
+        <tr><td>.tracking</td><td>state_composites (perishable)</td><td>The "tracking started" honesty cue</td></tr>
+        <tr><td>&lt;Sparkline&gt; / &lt;GrowthAreaChart&gt;</td><td>data_density → <code>sparkline</code> + new <code>growth_area</code></td><td>Backfilled curve (hero) + per-project trend (rows)</td></tr>
+        <tr><td>.cta / .cta--ghost</td><td>controls</td><td>Share link · export image · view project</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:var(--s-3) 0 0; font-size:12.5px; color:var(--ink-400)">
+      <code>growth_area</code> is a proposed additive taxonomy entry (web data-density). It is the one new
+      primitive type this product introduces; everything else maps onto existing v1.0.0 types. Per
+      governance it would land via a MINOR RFC — flagged in the Open Questions below, not assumed.
+    </p>
+  </div>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Production mapping — mockup token → globals.css @theme</span>
+    <pre class="tokenpre" aria-label="Tailwind v4 @theme mapping sketch"><span class="c">/* On approval, U1 merges these into src/app/globals.css. 1:1, no redesign. */</span>
+<span class="k">@theme</span> {
+  <span class="c">/* scale */</span>
+  <span class="k">--color-paper</span>:      <span class="v">#FBFAF7</span>;
+  <span class="k">--color-ink-900</span>:    <span class="v">#1A1C1A</span>;
+  <span class="k">--color-swell-500</span>:  <span class="v">#1E8C7A</span>;
+  <span class="k">--font-serif</span>:       <span class="v">"Fraunces", Georgia, serif</span>;
+  <span class="k">--font-mono</span>:        <span class="v">"Geist Mono", ui-monospace, monospace</span>;
+  <span class="k">--radius-xl</span>:        <span class="v">22px</span>;
+  <span class="c">/* data-viz — consumed by the chart primitives barrel */</span>
+  <span class="k">--color-viz-cat-1</span>:  <span class="v">#1E8C7A</span>;   <span class="c">/* … cat-2…6 */</span>
+  <span class="k">--color-viz-axis</span>:   <span class="v">#D8DCD6</span>;
+  <span class="k">--color-viz-tracking-start</span>: <span class="v">#C68A2E</span>;
+}</pre>
+    <p style="margin:var(--s-3) 0 0; font-size:12.5px; color:var(--ink-400)">
+      Token names gain the Tailwind <code>--color-*</code> / <code>--font-*</code> / <code>--radius-*</code>
+      prefixes; values are unchanged. The mockup is the contract — the visual language ships from here.
+    </p>
+  </div>
+</section>
+
+<hr class="doc-rule">
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     RANKED OPTIONS
+     ════════════════════════════════════════════════════════════════════════ -->
+<section class="doc-section">
+  <h2>Ranked options</h2>
+  <p class="lead">
+    Four compositions of the same content and tokens, ranked by how well each serves the load-bearing
+    constraint: a non-technical recruiter must reach <em>"this person ships real, growing software"</em> in
+    ~3 seconds, and the cold-start state (only stars/forks/ship-cadence backfillable; downloads/views young)
+    must read as intentional, never empty. Each option below is a <strong>fully rendered screen</strong>,
+    not a wireframe. Rank 1 is the recommendation.
+  </p>
+</section>
+
+<!-- ───────────────────────── RANK 1 · RECOMMENDED ───────────────────────── -->
+<section class="doc-section" id="rank1">
+  <div class="rankbar">
+    <span class="rankbadge rankbadge--rec">Rank 1 · Recommended</span>
+    <span class="ranktitle">The Aggregate Ledger</span>
+  </div>
+  <p class="lead" style="margin-bottom:var(--s-3)">
+    Absolute aggregate anchor leads; one backfilled curve proves momentum is real at cold-start; a ranked
+    project ledger below gives the breadth a single number can't. Editorial, calm, instrument-grade numerals.
+  </p>
+
+  <div class="frame-label">Desktop · 1180px (rendered at scale)</div>
+  <div class="device gs" role="img" aria-label="Groundswell public showcase — recommended layout">
+    <!-- TOP BAR -->
+    <div class="gs-top">
+      <div class="gs-brand">
+        <svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <rect width="28" height="28" rx="8" fill="#0E574C"/>
+          <path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M4 22 C 8 22, 9 7, 14 7 C 19 7, 20 13, 24 13" stroke="#E8F4F1" stroke-width="2.2" stroke-linecap="round" opacity=".85"/>
+        </svg>
+        <div>
+          <b>Groundswell</b>
+          <div class="who">josh gonzales · builder</div>
+        </div>
+      </div>
+      <nav class="gs-topnav" aria-label="Showcase sections">
+        <a href="#" class="on">Overview</a>
+        <a href="#">Projects</a>
+        <a href="#">citegeist</a>
+        <a href="#" class="cta cta--ghost menu" style="padding:7px 14px">Share ↗</a>
+      </nav>
+    </div>
+
+    <!-- HERO -->
+    <header class="gs-hero">
+      <div class="gs-hero-grid">
+        <div>
+          <span class="kicker kicker--accent">Open-source traction · updated daily</span>
+          <p class="gs-id">Eleven shipped tools for researchers and developers. Here is the adoption, measured over time.</p>
+          <div class="gs-anchor-row">
+            <div class="gs-anchor">
+              <span class="stat-label">Total downloads · all projects</span>
+              <span class="stat-num gs-fadein">2,418</span>
+              <div class="sub">
+                <span class="delta"><svg viewBox="0 0 12 12" fill="none"><path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>+214 this month</span>
+                <span class="tracking"><span class="dot"></span>downloads tracked since Apr 2026</span>
+              </div>
+            </div>
+            <div class="gs-anchor">
+              <span class="stat-label">Total stars · all projects</span>
+              <span class="stat-num gs-fadein" style="animation-delay:1.05s">247</span>
+              <div class="sub">
+                <span class="delta"><svg viewBox="0 0 12 12" fill="none"><path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>+39 this month</span>
+              </div>
+            </div>
+          </div>
+          <div class="gs-hero-actions">
+            <button class="cta">Share this page <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="cta cta--ghost">Export image</button>
+          </div>
+        </div>
+
+        <!-- HERO CHART: backfilled total-stars curve (real at cold-start) -->
+        <div class="surface gs-chart-card">
+          <div class="gs-chart-head">
+            <span class="t">Stars over time · all projects</span>
+            <span class="kicker kicker--bare">18 months</span>
+          </div>
+          <svg viewBox="0 0 760 230" width="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Combined star growth across all projects climbing from 3 to 247 over 18 months; download tracking began in the final 3 months.">
+            <defs>
+              <linearGradient id="r1area" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1E8C7A" stop-opacity="0.16"/>
+                <stop offset="1" stop-color="#1E8C7A" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- gridlines -->
+            <g stroke="var(--viz-grid)" stroke-width="1">
+              <line x1="18" y1="58" x2="742" y2="58"/><line x1="18" y1="118" x2="742" y2="118"/><line x1="18" y1="178" x2="742" y2="178"/>
+            </g>
+            <!-- backfilled-region wash + capture boundary marker -->
+            <rect x="656.8" y="18" width="85.2" height="194" fill="#FBF1E0" opacity="0.45"/>
+            <line x1="656.8" y1="14" x2="656.8" y2="216" stroke="var(--viz-tracking-start)" stroke-width="1.4" stroke-dasharray="3 3"/>
+            <text x="652" y="30" text-anchor="end" font-family="Geist Mono" font-size="10" letter-spacing="0.04em" fill="#8A5A14">DOWNLOADS TRACKING ▶</text>
+            <!-- area + line -->
+            <path d="M 18.0 212.0 C 25.1 211.7, 46.4 211.1, 60.6 210.4 C 74.8 209.7, 89.0 208.8, 103.2 208.0 C 117.4 207.2, 131.6 206.6, 145.8 205.6 C 160.0 204.7, 174.2 203.4, 188.4 202.5 C 202.5 201.5, 216.7 201.3, 230.9 200.1 C 245.1 198.9, 259.3 196.8, 273.5 195.3 C 287.7 193.8, 301.9 192.5, 316.1 191.3 C 330.3 190.1, 344.5 189.7, 358.7 188.1 C 372.9 186.6, 387.1 184.3, 401.3 181.8 C 415.5 179.3, 429.7 176.0, 443.9 173.0 C 458.1 170.1, 472.3 167.9, 486.5 164.3 C 500.7 160.7, 514.9 156.2, 529.1 151.6 C 543.3 146.9, 557.5 143.0, 571.6 136.5 C 585.8 130.0, 600.0 121.8, 614.2 112.6 C 628.4 103.5, 642.6 92.2, 656.8 81.6 C 671.0 71.0, 685.2 59.6, 699.4 49.0 C 713.6 38.4, 734.9 23.2, 742.0 18.0 L 742.0 212.0 L 18 212.0 Z" fill="url(#r1area)"/>
+            <path class="gs-draw" style="--len:1050" d="M 18.0 212.0 C 25.1 211.7, 46.4 211.1, 60.6 210.4 C 74.8 209.7, 89.0 208.8, 103.2 208.0 C 117.4 207.2, 131.6 206.6, 145.8 205.6 C 160.0 204.7, 174.2 203.4, 188.4 202.5 C 202.5 201.5, 216.7 201.3, 230.9 200.1 C 245.1 198.9, 259.3 196.8, 273.5 195.3 C 287.7 193.8, 301.9 192.5, 316.1 191.3 C 330.3 190.1, 344.5 189.7, 358.7 188.1 C 372.9 186.6, 387.1 184.3, 401.3 181.8 C 415.5 179.3, 429.7 176.0, 443.9 173.0 C 458.1 170.1, 472.3 167.9, 486.5 164.3 C 500.7 160.7, 514.9 156.2, 529.1 151.6 C 543.3 146.9, 557.5 143.0, 571.6 136.5 C 585.8 130.0, 600.0 121.8, 614.2 112.6 C 628.4 103.5, 642.6 92.2, 656.8 81.6 C 671.0 71.0, 685.2 59.6, 699.4 49.0 C 713.6 38.4, 734.9 23.2, 742.0 18.0" fill="none" stroke="var(--viz-cat-1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- end dot + tooltip demo -->
+            <circle cx="742" cy="18" r="4" fill="#fff" stroke="var(--viz-cat-1)" stroke-width="2.5"/>
+          </svg>
+          <div class="gs-chart-foot">
+            <span class="ax">Jan 2025</span>
+            <span class="ax">stars backfilled from stargazer history · downloads from Apr 2026</span>
+            <span class="ax">Jun 2026</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PROJECT LEDGER -->
+    <section class="gs-band">
+      <div class="gs-section-head">
+        <div>
+          <span class="kicker">The projects</span>
+          <h2>Six tracked, ranked by momentum</h2>
+        </div>
+        <span class="kicker kicker--bare" style="align-self:flex-end">★ = stars · ↓ = downloads · trend = 12-wk stars</span>
+      </div>
+      <div class="gs-rows">
+        <div class="gs-row head">
+          <span>Project</span><span>Trend · 12 wk</span><span class="r-num">Stars</span><span class="r-num">Downloads</span>
+        </div>
+
+        <!-- citegeist (flagship) -->
+        <a class="surface gs-row gs-row-link" tabindex="0">
+          <div class="gs-proj">
+            <span class="badge" style="background:#1E8C7A">cg</span>
+            <div><div class="nm">citegeist</div><div class="dk">citation-graph explorer · TS</div></div>
+          </div>
+          <svg class="spark" viewBox="0 0 120 34" aria-label="citegeist stars trend, rising">
+            <path d="M 4.0 30.0 C 5.7 29.9, 10.8 29.4, 14.2 29.3 C 17.6 29.2, 21.0 29.5, 24.4 29.3 C 27.8 29.0, 31.2 28.3, 34.5 27.8 C 37.9 27.4, 41.3 26.9, 44.7 26.4 C 48.1 25.9, 51.5 25.5, 54.9 24.9 C 58.3 24.3, 61.7 23.5, 65.1 22.8 C 68.5 22.1, 71.9 21.5, 75.3 20.6 C 78.7 19.8, 82.1 18.8, 85.5 17.7 C 88.8 16.6, 92.2 15.6, 95.6 14.1 C 99.0 12.7, 102.4 10.7, 105.8 9.1 C 109.2 7.4, 114.3 4.8, 116.0 4.0 L 116.0 30.0 L 4.0 30.0 Z" fill="#1E8C7A" fill-opacity="0.12"/>
+            <path d="M 4.0 30.0 C 5.7 29.9, 10.8 29.4, 14.2 29.3 C 17.6 29.2, 21.0 29.5, 24.4 29.3 C 27.8 29.0, 31.2 28.3, 34.5 27.8 C 37.9 27.4, 41.3 26.9, 44.7 26.4 C 48.1 25.9, 51.5 25.5, 54.9 24.9 C 58.3 24.3, 61.7 23.5, 65.1 22.8 C 68.5 22.1, 71.9 21.5, 75.3 20.6 C 78.7 19.8, 82.1 18.8, 85.5 17.7 C 88.8 16.6, 92.2 15.6, 95.6 14.1 C 99.0 12.7, 102.4 10.7, 105.8 9.1 C 109.2 7.4, 114.3 4.8, 116.0 4.0" fill="none" stroke="#1E8C7A" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="116" cy="4" r="2.4" fill="#1E8C7A"/>
+          </svg>
+          <div class="r-num"><span class="v">38</span><span class="l delta" style="background:none;border:none;padding:0;color:var(--swell-700)">+14</span></div>
+          <div class="r-num"><span class="v">1,043</span><span class="l">+126 / mo</span></div>
+        </a>
+
+        <!-- provenance -->
+        <a class="surface gs-row gs-row-link" tabindex="0">
+          <div class="gs-proj">
+            <span class="badge" style="background:#3A6EA5">pr</span>
+            <div><div class="nm">provenance</div><div class="dk">evidence→writing · Obsidian</div></div>
+          </div>
+          <svg class="spark" viewBox="0 0 120 34" aria-label="provenance stars trend, rising">
+            <path d="M 4.0 30.0 C 5.7 30.0, 10.8 30.3, 14.2 30.0 C 17.6 29.7, 21.0 28.3, 24.4 28.0 C 27.8 27.7, 31.2 28.3, 34.5 28.0 C 37.9 27.7, 41.3 26.7, 44.7 26.0 C 48.1 25.3, 51.5 24.3, 54.9 24.0 C 58.3 23.7, 61.7 24.7, 65.1 24.0 C 68.5 23.3, 71.9 21.3, 75.3 20.0 C 78.7 18.7, 82.1 17.0, 85.5 16.0 C 88.8 15.0, 92.2 15.0, 95.6 14.0 C 99.0 13.0, 102.4 11.7, 105.8 10.0 C 109.2 8.3, 114.3 5.0, 116.0 4.0" fill="none" stroke="#3A6EA5" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="116" cy="4" r="2.4" fill="#3A6EA5"/>
+          </svg>
+          <div class="r-num"><span class="v">31</span><span class="l" style="color:var(--swell-700)">+9</span></div>
+          <div class="r-num"><span class="v">612</span><span class="l">+58 / mo</span></div>
+        </a>
+
+        <!-- stemma -->
+        <a class="surface gs-row gs-row-link" tabindex="0">
+          <div class="gs-proj">
+            <span class="badge" style="background:#B5683C">st</span>
+            <div><div class="nm">stemma</div><div class="dk">Zotero citation map · Obsidian</div></div>
+          </div>
+          <svg class="spark" viewBox="0 0 120 34" aria-label="stemma stars trend, rising">
+            <path d="M 4.0 30.0 C 5.7 29.5, 10.8 27.6, 14.2 27.1 C 17.6 26.6, 21.0 27.6, 24.4 27.1 C 27.8 26.6, 31.2 24.7, 34.5 24.2 C 37.9 23.7, 41.3 24.7, 44.7 24.2 C 48.1 23.7, 51.5 21.8, 54.9 21.3 C 58.3 20.9, 61.7 21.8, 65.1 21.3 C 68.5 20.9, 71.9 19.4, 75.3 18.4 C 78.7 17.5, 82.1 16.5, 85.5 15.6 C 88.8 14.6, 92.2 13.6, 95.6 12.7 C 99.0 11.7, 102.4 11.2, 105.8 9.8 C 109.2 8.3, 114.3 5.0, 116.0 4.0" fill="none" stroke="#B5683C" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="116" cy="4" r="2.4" fill="#B5683C"/>
+          </svg>
+          <div class="r-num"><span class="v">24</span><span class="l" style="color:var(--swell-700)">+6</span></div>
+          <div class="r-num"><span class="v">488</span><span class="l">+41 / mo</span></div>
+        </a>
+
+        <!-- glimpse — YOUNG signal, honest tracking treatment -->
+        <a class="surface gs-row gs-row-link" tabindex="0">
+          <div class="gs-proj">
+            <span class="badge" style="background:#7A5AA6">gl</span>
+            <div><div class="nm">glimpse</div><div class="dk">local-data infographics · TS</div></div>
+          </div>
+          <svg class="spark" viewBox="0 0 120 34" aria-label="glimpse stars trend, early">
+            <path d="M 4.0 30.0 C 5.7 30.0, 10.8 30.7, 14.2 30.0 C 17.6 29.3, 21.0 26.4, 24.4 25.7 C 27.8 24.9, 31.2 25.7, 34.5 25.7 C 37.9 25.7, 41.3 26.4, 44.7 25.7 C 48.1 24.9, 51.5 22.1, 54.9 21.3 C 58.3 20.6, 61.7 22.1, 65.1 21.3 C 68.5 20.6, 71.9 17.7, 75.3 17.0 C 78.7 16.3, 82.1 17.7, 85.5 17.0 C 88.8 16.3, 92.2 14.1, 95.6 12.7 C 99.0 11.2, 102.4 9.8, 105.8 8.3 C 109.2 6.9, 114.3 4.7, 116.0 4.0" fill="none" stroke="#7A5AA6" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="116" cy="4" r="2.4" fill="#7A5AA6"/>
+          </svg>
+          <div class="r-num"><span class="v">17</span><span class="l" style="color:var(--swell-700)">+5</span></div>
+          <div class="r-num"><span class="tracking" style="font-size:11px;padding:3px 8px"><span class="dot"></span>tracking · 3 wk</span></div>
+        </a>
+
+        <!-- marginalia -->
+        <a class="surface gs-row gs-row-link" tabindex="0">
+          <div class="gs-proj">
+            <span class="badge" style="background:#4F8C46">mg</span>
+            <div><div class="nm">marginalia</div><div class="dk">research IDE over Zotero · TS</div></div>
+          </div>
+          <svg class="spark" viewBox="0 0 120 34" aria-label="marginalia stars trend, rising">
+            <path d="M 4.0 30.0 C 5.7 29.3, 10.8 26.4, 14.2 25.7 C 17.6 24.9, 21.0 26.4, 24.4 25.7 C 27.8 24.9, 31.2 22.1, 34.5 21.3 C 37.9 20.6, 41.3 21.3, 44.7 21.3 C 48.1 21.3, 51.5 22.1, 54.9 21.3 C 58.3 20.6, 61.7 17.7, 65.1 17.0 C 68.5 16.3, 71.9 17.7, 75.3 17.0 C 78.7 16.3, 82.1 13.4, 85.5 12.7 C 88.8 11.9, 92.2 13.4, 95.6 12.7 C 99.0 11.9, 102.4 9.8, 105.8 8.3 C 109.2 6.9, 114.3 4.7, 116.0 4.0" fill="none" stroke="#4F8C46" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="116" cy="4" r="2.4" fill="#4F8C46"/>
+          </svg>
+          <div class="r-num"><span class="v">15</span><span class="l" style="color:var(--swell-700)">+4</span></div>
+          <div class="r-num"><span class="v">— </span><span class="l">no releases yet</span></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- KILLER PROJECT DEEP CUT: citegeist -->
+    <section class="gs-deep">
+      <div class="surface gs-deep-card">
+        <div class="gs-deep-grid">
+          <div>
+            <span class="kicker kicker--accent">The killer project</span>
+            <h2 style="font:var(--t-display);margin:var(--s-2) 0 0;letter-spacing:var(--ls-tight)">citegeist</h2>
+            <div class="statline">
+              <div><span class="stat-label">Downloads</span><span class="stat-num" style="font:var(--t-data-lg)">1,043</span></div>
+              <div><span class="stat-label">Stars</span><span class="stat-num" style="font:var(--t-data-lg)">38</span></div>
+              <div><span class="stat-label">Forks</span><span class="stat-num" style="font:var(--t-data-lg)">9</span></div>
+            </div>
+            <p class="gs-narr"><b>A citation-graph explorer that researchers actually install.</b> Stars have climbed steadily for a year; since download tracking began in April it has added <b>126 downloads a month</b>. The two series share an axis with an explicit boundary — the curve is honest about what was reconstructed and what has been measured since.</p>
+            <div class="gs-hero-actions" style="margin-top:var(--s-5)">
+              <button class="cta cta--ghost">Open repository ↗</button>
+            </div>
+          </div>
+
+          <!-- co-plot: backfilled stars + capture-started downloads, per-series boundary -->
+          <div>
+            <div class="gs-chart-head">
+              <span class="t">Stars &amp; downloads over time</span>
+              <span class="kicker kicker--bare">12 months</span>
+            </div>
+            <svg viewBox="0 0 680 200" width="100%" role="img" aria-label="citegeist: backfilled star curve across 12 months reaching 38; download curve begins only at the capture boundary 4 months ago, reaching 1043, with a dashed boundary and amber wash marking where measured data starts.">
+              <defs>
+                <linearGradient id="cgdl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E8C7A" stop-opacity="0.14"/><stop offset="1" stop-color="#1E8C7A" stop-opacity="0"/></linearGradient>
+              </defs>
+              <g stroke="var(--viz-grid)" stroke-width="1"><line x1="16" y1="58" x2="664" y2="58"/><line x1="16" y1="108" x2="664" y2="108"/><line x1="16" y1="158" x2="664" y2="158"/></g>
+              <!-- capture region wash + boundary -->
+              <rect x="487.3" y="16" width="176.7" height="168" fill="#FBF1E0" opacity="0.4"/>
+              <line x1="487.3" y1="12" x2="487.3" y2="186" stroke="var(--viz-tracking-start)" stroke-width="1.4" stroke-dasharray="3 3"/>
+              <text x="493" y="28" font-family="Geist Mono" font-size="10" letter-spacing="0.04em" fill="#8A5A14">◀ DOWNLOADS MEASURED FROM HERE</text>
+              <!-- backfilled stars (full width) -->
+              <path d="M 16.0 184.0 C 25.8 183.2, 55.3 181.7, 74.9 179.5 C 94.5 177.2, 114.2 173.4, 133.8 170.4 C 153.5 167.4, 173.1 165.1, 192.7 161.3 C 212.4 157.5, 232.0 153.0, 251.6 147.7 C 271.3 142.4, 290.9 136.3, 310.5 129.5 C 330.2 122.7, 349.8 113.6, 369.5 106.8 C 389.1 100.0, 408.7 94.7, 428.4 88.6 C 448.0 82.6, 467.6 76.5, 487.3 70.5 C 506.9 64.4, 526.5 58.4, 546.2 52.3 C 565.8 46.3, 585.5 40.2, 605.1 34.2 C 624.7 28.1, 654.2 19.0, 664.0 16.0" fill="none" stroke="var(--viz-cat-2)" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 0"/>
+              <!-- downloads (capture region only) -->
+              <path d="M 487.3 184.0 C 497.1 177.2, 526.5 158.9, 546.2 143.4 C 565.8 128.0, 585.5 112.6, 605.1 91.3 C 624.7 70.1, 654.2 28.6, 664.0 16.0" fill="none" stroke="var(--viz-cat-1)" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="664" cy="16" r="3.5" fill="#fff" stroke="var(--viz-cat-1)" stroke-width="2.5"/>
+              <circle cx="664" cy="16" r="0"/>
+              <circle cx="487.3" cy="184" r="3" fill="var(--viz-cat-1)"/>
+            </svg>
+            <div class="gs-chart-foot" style="margin-top:var(--s-2)">
+              <span class="ax" style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:var(--viz-cat-2);display:inline-block;border-radius:2px"></span>stars (backfilled)</span>
+              <span class="ax" style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:var(--viz-cat-1);display:inline-block;border-radius:2px"></span>downloads (measured)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER / SOURCING -->
+    <footer class="gs-foot">
+      <div class="src"><b>How these numbers are measured.</b> Captured daily from the GitHub API and stored over time. Stars and forks are reconstructed from their full history; downloads and repository traffic are recorded from the day tracking began and cannot be backfilled — where a signal is young, the page says so rather than implying a longer record.</div>
+      <div style="text-align:right">
+        <span class="kicker kicker--bare" style="color:var(--ink-400)">Last updated · 10 Jun 2026, 06:00 UTC</span>
+        <div style="margin-top:var(--s-3)"><button class="cta cta--ghost" style="padding:8px 14px">Share ↗</button></div>
+      </div>
+    </footer>
+  </div><!-- /.device rank1 -->
+
+  <div class="when-wins">
+    <h4>When this wins</h4>
+    <p><b>This is the default recommendation.</b> It wins when the recruiter is non-technical and time-poor: the eye lands on a real four-figure absolute (2,418 downloads · 247 stars) in well under three seconds, momentum sits right beside it as support — never a bare percentage — and the single backfilled curve <em>proves</em> the growth is real on day one, before any perishable signal has accrued. The ranked ledger then answers the "is this breadth or one lucky repo?" question a single hero can't. Editorial serif + instrument numerals read as craft, which is itself a hiring signal.</p>
+    <p>It is also the most <b>honest cold-start design</b>: the amber boundary and "tracking since Apr 2026" treatment turn the product's biggest weakness (young download data) into a visible signal of rigor, satisfying AE1/AE3/AE6 directly.</p>
+  </div>
+</section>
+
+<!-- ───────────────────────── RANK 2 ───────────────────────── -->
+<section class="doc-section" id="rank2">
+  <div class="rankbar">
+    <span class="rankbadge rankbadge--alt">Rank 2</span>
+    <span class="ranktitle">The Momentum Hero</span>
+  </div>
+  <p class="lead" style="margin-bottom:var(--s-3)">
+    The backfilled curve becomes a full-bleed atmospheric backdrop; the aggregate floats over it on a dark
+    "swell" panel. Higher drama, more memorable as a shared link — at some cost to enterprise sobriety.
+  </p>
+  <div class="frame-label">Desktop · hero + ledger strip</div>
+  <div class="device gs" role="img" aria-label="Groundswell showcase — momentum-hero layout">
+
+    <div class="gs-top" style="border-bottom-color:transparent;position:relative;z-index:2">
+      <div class="gs-brand">
+        <svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/><path d="M4 22 C 8 22, 9 7, 14 7 C 19 7, 20 13, 24 13" stroke="#E8F4F1" stroke-width="2.2" stroke-linecap="round" opacity=".85"/></svg>
+        <div><b>Groundswell</b><div class="who">josh gonzales · builder</div></div>
+      </div>
+      <nav class="gs-topnav"><a href="#" class="on">Overview</a><a href="#">Projects</a><a href="#" class="cta cta--ghost menu" style="padding:7px 14px">Share ↗</a></nav>
+    </div>
+
+    <!-- dark hero panel with curve as backdrop -->
+    <header style="position:relative;background:linear-gradient(160deg,#0A3A33 0%,#0E574C 60%,#137061 100%);color:#EAF4F0;padding:var(--s-9) var(--s-6) var(--s-8);overflow:hidden">
+      <svg viewBox="0 0 1120 280" width="100%" height="100%" preserveAspectRatio="none" style="position:absolute;inset:0;opacity:.4" aria-hidden="true">
+        <defs><linearGradient id="r2bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5FB6A6" stop-opacity="0.55"/><stop offset="1" stop-color="#5FB6A6" stop-opacity="0"/></linearGradient></defs>
+        <path d="M 0 268 C 120 264, 240 258, 360 246 C 480 234, 600 214, 720 184 C 840 154, 960 108, 1040 74 C 1090 52, 1110 38, 1120 30 L 1120 280 L 0 280 Z" fill="url(#r2bg)"/>
+        <path d="M 0 268 C 120 264, 240 258, 360 246 C 480 234, 600 214, 720 184 C 840 154, 960 108, 1040 74 C 1090 52, 1110 38, 1120 30" fill="none" stroke="#9FD4C8" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <div style="position:relative;z-index:1;max-width:760px">
+        <span class="kicker" style="color:#9FD4C8">Open-source traction · updated daily</span>
+        <h1 style="font:var(--t-hero);font-size:clamp(40px,6vw,68px);letter-spacing:var(--ls-tight);margin:var(--s-3) 0 var(--s-2);color:#fff">2,418 downloads.</h1>
+        <p style="font:var(--t-lede);font-style:italic;color:#CDE9E2;margin:0 0 var(--s-6);max-width:40ch">Across eleven shipped tools — and climbing. 247 stars, reconstructed from day one.</p>
+        <div style="display:flex;gap:var(--s-5);flex-wrap:wrap;align-items:center">
+          <span class="delta" style="background:rgba(159,212,200,.16);border-color:rgba(159,212,200,.3);color:#CDE9E2"><svg viewBox="0 0 12 12" fill="none" width="11" height="11"><path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>+214 downloads · +39 stars this month</span>
+          <span class="tracking" style="background:rgba(198,138,46,.18);border-color:rgba(240,215,168,.35);color:#F0D7A8"><span class="dot" style="background:#F0D7A8"></span>downloads tracked since Apr 2026</span>
+        </div>
+        <div style="margin-top:var(--s-7);display:flex;gap:var(--s-3)">
+          <button class="cta" style="background:#fff;color:#0E574C">Share this page ↗</button>
+          <button class="cta cta--ghost" style="border-color:rgba(255,255,255,.3);color:#EAF4F0">Export image</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- condensed ledger strip -->
+    <section class="gs-band" style="border-top:none">
+      <div class="gs-section-head"><div><span class="kicker">The projects</span><h2 style="font:var(--t-display);margin:var(--s-2) 0 0">Six tracked</h2></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-4)">
+        <div class="surface" style="padding:var(--s-5)">
+          <div class="gs-proj" style="margin-bottom:var(--s-4)"><span class="badge" style="background:#1E8C7A">cg</span><div><div class="nm">citegeist</div><div class="dk">citation-graph explorer</div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><span class="stat-num" style="font:var(--t-data-lg)">1,043</span><span class="stat-label" style="display:block">downloads</span></div><span class="delta">+126/mo</span></div>
+        </div>
+        <div class="surface" style="padding:var(--s-5)">
+          <div class="gs-proj" style="margin-bottom:var(--s-4)"><span class="badge" style="background:#3A6EA5">pr</span><div><div class="nm">provenance</div><div class="dk">evidence→writing</div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><span class="stat-num" style="font:var(--t-data-lg)">612</span><span class="stat-label" style="display:block">downloads</span></div><span class="delta">+58/mo</span></div>
+        </div>
+        <div class="surface" style="padding:var(--s-5)">
+          <div class="gs-proj" style="margin-bottom:var(--s-4)"><span class="badge" style="background:#7A5AA6">gl</span><div><div class="nm">glimpse</div><div class="dk">local-data infographics</div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><span class="stat-num" style="font:var(--t-data-lg)">17</span><span class="stat-label" style="display:block">stars</span></div><span class="tracking" style="font-size:11px;padding:3px 8px"><span class="dot"></span>3 wk</span></div>
+        </div>
+      </div>
+    </section>
+  </div><!-- /.device rank2 -->
+
+  <div class="when-wins">
+    <h4>When this wins</h4>
+    <p>Wins when the link is going somewhere <b>scroll-stopping matters more than sober</b> — a tweet, a Show HN, a portfolio splash — and the audience skews technical-adjacent. The dark swell panel is genuinely memorable and the full-bleed curve sells momentum at a glance.</p>
+    <p>Why it ranks below #1: leading with a single number on a dramatic field reads slightly more "marketing site" than "credible instrument," and the dark hero spends its first impression on mood before breadth. For a <b>non-technical recruiter judging credibility in 3 seconds</b>, Rank 1's ledger-backed sobriety is the safer bet. Strong candidate for an A/B once real recruiter feedback (U6) is in.</p>
+  </div>
+</section>
+
+<!-- ───────────────────────── RANK 3 ───────────────────────── -->
+<section class="doc-section" id="rank3">
+  <div class="rankbar">
+    <span class="rankbadge rankbadge--alt">Rank 3</span>
+    <span class="ranktitle">The Stat Grid</span>
+  </div>
+  <p class="lead" style="margin-bottom:var(--s-3)">
+    A familiar metrics-dashboard composition: aggregate KPI tiles up top, per-project cards below. Maximally
+    scannable and enterprise-recognizable — but it leans toward the generic SaaS card grid, so the craft
+    differentiation that is itself a hiring signal gets muted.
+  </p>
+  <div class="frame-label">Desktop · KPI tiles + project grid</div>
+  <div class="device gs" role="img" aria-label="Groundswell showcase — stat-grid layout">
+    <div class="gs-top">
+      <div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Groundswell</b><div class="who">josh gonzales · builder</div></div></div>
+      <nav class="gs-topnav"><a href="#" class="on">Overview</a><a href="#">Projects</a><a href="#" class="cta cta--ghost menu" style="padding:7px 14px">Share ↗</a></nav>
+    </div>
+
+    <header style="padding:var(--s-7) var(--s-6) var(--s-5)">
+      <span class="kicker kicker--accent">Open-source traction · updated daily</span>
+      <h1 style="font:var(--t-display);margin:var(--s-2) 0 var(--s-5);letter-spacing:var(--ls-tight)">Adoption at a glance</h1>
+      <!-- KPI tiles -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-4)">
+        <div class="surface" style="padding:var(--s-5)">
+          <span class="stat-label">Total downloads</span>
+          <span class="stat-num" style="font:var(--t-data-lg);display:block;margin:var(--s-2) 0">2,418</span>
+          <span class="delta">+214 / mo</span>
+        </div>
+        <div class="surface" style="padding:var(--s-5)">
+          <span class="stat-label">Total stars</span>
+          <span class="stat-num" style="font:var(--t-data-lg);display:block;margin:var(--s-2) 0">247</span>
+          <span class="delta">+39 / mo</span>
+        </div>
+        <div class="surface" style="padding:var(--s-5)">
+          <span class="stat-label">Projects shipped</span>
+          <span class="stat-num" style="font:var(--t-data-lg);display:block;margin:var(--s-2) 0">11</span>
+          <span class="delta delta--flat">6 tracked</span>
+        </div>
+        <div class="surface" style="padding:var(--s-5)">
+          <span class="stat-label">Forks</span>
+          <span class="stat-num" style="font:var(--t-data-lg);display:block;margin:var(--s-2) 0">34</span>
+          <span class="delta">+6 / mo</span>
+        </div>
+      </div>
+      <p style="margin:var(--s-4) 0 0"><span class="tracking"><span class="dot"></span>downloads &amp; traffic tracked since Apr 2026 · stars/forks reconstructed from full history</span></p>
+    </header>
+
+    <!-- project card grid -->
+    <section class="gs-band">
+      <div class="gs-section-head"><div><span class="kicker">The projects</span><h2 style="font:var(--t-display);margin:var(--s-2) 0 0">Six tracked</h2></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-4)">
+        <!-- card with mini sparkline -->
+        <div class="surface" style="padding:var(--s-5)">
+          <div class="gs-proj" style="margin-bottom:var(--s-4)"><span class="badge" style="background:#1E8C7A">cg</span><div><div class="nm">citegeist</div><div class="dk">citation-graph explorer</div></div></div>
+          <svg class="spark" viewBox="0 0 120 34" width="100%" height="40" aria-label="citegeist trend rising"><path d="M 4.0 30.0 C 5.7 29.9, 10.8 29.4, 14.2 29.3 C 17.6 29.2, 21.0 29.5, 24.4 29.3 C 27.8 29.0, 31.2 28.3, 34.5 27.8 C 37.9 27.4, 41.3 26.9, 44.7 26.4 C 48.1 25.9, 51.5 25.5, 54.9 24.9 C 58.3 24.3, 61.7 23.5, 65.1 22.8 C 68.5 22.1, 71.9 21.5, 75.3 20.6 C 78.7 19.8, 82.1 18.8, 85.5 17.7 C 88.8 16.6, 92.2 15.6, 95.6 14.1 C 99.0 12.7, 102.4 10.7, 105.8 9.1 C 109.2 7.4, 114.3 4.8, 116.0 4.0" fill="none" stroke="#1E8C7A" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <div style="display:flex;justify-content:space-between;margin-top:var(--s-4)"><div><span class="stat-num" style="font:var(--t-data-md)">1,043</span> <span class="stat-label">↓</span></div><div><span class="stat-num" style="font:var(--t-data-md)">38</span> <span class="stat-label">★</span></div><span class="delta">+126/mo</span></div>
+        </div>
+        <div class="surface" style="padding:var(--s-5)">
+          <div class="gs-proj" style="margin-bottom:var(--s-4)"><span class="badge" style="background:#3A6EA5">pr</span><div><div class="nm">provenance</div><div class="dk">evidence→writing</div></div></div>
+          <svg class="spark" viewBox="0 0 120 34" width="100%" height="40" aria-label="provenance trend rising"><path d="M 4.0 30.0 C 5.7 30.0, 10.8 30.3, 14.2 30.0 C 17.6 29.7, 21.0 28.3, 24.4 28.0 C 27.8 27.7, 31.2 28.3, 34.5 28.0 C 37.9 27.7, 41.3 26.7, 44.7 26.0 C 48.1 25.3, 51.5 24.3, 54.9 24.0 C 58.3 23.7, 61.7 24.7, 65.1 24.0 C 68.5 23.3, 71.9 21.3, 75.3 20.0 C 78.7 18.7, 82.1 17.0, 85.5 16.0 C 88.8 15.0, 92.2 15.0, 95.6 14.0 C 99.0 13.0, 102.4 11.7, 105.8 10.0 C 109.2 8.3, 114.3 5.0, 116.0 4.0" fill="none" stroke="#3A6EA5" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <div style="display:flex;justify-content:space-between;margin-top:var(--s-4)"><div><span class="stat-num" style="font:var(--t-data-md)">612</span> <span class="stat-label">↓</span></div><div><span class="stat-num" style="font:var(--t-data-md)">31</span> <span class="stat-label">★</span></div><span class="delta">+58/mo</span></div>
+        </div>
+        <div class="surface" style="padding:var(--s-5)">
+          <div class="gs-proj" style="margin-bottom:var(--s-4)"><span class="badge" style="background:#7A5AA6">gl</span><div><div class="nm">glimpse</div><div class="dk">local-data infographics</div></div></div>
+          <svg class="spark" viewBox="0 0 120 34" width="100%" height="40" aria-label="glimpse trend early"><path d="M 4.0 30.0 C 5.7 30.0, 10.8 30.7, 14.2 30.0 C 17.6 29.3, 21.0 26.4, 24.4 25.7 C 27.8 24.9, 31.2 25.7, 34.5 25.7 C 37.9 25.7, 41.3 26.4, 44.7 25.7 C 48.1 24.9, 51.5 22.1, 54.9 21.3 C 58.3 20.6, 61.7 22.1, 65.1 21.3 C 68.5 20.6, 71.9 17.7, 75.3 17.0 C 78.7 16.3, 82.1 17.7, 85.5 17.0 C 88.8 16.3, 92.2 14.1, 95.6 12.7 C 99.0 11.2, 102.4 9.8, 105.8 8.3 C 109.2 6.9, 114.3 4.7, 116.0 4.0" fill="none" stroke="#7A5AA6" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 2"/></svg>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--s-4)"><div><span class="stat-num" style="font:var(--t-data-md)">17</span> <span class="stat-label">★</span></div><span class="tracking" style="font-size:11px;padding:3px 8px"><span class="dot"></span>tracking · 3 wk</span></div>
+        </div>
+      </div>
+    </section>
+  </div><!-- /.device rank3 -->
+
+  <div class="when-wins">
+    <h4>When this wins</h4>
+    <p>Wins if the validating recruiter explicitly reads as a <b>data/analytics or enterprise-IT</b> persona who finds KPI tiles reassuring, or if Groundswell later needs an internal "ops" view. The four-tile header is unambiguous and the grid scales to any project count without layout strain.</p>
+    <p>Why it ranks third: this is the layout the frontend-design guidance warns against as a first impression — a SaaS card grid reads as <b>template, not craft</b>, and craft is itself the hiring signal here (R22). The KPI tiles also flatten the story: breadth, momentum, and the killer project all get equal visual weight instead of a guided read. Acceptable, not distinctive.</p>
+  </div>
+</section>
+
+<!-- ───────────────────────── RANK 4 · REJECTED ───────────────────────── -->
+<section class="doc-section" id="rank4">
+  <div class="rankbar">
+    <span class="rankbadge rankbadge--rej">Rank 4 · Rejected</span>
+    <span class="ranktitle">The Percentage Marquee</span>
+  </div>
+  <p class="lead" style="margin-bottom:var(--s-3)">
+    Rendered deliberately as the <strong>anti-pattern</strong> the brainstorm and KTD12 warn against, so the
+    failure is concrete. It leads with a huge bare growth percentage, foregrounds perishable velocity, and
+    has nothing honest to show at cold-start. Kept in the set as a guardrail, not a candidate.
+  </p>
+  <div class="frame-label">Desktop · rejected — shown to make the failure visible</div>
+  <div class="device gs" role="img" aria-label="Groundswell showcase — rejected percentage-marquee layout" style="opacity:.97">
+    <div class="gs-top">
+      <div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Groundswell</b></div></div>
+      <nav class="gs-topnav"><a href="#" class="on">Overview</a></nav>
+    </div>
+    <header style="padding:var(--s-10) var(--s-6);text-align:center">
+      <span class="kicker kicker--accent" style="justify-content:center">This week</span>
+      <div style="font:var(--t-hero);font-size:clamp(64px,12vw,140px);color:var(--swell-500);letter-spacing:-0.02em;line-height:1;margin:var(--s-4) 0">+100%</div>
+      <p style="font:var(--t-lede);font-style:italic;color:var(--color-ink-2)">Explosive growth across the board 🚀</p>
+      <!-- empty/flat perishable card — the embarrassing cold-start failure -->
+      <div class="surface" style="max-width:520px;margin:var(--s-7) auto 0;padding:var(--s-6)">
+        <span class="stat-label">Repo views · this week</span>
+        <svg viewBox="0 0 480 80" width="100%" height="70" style="margin-top:var(--s-3)" aria-label="flat empty views chart"><line x1="10" y1="70" x2="470" y2="70" stroke="var(--viz-axis)" stroke-width="1"/><line x1="10" y1="68" x2="470" y2="68" stroke="var(--ink-300)" stroke-width="1.5" stroke-dasharray="4 4"/><text x="240" y="40" text-anchor="middle" font-family="Geist Mono" font-size="12" fill="var(--ink-300)">no data yet</text></svg>
+      </div>
+    </header>
+  </div><!-- /.device rank4 -->
+
+  <div class="when-wins rej">
+    <h4>Why this is rejected (never ships)</h4>
+    <p><b>"+100%" is two downloads becoming four.</b> A percentage with no denominator reads as evasive to a recruiter — exactly the failure KTD12 and AE3 call out. The honest absolute (2,418 · 247) is both available immediately and far more credible; hiding it behind a hype number actively damages trust.</p>
+    <p><b>Perishable-velocity-first breaks at cold-start.</b> Views/clones live in a 14-day owner window and don't exist on day one, so the strongest tile is a flat "no data yet" — the embarrassing empty card the whole product exists to avoid (AE6). It also violates the design bar on empty states (a flat line is not a considered empty state) and on hierarchy (one giant decorative number, emoji as content). Documented here so no future session reaches for the "big % hero" by reflex.</p>
+  </div>
+</section>
+
+<hr class="doc-rule">
+
+<!-- ════════════════════ MOBILE + STATES (resolves flagged undecideds) ════════════════════ -->
+<section class="doc-section" id="responsive">
+  <h2>Mobile &amp; states <span class="kicker kicker--bare">recommended option · Rank 1</span></h2>
+  <p class="lead">
+    The showcase is a shareable link — over half of resume/portfolio clicks open on a phone, so mobile is
+    not optional. These render the Rank&nbsp;1 language at 390px and resolve the empty / loading / error
+    visuals the doc review flagged as undecided. The phone frames are real renders of the same tokens.
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s-5);align-items:start">
+
+    <!-- MOBILE — loaded -->
+    <div>
+      <div class="frame-label">Mobile · 390px — loaded</div>
+      <div class="device device--phone gs" role="img" aria-label="Showcase on mobile, loaded">
+        <div class="gs-top" style="padding:var(--s-4)">
+          <div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Groundswell</b></div></div>
+          <button class="cta cta--ghost menu" style="padding:6px 10px;font-size:13px">Share ↗</button>
+        </div>
+        <header style="padding:var(--s-6) var(--s-4)">
+          <span class="kicker kicker--accent">Traction · updated daily</span>
+          <div style="margin:var(--s-4) 0">
+            <span class="stat-label" style="display:block">Total downloads</span>
+            <span class="stat-num" style="font-size:46px">2,418</span>
+            <div style="display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-3)"><span class="delta">+214 / mo</span><span class="tracking" style="font-size:11px;padding:3px 8px"><span class="dot"></span>since Apr 2026</span></div>
+          </div>
+          <div style="display:flex;gap:var(--s-6);margin-top:var(--s-4)"><div><span class="stat-num" style="font:var(--t-data-lg)">247</span><span class="stat-label" style="display:block">stars · +39/mo</span></div></div>
+          <div class="surface gs-chart-card" style="margin-top:var(--s-5);padding:var(--s-4)">
+            <svg viewBox="0 0 340 120" width="100%" aria-label="Stars over time on mobile, climbing to 247; downloads tracking marked in last third">
+              <defs><linearGradient id="marea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E8C7A" stop-opacity=".16"/><stop offset="1" stop-color="#1E8C7A" stop-opacity="0"/></linearGradient></defs>
+              <rect x="250" y="8" width="86" height="104" fill="#FBF1E0" opacity=".45"/>
+              <line x1="250" y1="6" x2="250" y2="114" stroke="#C68A2E" stroke-width="1.2" stroke-dasharray="3 3"/>
+              <path d="M 8.0 112.0 C 11.2 111.9, 20.7 111.5, 27.1 111.1 C 33.4 110.8, 39.8 110.3, 46.1 109.9 C 52.5 109.4, 58.8 109.1, 65.2 108.6 C 71.5 108.1, 77.9 107.4, 84.2 106.9 C 90.6 106.4, 96.9 106.2, 103.3 105.6 C 109.6 105.0, 116.0 103.8, 122.4 103.0 C 128.7 102.3, 135.1 101.6, 141.4 100.9 C 147.8 100.3, 154.1 100.1, 160.5 99.2 C 166.8 98.4, 173.2 97.2, 179.5 95.8 C 185.9 94.5, 192.2 92.7, 198.6 91.1 C 204.9 89.6, 211.3 88.3, 217.6 86.4 C 224.0 84.5, 230.4 82.1, 236.7 79.6 C 243.1 77.1, 249.4 75.0, 255.8 71.5 C 262.1 68.0, 268.5 63.6, 274.8 58.7 C 281.2 53.8, 287.5 47.8, 293.9 42.1 C 300.2 36.4, 306.6 30.3, 312.9 24.6 C 319.3 18.9, 328.8 10.8, 332.0 8.0 L 332.0 112.0 L 8 112.0 Z" fill="url(#marea)"/>
+              <path d="M 8.0 112.0 C 11.2 111.9, 20.7 111.5, 27.1 111.1 C 33.4 110.8, 39.8 110.3, 46.1 109.9 C 52.5 109.4, 58.8 109.1, 65.2 108.6 C 71.5 108.1, 77.9 107.4, 84.2 106.9 C 90.6 106.4, 96.9 106.2, 103.3 105.6 C 109.6 105.0, 116.0 103.8, 122.4 103.0 C 128.7 102.3, 135.1 101.6, 141.4 100.9 C 147.8 100.3, 154.1 100.1, 160.5 99.2 C 166.8 98.4, 173.2 97.2, 179.5 95.8 C 185.9 94.5, 192.2 92.7, 198.6 91.1 C 204.9 89.6, 211.3 88.3, 217.6 86.4 C 224.0 84.5, 230.4 82.1, 236.7 79.6 C 243.1 77.1, 249.4 75.0, 255.8 71.5 C 262.1 68.0, 268.5 63.6, 274.8 58.7 C 281.2 53.8, 287.5 47.8, 293.9 42.1 C 300.2 36.4, 306.6 30.3, 312.9 24.6 C 319.3 18.9, 328.8 10.8, 332.0 8.0" fill="none" stroke="#1E8C7A" stroke-width="2.2" stroke-linecap="round"/>
+              <circle cx="332" cy="12" r="3.5" fill="#fff" stroke="#1E8C7A" stroke-width="2.2"/>
+            </svg>
+          </div>
+          <button class="cta" style="width:100%;justify-content:center;margin-top:var(--s-5)">Share this page ↗</button>
+        </header>
+        <!-- stacked project rows -->
+        <section class="gs-band" style="padding:var(--s-5) var(--s-4)">
+          <span class="kicker">Projects · by momentum</span>
+          <div class="gs-rows" style="margin-top:var(--s-4)">
+            <div class="surface gs-row gs-row-link" style="grid-template-columns:1fr auto;row-gap:var(--s-3)">
+              <div class="gs-proj"><span class="badge" style="background:#1E8C7A;width:32px;height:32px">cg</span><div><div class="nm" style="font-size:16px">citegeist</div></div></div>
+              <div class="r-num"><span class="v">1,043</span><span class="l">↓ +126/mo</span></div>
+              <svg class="spark" viewBox="0 0 120 34" style="grid-column:1/-1;width:100%" aria-label="citegeist trend"><path d="M 4.0 30.0 C 5.7 29.9, 10.8 29.4, 14.2 29.3 C 17.6 29.2, 21.0 29.5, 24.4 29.3 C 27.8 29.0, 31.2 28.3, 34.5 27.8 C 37.9 27.4, 41.3 26.9, 44.7 26.4 C 48.1 25.9, 51.5 25.5, 54.9 24.9 C 58.3 24.3, 61.7 23.5, 65.1 22.8 C 68.5 22.1, 71.9 21.5, 75.3 20.6 C 78.7 19.8, 82.1 18.8, 85.5 17.7 C 88.8 16.6, 92.2 15.6, 95.6 14.1 C 99.0 12.7, 102.4 10.7, 105.8 9.1 C 109.2 7.4, 114.3 4.8, 116.0 4.0" fill="none" stroke="#1E8C7A" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="surface gs-row gs-row-link" style="grid-template-columns:1fr auto">
+              <div class="gs-proj"><span class="badge" style="background:#7A5AA6;width:32px;height:32px">gl</span><div><div class="nm" style="font-size:16px">glimpse</div></div></div>
+              <div class="r-num"><span class="tracking" style="font-size:11px;padding:3px 8px"><span class="dot"></span>tracking · 3 wk</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- LOADING (skeleton, not spinner) -->
+    <div>
+      <div class="frame-label">Mobile · loading — skeleton, never a spinner</div>
+      <div class="device device--phone gs" aria-label="Showcase loading skeleton">
+        <div class="gs-top" style="padding:var(--s-4)"><div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28"><rect width="28" height="28" rx="8" fill="#0E574C"/></svg><div><b>Groundswell</b></div></div></div>
+        <header style="padding:var(--s-6) var(--s-4)">
+          <div class="sk" style="width:120px;height:11px"></div>
+          <div class="sk" style="width:62%;height:52px;margin:var(--s-4) 0 var(--s-3);border-radius:var(--r-sm)"></div>
+          <div class="sk" style="width:160px;height:24px;border-radius:var(--r-pill)"></div>
+          <div class="surface" style="margin-top:var(--s-5);padding:var(--s-5)"><div class="sk" style="width:100%;height:96px;border-radius:var(--r-sm)"></div></div>
+          <div class="sk" style="width:100%;height:44px;margin-top:var(--s-5);border-radius:var(--r-md)"></div>
+        </header>
+        <section class="gs-band" style="padding:var(--s-5) var(--s-4)">
+          <div class="sk" style="width:140px;height:11px;margin-bottom:var(--s-4)"></div>
+          <div class="surface" style="padding:var(--s-4);margin-bottom:var(--s-3);display:flex;gap:var(--s-3);align-items:center"><div class="sk" style="width:32px;height:32px;border-radius:var(--r-md)"></div><div style="flex:1"><div class="sk" style="width:60%;height:14px"></div></div><div class="sk" style="width:60px;height:14px"></div></div>
+          <div class="surface" style="padding:var(--s-4);display:flex;gap:var(--s-3);align-items:center"><div class="sk" style="width:32px;height:32px;border-radius:var(--r-md)"></div><div style="flex:1"><div class="sk" style="width:50%;height:14px"></div></div><div class="sk" style="width:60px;height:14px"></div></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- EMPTY + ERROR -->
+    <div>
+      <div class="frame-label">States · empty + error (considered, not blank)</div>
+      <div class="device device--phone gs" aria-label="Showcase empty and error states" style="padding-bottom:var(--s-5)">
+        <div class="gs-top" style="padding:var(--s-4)"><div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Groundswell</b></div></div></div>
+        <!-- EMPTY: published nothing yet (owner-facing pre-publish, or brand-new project) -->
+        <div style="padding:var(--s-7) var(--s-5);text-align:center;border-bottom:1px solid var(--color-border)">
+          <span class="kicker kicker--bare" style="justify-content:center;color:var(--ink-400)">Empty — nothing published yet</span>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" style="margin:var(--s-4) auto" aria-hidden="true"><rect x="6" y="6" width="44" height="44" rx="12" fill="#E8F4F1"/><path d="M16 36 C 22 36, 24 24, 28 24 C 32 24, 34 30, 40 30" stroke="#1E8C7A" stroke-width="2.2" stroke-linecap="round"/><circle cx="40" cy="30" r="2.6" fill="#1E8C7A"/></svg>
+          <p style="font:var(--t-heading);font-size:18px;margin:0 0 var(--s-2)">Curves are forming</p>
+          <p style="font:var(--t-body);color:var(--color-ink-2);max-width:30ch;margin:0 auto">Tracking has started. The first signals are being recorded daily and will appear here within a few days.</p>
+        </div>
+        <!-- ERROR: data fetch failed -->
+        <div style="padding:var(--s-7) var(--s-5);text-align:center">
+          <span class="kicker kicker--bare" style="justify-content:center;color:var(--amber-700)">Error — couldn't load</span>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" style="margin:var(--s-4) auto" aria-hidden="true"><rect x="6" y="6" width="44" height="44" rx="12" fill="#FBF1E0"/><path d="M28 19v12" stroke="#C68A2E" stroke-width="2.4" stroke-linecap="round"/><circle cx="28" cy="38" r="1.8" fill="#C68A2E"/></svg>
+          <p style="font:var(--t-heading);font-size:18px;margin:0 0 var(--s-2)">This didn't load</p>
+          <p style="font:var(--t-body);color:var(--color-ink-2);max-width:32ch;margin:0 auto var(--s-4)">The traction data couldn't be fetched just now. Your link is fine — this is on our side.</p>
+          <button class="cta cta--ghost">Try again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="when-wins" style="background:var(--paper-2);border-left-color:var(--swell-300)">
+    <h4>What these resolve</h4>
+    <p><b>Loading</b> is skeletons shaped like the real content (no centered spinner in a void). <b>Empty</b> is a confident "curves are forming" — it reframes a fresh project as in-progress, never broken or embarrassing, and reuses the brand mark's swell motif. <b>Error</b> explains what happened, absolves the viewer ("your link is fine"), and offers one recovery. All three inherit the same tokens, so they feel like the product, not fallbacks. Mobile stacks the hero, full-bleeds the curve, collapses the ledger to single-column rows with the sparkline below — 44px+ tap targets throughout.</p>
+  </div>
+</section>
+
+<hr class="doc-rule">
+
+<!-- ════════════════════ TRADE-OFF MATRIX ════════════════════ -->
+<section class="doc-section" id="matrix">
+  <h2>Trade-off matrix</h2>
+  <p class="lead">Scored against what actually matters for this artifact. <span class="cell-win">Green</span> = strength, <span class="cell-mid">amber</span> = compromise, <span class="cell-bad">red</span> = liability.</p>
+  <div class="doc-card" style="padding:0;overflow-x:auto">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th>Criterion</th>
+          <th>R1 · Aggregate Ledger</th>
+          <th>R2 · Momentum Hero</th>
+          <th>R3 · Stat Grid</th>
+          <th>R4 · % Marquee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>3-second credibility (non-technical)</td><td class="cell-win">Absolute anchor lands instantly</td><td class="cell-mid">Mood first, breadth second</td><td class="cell-win">Tiles are unambiguous</td><td class="cell-bad">Bare % reads evasive</td></tr>
+        <tr><td>Honest cold-start (AE1/3/6)</td><td class="cell-win">Backfilled curve + boundary</td><td class="cell-win">Curve real; velocity supporting</td><td class="cell-mid">Tiles fine; cards can look thin</td><td class="cell-bad">Flat "no data" hero</td></tr>
+        <tr><td>Craft as hiring signal (R22)</td><td class="cell-win">Editorial, distinctive</td><td class="cell-win">Memorable, dramatic</td><td class="cell-bad">Reads as template</td><td class="cell-bad">Reads as hype</td></tr>
+        <tr><td>Breadth across projects (R11)</td><td class="cell-win">Ranked ledger</td><td class="cell-mid">Strip is partial</td><td class="cell-win">Full grid</td><td class="cell-bad">Absent</td></tr>
+        <tr><td>Killer-project depth (R15)</td><td class="cell-win">Dedicated deep cut</td><td class="cell-mid">Needs a sub-page</td><td class="cell-mid">One card among many</td><td class="cell-bad">None</td></tr>
+        <tr><td>Modest numbers feel intentional (R23)</td><td class="cell-win">Numbers as instruments</td><td class="cell-mid">One big number carries risk</td><td class="cell-mid">Small tiles can read thin</td><td class="cell-bad">% inflates 2→4</td></tr>
+        <tr><td>Mobile / shareable-link fit</td><td class="cell-win">Stacks cleanly</td><td class="cell-mid">Dark hero heavy on small screens</td><td class="cell-win">Grid reflows to 1-col</td><td class="cell-mid">Giant number awkward</td></tr>
+        <tr><td>Image export legibility (R17)</td><td class="cell-win">Hero crop is self-contained</td><td class="cell-win">Very screenshot-friendly</td><td class="cell-mid">Tiles crop oddly</td><td class="cell-mid">% alone says little</td></tr>
+        <tr><td>Build cost on the chart primitives (KTD4)</td><td class="cell-mid">Area + sparkline + co-plot</td><td class="cell-mid">+ full-bleed bg variant</td><td class="cell-win">Mostly sparklines</td><td class="cell-win">Minimal</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:13.5px;color:var(--ink-500);margin-top:var(--s-3)">
+    <b>Verdict:</b> R1 leads on every criterion that maps to the success metric (3-second credible read,
+    honest cold-start, craft, breadth, depth). R2 is the strongest alternative and a natural A/B variant
+    once U6 recruiter feedback is in. R3 is the safe-but-generic fallback. R4 is a documented guardrail.
+  </p>
+</section>
+
+<hr class="doc-rule">
+
+<!-- ════════════════════ RESOLVED DECISIONS ════════════════════ -->
+<section class="doc-section" id="resolved">
+  <h2>Resolved decisions <span class="kicker kicker--bare">the doc review flagged these as undecided</span></h2>
+  <p class="lead">Each item the plan called out as open for U5 is decided here, with the reasoning, so U6 tests a fully-specified design and U9/U10 build against a fixed target.</p>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">First-screen information architecture + navigation</span>
+    <p style="margin:var(--s-3) 0;font-size:14px;line-height:1.65;color:var(--ink-700)">
+      <b>Single long scroll, anchor nav</b> — Overview → Projects → killer project (citegeist) → sourcing
+      footer. No app shell, no sidebar: this is a document a recruiter reads top-to-bottom, not a tool they
+      operate. The top bar is sticky and thin; its links are in-page anchors. The killer project gets a
+      named anchor (<code>/citegeist</code> deep route) so it is independently shareable (R15). Order is a
+      deliberate funnel: <em>absolute proof → breadth → depth → method</em>.
+    </p>
+  </div>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Per-project card content hierarchy</span>
+    <p style="margin:var(--s-3) 0;font-size:14px;line-height:1.65;color:var(--ink-700)">
+      Fixed read order, left→right: <b>identity</b> (badge + name + one-line deck) → <b>trend</b>
+      (12-week star sparkline) → <b>stars</b> → <b>downloads</b>. The lead signal is the absolute count
+      with a small supporting delta beneath it (never a bare %). Stars lead over downloads because stars are
+      backfilled and therefore always present; a young project shows the "tracking · N wk" chip in the
+      downloads slot instead of a number — the slot is never blank (mirrors the sponsor-row "never absent"
+      discipline). Whole row is one tap target; no nested links.
+    </p>
+  </div>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Tooltip interaction — hover + keyboard focus + mobile tap</span>
+    <div style="display:flex;gap:var(--s-7);flex-wrap:wrap;align-items:center;margin:var(--s-4) 0">
+      <div class="gs" style="background:var(--paper);padding:var(--s-7) var(--s-6) var(--s-6);border:1px solid var(--ink-200);border-radius:var(--r-md)">
+        <div class="gs-tip">
+          <div class="gs-tip-pop"><span class="tl">Mar 2026 · stars</span><span class="tv">128</span></div>
+          <svg width="180" height="60" viewBox="0 0 180 60" aria-label="tooltip demo"><path d="M 8 52 C 40 50, 70 42, 100 32 C 130 22, 160 12, 172 8" fill="none" stroke="#1E8C7A" stroke-width="2" stroke-linecap="round"/><line x1="100" y1="8" x2="100" y2="56" stroke="#D8DCD6" stroke-width="1" stroke-dasharray="3 3"/><circle cx="100" cy="32" r="4" fill="#fff" stroke="#1E8C7A" stroke-width="2"/></svg>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.65;color:var(--ink-700);max-width:46ch">
+        One <b>portal-rendered</b> tooltip (escapes any <code>overflow:hidden</code> chart clip — the
+        dropdown-portal-stacking learning), dark surface, mono numeral + uppercase label. <b>Desktop:</b>
+        follows the nearest data point on hover with a focus crosshair. <b>Keyboard:</b> the chart is one
+        focusable element; arrow keys step through points and the tooltip tracks focus (visible focus ring).
+        <b>Mobile:</b> tap snaps the tooltip to the nearest point; tap-elsewhere dismisses — no hover-only
+        affordance. An offscreen <code>&lt;table&gt;</code> mirrors the series for screen readers.
+      </p>
+    </div>
+  </div>
+
+  <div class="doc-card">
+    <span class="kicker kicker--accent">Dark mode — recommend LOCK TO LIGHT for v1</span>
+    <p style="margin:var(--s-3) 0;font-size:14px;line-height:1.65;color:var(--ink-700)">
+      <b>Ship light-only for v1.</b> Three reasons: (1) the cdo bar treats dark mode as <em>its own design</em>,
+      not an inversion — the data-viz palette (categorical luminance balance, area-fill opacities, the amber
+      tracking-boundary against paper) would need a full second tuning pass to stay credible, and that work
+      doesn't move the recruiter metric; (2) the warm-bone editorial paper <em>is</em> the brand's point of
+      view — a dark variant dilutes the "lab notebook" thesis on first impression; (3) it is cheap to add
+      later precisely because the token architecture isolates it — a future dark theme redefines only the
+      Layer-2 semantic aliases and a dark data-viz set, with Layer-1 scale and all primitives untouched. The
+      cost of waiting is one media query later; the cost of doing it now is a half-built second palette that
+      undercuts the launch. <em>Honest naming of the cost, per Josh's standing principle: this defers real
+      work, but the deferral is clean and reversible, not debt that compounds.</em>
+    </p>
+  </div>
+</section>
+
+<hr class="doc-rule">
+
+<!-- ════════════════════ OPEN QUESTIONS ════════════════════ -->
+<section class="doc-section" id="questions">
+  <h2>Open questions for Josh</h2>
+  <p class="lead">Decisions I made a recommendation on but that are genuinely yours to confirm before the tokens merge and U6 goes out. Each has my proposed default.</p>
+  <ol class="q-list">
+    <li><b>Approve Rank 1 (Aggregate Ledger) as the build target?</b> <span class="ans">Proposed: <b>yes</b> — and carry Rank 2 (Momentum Hero) as a documented A/B variant to test in U6, since it's the strongest alternative and cheap to mock against the same tokens.</span></li>
+    <li><b>Type system — Fraunces + Geist + Geist Mono?</b> <span class="ans">Proposed: <b>yes</b>. Fraunces gives the editorial point of view the cdo bar demands; Geist is distinctive-but-neutral and a fitting nod to the Vercel host; Geist Mono carries every numeral with tabular figures. All three are open-source / Google-Fonts-hosted. If you'd rather a single-family system, the fallback is Geist + Geist Mono (drops the serif voice).</span></li>
+    <li><b>Signature accent — "swell" teal (#1E8C7A)?</b> <span class="ans">Proposed: <b>yes</b> — it carries the growth/ocean-swell metaphor behind the name and clears AA on paper. Alternative is a deep indigo if you want to read less "eco" and more "instrument."</span></li>
+    <li><b>Confirm the v1 tracked-repo set + the killer project.</b> <span class="ans">Mockup assumes citegeist (flagship) · provenance · stemma · glimpse · marginalia, citegeist as the deep cut (ISSUES GS-003). Need the real list + confirmation each killer candidate actually ships GitHub Release assets, since downloads is the lead per-project signal. Are these numbers in the right ballpark?</span></li>
+    <li><b>Lock to light mode for v1?</b> <span class="ans">Proposed: <b>yes</b> (full reasoning in Resolved Decisions). Confirm you're comfortable shipping light-only and revisiting dark post-launch.</span></li>
+    <li><b>"growth_area" as a new Opus Vita taxonomy primitive type?</b> <span class="ans">The hero area-chart maps to a primitive type the v1.0.0 taxonomy doesn't have (it's iOS-seeded). Proposed: register <code>growth_area</code> under <code>data_density</code> via a MINOR RFC (A2 reviews, you approve). Until then it lives only in this mockup. OK to file the RFC?</span></li>
+    <li><b>How loud should momentum be next to the absolute?</b> <span class="ans">Current: a quiet "+214 this month" pill beside the big number. If U6 recruiters want more "growing" emphasis, the lever is a small inline delta arrow on the curve's end-point — not a bigger percentage. Confirm the restrained default, or flag for U6 to probe.</span></li>
+    <li><b>Identity line copy.</b> <span class="ans">Mockup uses "Eleven shipped tools for researchers and developers." Want your real one-liner (and the exact tracked-project count) before U6 — the first sentence does a lot of the 3-second work.</span></li>
+  </ol>
+</section>
+
+<footer style="margin-top:var(--s-10);padding-top:var(--s-6);border-top:1px solid var(--ink-200);color:var(--ink-400);font:var(--t-data-sm)">
+  Groundswell · Unit U5 · design system + ranked showcase mockups · 2026-06-10 · MOCKUP-FIRST APPROVAL GATE.
+  No React components, charts, or pages are built from this artifact. Tokens merge into
+  <code>src/app/globals.css</code> (U1-owned) only after approval. Next: Josh approves a ranked option →
+  U6 recruiter validation against it → Phase C build.
+</footer>
+
+</div><!-- /.doc-wrap -->
+</body>
+</html>
