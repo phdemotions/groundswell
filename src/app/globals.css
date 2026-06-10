@@ -1,0 +1,37 @@
+/*
+ * Groundswell — global styles (Tailwind v4).
+ *
+ * `source(none)` disables Tailwind's automatic source detection (which can pull
+ * in node_modules and other noise); `@source` then declares exactly what to
+ * scan. This is the canonical monorepo Tailwind v4 pattern (KTD9).
+ */
+@import "tailwindcss" source(none);
+@source "./src";
+
+/*
+ * ─────────────────────────────────────────────────────────────────────────
+ * DESIGN TOKENS — owned by Unit U5 (design system + realistic-data mockups).
+ *
+ * Do NOT define an `@theme { ... }` token block here yet. U5 establishes the
+ * three-layer token system (incl. data-viz tokens) mapped to Tailwind `@theme`,
+ * after the mockup approval gate. Adding tokens here before then would fork the
+ * design system. Placeholder intentionally left empty.
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    font-family:
+      ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

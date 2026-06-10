@@ -1,0 +1,111 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommitTypeAll(chore)",
+    ":dependencyDashboard",
+    ":timezone(America/Toronto)",
+    "schedule:weekly"
+  ],
+  "description": "Groundswell dependency policy. Vercel-first CI: every Renovate PR triggers a Vercel preview deploy that runs the full `pnpm build` chain (type-check + lint + tests + next build). Auto-merge is allowed only when the preview check passes.",
+  "packageRules": [
+    {
+      "description": "Auto-merge patch + minor devDeps once Vercel preview passes.",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true,
+      "automergeType": "branch",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Group all @types/* under one PR per week.",
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "type definitions",
+      "automerge": true,
+      "automergeType": "branch",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Group Supabase ecosystem; manual review for any 0.x minor (semver pre-1.0 may break).",
+      "matchPackagePatterns": ["^@supabase/"],
+      "groupName": "supabase",
+      "automerge": false
+    },
+    {
+      "description": "Group Sentry ecosystem.",
+      "matchPackagePatterns": ["^@sentry/"],
+      "groupName": "sentry",
+      "automerge": false
+    },
+    {
+      "description": "Group ESLint stack; major bumps are framework-coupled and need manual review.",
+      "matchPackagePatterns": ["eslint", "^@eslint/"],
+      "groupName": "eslint",
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true,
+      "automergeType": "branch",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Next.js + eslint-config-next must bump together; never auto-merge majors.",
+      "matchPackageNames": ["next", "eslint-config-next"],
+      "groupName": "next.js",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["framework-major"]
+    },
+    {
+      "description": "Tailwind v4 is a breaking migration; manual review.",
+      "matchPackageNames": ["tailwindcss", "@tailwindcss/postcss"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["framework-major"]
+    },
+    {
+      "description": "TypeScript major: requires verifying all generics still resolve.",
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["framework-major"]
+    },
+    {
+      "description": "Zod major: API change, all schemas need audit.",
+      "matchPackageNames": ["zod"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["framework-major"]
+    },
+    {
+      "description": "@types/node tied to runtime; pin to Node 22 LTS major until we move to 24 LTS.",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<24"
+    },
+    {
+      "description": "Security alerts ship immediately, no schedule gate, prioritized.",
+      "matchDatasources": ["npm"],
+      "vulnerabilityAlerts": {
+        "enabled": true,
+        "schedule": "at any time",
+        "labels": ["security"],
+        "prCreation": "immediate"
+      }
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on monday"],
+    "automerge": true,
+    "automergeType": "branch",
+    "platformAutomerge": true
+  },
+  "minimumReleaseAge": "3 days",
+  "rangeStrategy": "bump",
+  "postUpdateOptions": ["pnpmDedupe"],
+  "ignoreDeps": [],
+  "schedule": ["before 5am on monday"],
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 8,
+  "dependencyDashboardTitle": "🤖 Renovate Dashboard — Groundswell",
+  "dependencyDashboardLabels": ["dependencies"],
+  "labels": ["dependencies"]
+}

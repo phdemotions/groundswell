@@ -1,0 +1,13 @@
+packages:
+  - .
+
+verifyDepsBeforeRun: error
+strictDepBuilds: true
+minimumReleaseAge: 1440
+allowBuilds:
+  '@sentry/cli': true
+  core-js: false
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+  unrs-resolver: true
