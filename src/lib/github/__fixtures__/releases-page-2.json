@@ -1,0 +1,22 @@
+[
+  {
+    "id": 99,
+    "tag_name": "v1.0.0",
+    "name": "v1.0.0 — first public release",
+    "draft": false,
+    "prerelease": false,
+    "created_at": "2026-02-14T09:00:00Z",
+    "published_at": "2026-02-14T10:00:00Z",
+    "assets": [
+      {
+        "id": 7001,
+        "name": "citegeist-macos-arm64.dmg",
+        "content_type": "application/x-apple-diskimage",
+        "size": 45000000,
+        "download_count": 5310,
+        "created_at": "2026-02-14T10:01:00Z",
+        "updated_at": "2026-06-09T08:00:00Z"
+      }
+    ]
+  }
+]

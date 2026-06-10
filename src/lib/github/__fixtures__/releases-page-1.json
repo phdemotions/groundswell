@@ -1,0 +1,51 @@
+[
+  {
+    "id": 101,
+    "tag_name": "v1.2.0",
+    "name": "v1.2.0 — Traffic insights",
+    "draft": false,
+    "prerelease": false,
+    "created_at": "2026-05-20T12:00:00Z",
+    "published_at": "2026-05-20T13:00:00Z",
+    "assets": [
+      {
+        "id": 9001,
+        "name": "citegeist-macos-arm64.dmg",
+        "content_type": "application/x-apple-diskimage",
+        "size": 48210432,
+        "download_count": 1843,
+        "created_at": "2026-05-20T13:01:00Z",
+        "updated_at": "2026-06-09T08:00:00Z"
+      },
+      {
+        "id": 9002,
+        "name": "citegeist-windows-x64.exe",
+        "content_type": "application/x-msdownload",
+        "size": 52118016,
+        "download_count": 921,
+        "created_at": "2026-05-20T13:02:00Z",
+        "updated_at": "2026-06-09T08:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": 100,
+    "tag_name": "v1.1.0",
+    "name": "v1.1.0",
+    "draft": false,
+    "prerelease": false,
+    "created_at": "2026-04-02T12:00:00Z",
+    "published_at": "2026-04-02T12:30:00Z",
+    "assets": [
+      {
+        "id": 8001,
+        "name": "citegeist-macos-arm64.dmg",
+        "content_type": "application/x-apple-diskimage",
+        "size": 47000000,
+        "download_count": 2204,
+        "created_at": "2026-04-02T12:31:00Z",
+        "updated_at": "2026-06-09T08:00:00Z"
+      }
+    ]
+  }
+]

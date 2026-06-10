@@ -1,0 +1,10 @@
+[
+  {
+    "starred_at": "2025-01-22T14:05:00Z",
+    "user": { "login": "dave", "id": 14, "type": "User" }
+  },
+  {
+    "starred_at": "2025-08-30T22:18:00Z",
+    "user": { "login": "erin", "id": 15, "type": "User" }
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "count": 1432,
+  "uniques": 274,
+  "views": [
+    { "timestamp": "2026-05-28T00:00:00Z", "count": 121, "uniques": 38 },
+    { "timestamp": "2026-05-29T00:00:00Z", "count": 98, "uniques": 31 },
+    { "timestamp": "2026-05-30T00:00:00Z", "count": 76, "uniques": 22 },
+    { "timestamp": "2026-05-31T00:00:00Z", "count": 64, "uniques": 19 },
+    { "timestamp": "2026-06-01T00:00:00Z", "count": 142, "uniques": 41 },
+    { "timestamp": "2026-06-02T00:00:00Z", "count": 156, "uniques": 47 },
+    { "timestamp": "2026-06-03T00:00:00Z", "count": 133, "uniques": 39 }
+  ]
+}

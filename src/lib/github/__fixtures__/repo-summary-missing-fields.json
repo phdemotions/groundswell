@@ -1,0 +1,14 @@
+{
+  "id": 222,
+  "name": "young-repo",
+  "full_name": "joshgonzales/young-repo",
+  "private": false,
+  "owner": { "login": "joshgonzales", "id": 583231, "type": "User" },
+  "html_url": "https://github.com/joshgonzales/young-repo",
+  "fork": false,
+  "created_at": "2026-06-01T00:00:00Z",
+  "stargazers_count": null,
+  "watchers_count": 14,
+  "forks_count": null,
+  "subscribers_count": null
+}
