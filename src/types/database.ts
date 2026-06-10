@@ -33,6 +33,14 @@ export type Json =
 /** Data-availability class for a signal snapshot (R5). */
 export type DataClass = 'cumulative' | 'timeseries' | 'rolling_window'
 
+/**
+ * Per-(project, metric) derived-series status (U8). `'ok'` = >= 2 usable points,
+ * real velocity/growth; `'tracking_started'` = < 2 points, show the absolute
+ * value + a "tracking started" marker, never a false 0% (R12 / KTD6). Mirrors
+ * `SeriesStatus` in src/lib/metrics/derive.ts.
+ */
+export type MetricStatus = 'ok' | 'tracking_started'
+
 /** Status of a capture run (KTD3). */
 export type CaptureRunStatus = 'running' | 'success' | 'partial' | 'error'
 
@@ -333,6 +341,41 @@ export interface Database {
         }
         Relationships: []
       }
+      /**
+       * Anon-facing per-(published project, published cumulative metric) derived
+       * numbers (U8 — 00002_derived_views.sql). `security_invoker` view over the
+       * gs_published_metric_summaries() definer gate; published-only (KTD10/R21).
+       * `status` carries per-(project,metric) degradation (R12); `growth_pct` is
+       * null when SUPPRESSED — render `absolute_delta` instead (KTD12). Read-only.
+       */
+      gs_public_metrics: {
+        Row: {
+          project_id: string | null
+          slug: string | null
+          metric: string | null
+          status: MetricStatus | null
+          latest: number | null
+          tracking_started_at: string | null
+          velocity_per_day: number | null
+          velocity_window_days: number | null
+          absolute_delta: number | null
+          growth_pct: number | null
+        }
+        Relationships: []
+      }
+      /**
+       * Anon-facing epoch-aligned cross-project download aggregate curve (U8 —
+       * R11/KTD12), published-only. The hero absolute number is SUM(latest) over
+       * the `downloads` rows of `gs_public_metrics`; this is the shaped curve over
+       * time, aligned to the common capture epoch. Read-only.
+       */
+      gs_public_aggregate_downloads: {
+        Row: {
+          day: string | null
+          total: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       /**
@@ -352,6 +395,36 @@ export interface Database {
           visibility: SignalVisibility
           created_at: string
           updated_at: string
+        }[]
+      }
+      /**
+       * SECURITY DEFINER gate behind `gs_public_metrics` (U8). Prefer reading the
+       * view; typed here to mirror `gen types`. Published-only (KTD10).
+       */
+      gs_published_metric_summaries: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          project_id: string
+          slug: string
+          metric: string
+          status: MetricStatus
+          latest: number
+          tracking_started_at: string | null
+          velocity_per_day: number | null
+          velocity_window_days: number
+          absolute_delta: number | null
+          growth_pct: number | null
+        }[]
+      }
+      /**
+       * SECURITY DEFINER wrapper behind `gs_public_aggregate_downloads` (U8).
+       * Prefer reading the view; typed here to mirror `gen types`.
+       */
+      gs_published_aggregate_downloads: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          day: string
+          total: number
         }[]
       }
     }
