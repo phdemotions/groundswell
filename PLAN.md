@@ -1,20 +1,84 @@
-# Groundswell — Next
+# Groundswell — Plan (v2: static-first)
 
-**Branch:** `feat/scaffold-and-mockups` (own repo, unpushed; tree clean except untracked local preview copy + `.claude/`; build green).
+**Branch:** `feat/scaffold-and-mockups` (own repo, unpushed).
 
-**Mockup design gate — APPROVED** (Josh, 2026-06-10: "looks good enough").
-Canonical mockup: `docs/mockups/2026-06-10-showcase-real.html` (preview port 4594) —
-real numbers (citegeist 546 / 10★ / 16 releases), de-echoed, full-width, pixel-aligned,
-quiet editorial "Shipping next" cards.
+---
 
-**Heavy build (U9→U10) HELD** pending **GS-002** recruiter validation — Josh's own plan
-gate (don't build U10 against an unvalidated design). Next real action is GS-002 (Josh).
+## Architecture (chosen 2026-06-10): GitHub Pages + Actions + JSON-in-repo
 
-**On GS-002 pass, build the UI track** (each: implement → /simplify → /deslop → /thermo-nuclear → commit; mockup-first still applies to U11/U12 with a lighter gate):
-U9 chart primitives (d3-shape + motion, barrel export) → U10 public showcase → U11 curation + auth (`proxy.ts`) → U12 private radar.
+**No Supabase, no Vercel.** GitHub's API has no history (`download_count` is
+cumulative; traffic is a 14-day rolling window), so we persist a daily snapshot. The
+store is JSON committed to this repo — **git history is the time-series log.**
 
-**Committed (Phase A + derived):** U1 scaffold · U2 schema/RLS · U3 client · U4 capture+watchdog · U5 mockups v1 · U7 backfill · U8 derived · real-numbers + 4-round polish + alignment + quiet Shipping-next mockup (`showcase-real.html`). Full `pnpm build` green.
+- **Capture:** `.github/workflows/capture.yml` (daily cron) runs `scripts/capture.mjs`
+  (reuses the U3 GitHub client) → appends a line to `data/<repo>.ndjson` → commits.
+- **Site:** Next.js **static export** (`output: 'export'`) → GitHub Pages via
+  `.github/workflows/deploy.yml`. Pages SSG from `derive.ts`; charts render
+  client-side from the JSON.
+- **Refresh loop:** capture commit → triggers deploy → site rebuilds daily.
+- **Private radar (U12):** static can't server-gate → **local-only** (`pnpm dev`,
+  reading gitignored `data/.local/`).
 
-**Blockers (Josh, manual):** GS-001 ops → live capture; GS-002 recruiters → U6.
+---
 
-**Before U9/U10:** fold the GS-007 conventions into `groundswell/CLAUDE.md`.
+## Data contract (`data/`)
+
+```
+data/meta.json            { repos: [{ name, owner, visibility, trackingStartedAt }], lastCapture }
+data/<repo>.ndjson        one line/day: { d, downloads, stars, forks, watchers, releases: { <tag>: count } }
+data/backfill/<repo>.json { stars: [{ d, total }], cadence: [{ tag, publishedAt }] }
+data/.local/<repo>.ndjson gitignored — private-repo snapshots (radar only)
+```
+
+Public store commits **public repos only**. Private-repo metrics never enter
+committed JSON (GS-010 guard test).
+
+---
+
+## Units
+
+**PORT (keep, repoint to JSON):** U3 GitHub client · U7 backfill (writes JSON) ·
+U8 `derive.ts` (reads NDJSON) · `runBounded` · domain types.
+
+**DEPRECATE (remove — GS-009 pivot commit):** U1 Supabase clients ·
+U2 SQL schema/RLS/views · U4 Vercel cron route + watchdog · `proxy.ts` ·
+`env.ts` Supabase/`CRON_SECRET` gating · `admin-import-barrier` test · `vercel.json` ·
+`supabase/` · `@supabase/*` + `server-only` deps.
+
+**BUILD (next):**
+1. **GS-009** — pivot: strip the Supabase/Vercel layer; repoint backfill + derive to JSON.
+2. **U4′** capture: `scripts/capture.mjs` + `.github/workflows/capture.yml` (cron → NDJSON commit); `data/meta.json`.
+3. **U8′** derive reads NDJSON (+ cold-start / backfill merge).
+4. **U9** chart primitives — `d3-shape` + `motion` + SVG barrel (HTML stat numbers, portal tooltips). Unchanged by the pivot.
+5. **U10** static showcase — SSG from JSON, ports `showcase-real.html` to the pixel.
+6. **U11′** deploy: `output: 'export'` + `.github/workflows/deploy.yml` → Pages (CI runs here).
+7. **U12** radar — local-only, deferred.
+
+Each unit: implement → `/simplify` → `/deslop` → `/thermo-nuclear` → commit.
+
+---
+
+## Gate
+
+Mockup design **APPROVED** 2026-06-10. Recruiter check (U6) **waived**
+(Josh: "assume recruiter thinks it's fine"). → Build the static path now.
+
+---
+
+## Ops — GS-001′ (Josh, much smaller than v1)
+
+- Mint fine-grained **PAT** (`Administration:Read` + `Contents:Read` +
+  `Metadata:Read`, scoped to tracked repos, 90-day + rotation) → repo secret `GH_PAT`.
+- Enable **GitHub Pages** (Source: GitHub Actions).
+- Populate `data/meta.json` (tracked repos · visibility · trackingStartedAt).
+- Keep the repo **public** → Actions free. (Optional: custom domain; else project-page
+  `basePath=/groundswell`.)
+
+---
+
+## Real data baseline (verified via `gh`, owner `phdemotions`)
+
+- **zotero-citegeist** (public): 546 downloads · 10 stars · 16 releases
+  (v1.3.0=274, v2.0.2=116, v2.0.0=61, v2.0.1=23, v1.0.0=17, v1.2.0=35, others single/low).
+- provenance · arbiter.ac · marginalia: **private, 0 public** (radar-only).
+- glimpse: public, 0 releases. stemma: no GitHub remote.

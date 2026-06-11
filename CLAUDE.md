@@ -1,25 +1,30 @@
 # Groundswell
 
 > **Developer-traction showcase.**
-> Capture multi-signal GitHub adoption over time → a recruiter-facing public page
-> led by growth + an honest absolute aggregate, plus a private "what's growing" radar.
+> A daily GitHub Action captures multi-signal adoption → JSON in this repo →
+> a static GitHub Pages site, led by growth + an honest absolute aggregate.
+> Plus a local-only "what's growing" radar.
 
 ---
 
 ## What it is
 
-Personal-first developer-traction showcase. One capture spine writes a
-source-agnostic snapshot store (GitHub v1: downloads, stars, forks, watchers,
-views, clones, referrers, ship-cadence); everything reads derived views off it.
-A public unauthenticated showcase leads with a real absolute aggregate (total
-downloads + stars) with momentum as the supporting modifier, and backfilled
-curves (stars/forks/ship-cadence) carry the early growth story during cold-start.
-A private, auth-gated radar ranks what's growing.
+Personal-first developer-traction showcase. A daily **GitHub Action** captures
+multi-signal adoption (downloads, stars, forks, watchers, ship-cadence) and commits
+it as JSON to this repo — **git history is the time-series store**. A static
+**GitHub Pages** site reads that JSON: a public showcase leads with a real absolute
+aggregate (total downloads + stars), momentum as the supporting modifier, and
+backfilled curves (stars / forks / ship-cadence) carrying the early growth story
+during cold-start. A private "what's growing" radar runs **local-only** (`pnpm dev`)
+— static hosting can't gate it server-side.
 
-**Canonical plan (read first):**
-[`docs/plans/2026-06-10-001-feat-groundswell-traction-showcase-plan.md`](docs/plans/2026-06-10-001-feat-groundswell-traction-showcase-plan.md)
-Brainstorm: `docs/brainstorms/2026-06-10-developer-traction-showcase-requirements.md`.
-Current state: `STATUS.md`. Open issues: `ISSUES.md`.
+**No Supabase, no Vercel** (architecture chosen 2026-06-10 — see `PLAN.md`). GitHub's
+API has no history, so the only hard requirement is persisting a daily snapshot;
+JSON-in-repo does that at personal scale without a database.
+
+**Plan (read first):** `PLAN.md` (v2: static-first). Origin brainstorm +
+v1 (Supabase) plan are archived under `docs/`. Current state: `STATUS.md`.
+Open issues: `ISSUES.md`.
 
 ---
 
@@ -28,9 +33,10 @@ Current state: `STATUS.md`. Open issues: `ISSUES.md`.
 Load-bearing. U9/U10 and every later surface inherit them.
 
 1. **No hardcoded numbers — ever.** Every figure the UI shows (downloads, stars,
-   per-release bars, deltas, dates) renders from the capture pipeline via the U8
-   derived views — never a literal in JSX, never a prod fixture. If a number can't be
-   sourced yet, show an honest empty / cold-start state, not a guess.
+   per-release bars, deltas, dates) renders from the JSON store via the derive layer
+   (`src/lib/metrics/derive.ts`) — never a literal in JSX, never a committed fixture
+   passed off as live. If a number can't be sourced yet, show an honest empty /
+   cold-start state, not a guess.
 2. **Honesty-first.** No traction claimed before it's earned. Cold-start curves are
    labeled ("tracking started &lt;month&gt;"); backfilled series (stars / forks / cadence)
    are marked reconstructed; private/unreleased repos show status, not invented metrics.
@@ -44,60 +50,54 @@ Load-bearing. U9/U10 and every later surface inherit them.
 
 ## Stack
 
-- **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5.8 (strict)
+- **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5.8 (strict),
+  **static export** (`output: 'export'`) — no server at runtime.
 - **Styling:** Tailwind CSS v4 (`@import "tailwindcss" source(none)` + `@source "./src"`).
-  Design tokens are owned by **U5** — do NOT add an `@theme` block to
-  `src/app/globals.css` before the U5 mockup approval gate.
-- **Database:** Supabase — own dedicated project (`public` schema), not a shared instance (KTD11)
-- **Auth:** Supabase Auth (`@supabase/ssr`) — public showcase is anon; radar + curation are gated
-- **Error tracking:** Sentry (`@sentry/nextjs`) — consent-gated, no-ops without a DSN, PII stripped
-- **Charts (later, U9):** hand-rolled `d3-shape` + `motion` + SVG behind a barrel (KTD4)
-- **Deployment:** Vercel (Pro plan); daily capture via Vercel Cron (needs Fluid Compute)
+  Design tokens land in `globals.css` (`@theme`) when U10 ports the approved mockup.
+- **Store:** JSON in `data/` (NDJSON daily snapshots). **Git history is the
+  time-series log.** No database.
+- **Capture:** daily **GitHub Action** → `scripts/capture.mjs` (reuses the U3 GitHub
+  client) → append `data/<repo>.ndjson` → commit.
+- **Charts (U9):** hand-rolled `d3-shape` + `motion` + SVG behind a barrel (KTD4),
+  rendered client-side from the JSON.
+- **Hosting:** GitHub Pages (static), deployed by `.github/workflows/deploy.yml`.
+- **Error tracking (optional):** Sentry client-only; no-ops without a DSN.
 
 ---
 
-## CI Policy — Vercel-first, NOT GitHub Actions
+## CI — runs in the deploy workflow (this repo is not on Vercel)
 
-**Rule:** all CI checks (type-check, lint, tests, build) run inside the
-`pnpm build` chain so Vercel runs them on every preview + production deploy.
-Josh has Vercel Pro (build minutes included); GitHub Actions minutes bill against
-his personal plan. (KTD9 · mirrors `~/developer/allages`.)
+The monorepo default is Vercel-first CI; **Groundswell is the documented exception**
+because it deploys to **GitHub Pages**, not Vercel.
 
-- `package.json` `"build"`: `pnpm run type-check && pnpm run lint && pnpm run test && next build`
-- `vercel.json` `buildCommand: "pnpm run build"` (explicit — prevents Next auto-detect bypass)
-- `build:next` is the emergency escape hatch (`next build` only)
-- `NODE_ENV=test` is pinned on the test script (Vercel sets `NODE_ENV=production`,
-  which strips React `act` and breaks the test env)
-- Local pre-commit via `simple-git-hooks` + `lint-staged` (free, fast feedback)
-
-**Do not add `.github/workflows/*.yml` for type-check / lint / test / build.**
-Add to the build chain instead. (GH Actions OK only for non-deploy automation
-Vercel can't do — scheduled DB cleanups, cross-repo — with explicit approval.)
-
-**Dependencies:** Renovate (`renovate.json`), not Dependabot — runs as a GitHub
-App, no Actions billing, Vercel-preview-gated auto-merge.
+- CI (type-check · lint · test) runs in `.github/workflows/deploy.yml` BEFORE
+  `next build`, on every push. A red check blocks the Pages deploy.
+- Daily capture (`capture.yml`) is the explicitly-allowed "scheduled automation
+  Vercel can't do" exception (per `~/developer/CLAUDE.md`).
+- **Keep the groundswell repo public** → Actions minutes are free/unlimited. (Private
+  would be ~30–60 min/month, within the 2,000-min free tier — but public is the
+  intended state for a recruiter showcase anyway.)
+- `NODE_ENV=test` pinned on the test script (CI sets `production`, which strips React
+  `act`). Local pre-commit via `simple-git-hooks` + `lint-staged`.
+- Dependencies: Renovate (`renovate.json`), not Dependabot.
 
 ---
 
-## Secret + trust boundary (KTD10)
+## Secret + privacy boundary
 
-- **Service-role key is server-only.** `src/lib/supabase/admin.ts` imports the
-  `server-only` package (build fails if bundled client-side). Two more guards:
-  an eslint `no-restricted-imports` rule barring `admin` from the `(public)`
-  route group, and `__tests__/admin-import-barrier.test.ts` (scans every
-  `'use client'` file). Never weaken any of the three.
-- **Three Supabase clients, never mixed:** `client.ts` (browser, anon, RLS),
-  `server.ts` (Server Components/Actions, anon, RLS), `admin.ts` (service-role,
-  RLS bypass, server-only). The capture path is the only routine admin consumer.
-- **RLS is deny-all by default; the public showcase reads one read-only view**
-  (derived / aggregate columns only — never raw internal rows). The anon role gets
-  `SELECT` on that view and nothing else.
-- **`CAPTURE_ENABLED` defaults OFF.** `src/lib/env.ts` (Zod) only *requires*
-  `GITHUB_TOKEN` + `CRON_SECRET` (min length) when capture is on, so dev/preview
-  boot without them. Server vars never carry a `NEXT_PUBLIC_` prefix.
-- **Next 16 uses `proxy.ts` / `proxy()`**, NOT `middleware.ts` (which Next 16
-  ignores — the auth gate would silently not run). The session-refresh helper is
-  `src/lib/supabase/middleware.ts`, imported by the root `proxy.ts`.
+- **One secret: the GitHub PAT (`GH_PAT`).** It lives ONLY as a GitHub Actions repo
+  secret, used by `scripts/capture.mjs` inside the Action. It is NEVER bundled into
+  the static site — the deployed Pages site ships only the already-captured JSON: no
+  tokens, no runtime secrets.
+- **Public store = public repos only.** Capture commits metrics for PUBLIC repos to
+  `data/`. Private-repo traction (provenance, arbiter.ac, marginalia) must NEVER land
+  in committed JSON — it goes to gitignored `data/.local/`, read only by the local
+  radar. **Leaking private-repo numbers in a public repo is the one unacceptable
+  failure here** (enforced by a guard test — GS-010).
+- **Least-privilege PAT:** fine-grained, `Administration:Read` + `Contents:Read` +
+  `Metadata:Read`, scoped to the tracked repos, 90-day expiry + rotation reminder.
+- **No service-role / no DB / no auth surface.** The static site has no server — no
+  admin client, no RLS, no session middleware to get wrong.
 
 ---
 
@@ -109,25 +109,23 @@ Hard-won; getting any of these wrong silently corrupts the curves.
   is an alias of stargazers. Use `subscribers_count` for true watchers.
 - **Release `download_count` is cumulative, no history.** A running per-asset total;
   deltas come from differencing our daily snapshots, never from the API.
-- **Traffic (views/clones) is owner-only + 14-day rolling.** Re-upsert the full 14-day
-  window each run (`ON CONFLICT (repo, metric, day)`) so late-arriving days self-heal.
+- **Traffic (views/clones) is owner-only + 14-day rolling.** Re-capture the full
+  14-day window each run and dedupe by `(repo, metric, day)` so late-arriving days
+  self-heal (in JSON: rewrite the trailing 14 days, don't blind-append).
 - **Daily uniques are NOT additive.** Summing daily `uniques` overcounts — persist the
   window-level unique figure; never sum.
 - **Stars / forks / cadence are backfillable** (`star+json` `starred_at`; creation /
   published timestamps). The cold-start story rides these reconstructed series.
-- **Least-privilege PAT:** fine-grained, `Administration:Read` + `Contents:Read` +
-  `Metadata:Read`, scoped to tracked repos, 90-day expiry + rotation.
 
 ---
 
 ## Mockup-first
 
-This product follows the monorepo **mockup-first** rule: any user-facing UI
-surface goes through a ranked HTML mockup + owner approval **before**
-implementation. The design system + showcase mockups are **U5** (an explicit
-approval gate); recruiter validation against that mockup is **U6**, and it gates
-the heavy Phase C build. The current `src/app/page.tsx` is a deliberate
-placeholder carrying no design debt.
+Any user-facing UI surface goes through a ranked HTML mockup + owner approval
+**before** implementation. The showcase mockup (**U5**) was approved 2026-06-10
+(`docs/mockups/2026-06-10-showcase-real.html`). Recruiter validation (**U6**) was
+waived by Josh ("assume recruiter thinks it's fine"). `src/app/page.tsx` is a
+deliberate placeholder until U10 ports the mockup to components.
 
 ---
 
@@ -148,32 +146,38 @@ Carry these from the approved mockup into real components.
   invented color. Restraint reads as honesty.
 - **Honesty cues are design elements**, not afterthoughts: cold-start labels,
   "reconstructed" tags on backfilled series, AA contrast on every honesty note.
-- **Tokens come from U5.** Once the design system lands in `globals.css` (`@theme`),
-  components consume tokens — no ad-hoc hex or spacing.
 
 ---
 
-## Structure (current — scaffold)
+## Structure (target — v2 static-first)
 
 ```
 groundswell/
-├── package.json · vercel.json · renovate.json · pnpm-workspace.yaml · tsconfig.json
-├── next.config.ts · postcss.config.mjs · eslint.config.mjs · vitest.config.ts
-├── proxy.ts                         # Next 16 session refresh (NOT middleware.ts)
-├── instrumentation.ts · sentry.{client,server}.config.ts
-├── vitest.setup.ts · vitest.server-only-shim.ts
-├── __tests__/                       # env-schema + admin-import-barrier smoke tests
+├── package.json · renovate.json · pnpm-workspace.yaml · tsconfig.json
+├── next.config.ts            # output: 'export' (static) · basePath for project Pages
+├── postcss.config.mjs · eslint.config.mjs · vitest.config.ts
+├── scripts/
+│   ├── capture.mjs           # daily — GitHub API → append data/<repo>.ndjson
+│   └── backfill.mjs          # one-time — starred_at + release dates → data/backfill/
+├── .github/workflows/
+│   ├── capture.yml           # cron (daily) → run capture → commit JSON
+│   └── deploy.yml            # on push → CI (type-check·lint·test) → next build → Pages
+├── data/
+│   ├── meta.json             # repos · visibility · trackingStartedAt · lastCapture
+│   ├── <repo>.ndjson         # daily snapshots (per-release counts inline) = history
+│   ├── backfill/<repo>.json
+│   └── .local/               # gitignored — private-repo metrics for the local radar
 └── src/
-    ├── app/                         # layout · page (placeholder) · globals.css
+    ├── app/                  # layout · page · globals.css (static showcase)
     ├── lib/
-    │   ├── env.ts                   # Zod, capture-gated secret requirements
-    │   └── supabase/{client,server,admin,middleware}.ts
-    └── types/database.ts            # placeholder — U2 generates the real type
+    │   ├── github/           # U3 client (reused by scripts/capture.mjs)
+    │   └── metrics/derive.ts # reads data/*.ndjson → SSG figures
+    └── components/charts/    # d3-shape + motion + SVG barrel (U9)
 ```
 
-Future layout (per plan): `src/app/(public)/` showcase · `src/app/(app)/` radar +
-curation · `src/app/api/cron/github-capture/route.ts` · `supabase/migrations/` ·
-`src/components/charts/` (barrel) · `scripts/backfill.ts`.
+> The Supabase/Vercel scaffold (`src/lib/supabase/`, `supabase/migrations/`,
+> `src/app/api/cron/`, `proxy.ts`, `vercel.json`, `@supabase/*`) is being removed in
+> the pivot — see **GS-009**. Git history preserves it if ever needed.
 
 ---
 
@@ -181,16 +185,18 @@ curation · `src/app/api/cron/github-capture/route.ts` · `supabase/migrations/`
 
 ```bash
 pnpm install
-pnpm dev          # localhost:3000
-pnpm build        # full CI chain: type-check → lint → test → next build
-pnpm test         # vitest (NODE_ENV=test)
+pnpm dev            # localhost:3000 — reads data/*.ndjson (+ data/.local for radar)
+pnpm build          # CI chain + static export (next build, output: 'export')
+pnpm capture        # node scripts/capture.mjs — local capture (needs GH_PAT in env)
+pnpm test           # vitest (NODE_ENV=test)
 ```
 
-Live capture requires U0 ops (GS-001): dedicated Supabase project, fine-grained
-PAT, secrets in all three Vercel buckets, Fluid Compute. Until then the app runs
-with `CAPTURE_ENABLED=false`.
+Live capture requires GS-001 ops (Josh): mint the fine-grained PAT → repo secret
+`GH_PAT`; enable GitHub Pages (Source: GitHub Actions); set the tracked repos in
+`data/meta.json`. Keep the repo public so Actions stay free.
 
 ---
 
-*Inherits the Opus Vita Dual Standard (Apple-grade design + enterprise SaaS) and
-the workspace CI / dependency / design protocols. See `~/developer/CLAUDE.md`.*
+*Inherits the Opus Vita Dual Standard (Apple-grade design + enterprise SaaS) and the
+workspace design protocols. CI/host deviate from Vercel-first by design (static Pages
+deploy) — documented above. See `~/developer/CLAUDE.md`.*
