@@ -28,13 +28,32 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+// Absolute base for OG/canonical URLs. Set NEXT_PUBLIC_SITE_URL to the deployed
+// origin (e.g. https://you.github.io/groundswell) so shared links unfurl correctly.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://groundswell.local'
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'Josh Gonzales — research tools I build and ship',
     template: '%s — Groundswell',
   },
   description:
     'Research tools I build and ship — real GitHub traction, led by an honest aggregate.',
+  openGraph: {
+    title: 'Josh Gonzales — research tools I build and ship',
+    description:
+      'Real GitHub traction for the research tools I build — led by an honest aggregate, not a vanity badge.',
+    siteName: 'Groundswell',
+    type: 'website',
+    url: '/',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Josh Gonzales — research tools I build and ship',
+    description:
+      'Real GitHub traction for the research tools I build — led by an honest aggregate.',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
