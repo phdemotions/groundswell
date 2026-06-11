@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<!-- STATIC MOCKUP: real numbers snapshotted from GitHub 2026-06-10; the live product (U10) renders these from the capture pipeline, never hardcoded. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groundswell — Public Showcase · REAL data · 2026-06-10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,650;9..144,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+ * GROUNDSWELL — Public Showcase · REAL DATA build
+ * 2026-06-10 · Mockup-first approval gate (Unit U5). NOT production CSS.
+ *
+ * Same approved visual-language CONTRACT as 2026-06-10-showcase-rank1-v2.html
+ * (Layer 1 scale → Layer 2 semantic → Layer 3 primitives carried verbatim;
+ * Fraunces + Geist + Geist Mono; swell teal #1E8C7A; @390px; accessible).
+ *
+ * What changed: every INVENTED number is gone. Real public traction is
+ * essentially ONE tool — citegeist. The page leads with its real story:
+ *   · one confident absolute (546 installs)
+ *   · one real curve (the 10-point star history, Apr→Jun)
+ *   · the genuinely strong real signal — relentless shipping (16 releases
+ *     in ~10 weeks, a v2 rewrite landing this month) shown as per-release bars
+ *   · an honest, number-free pipeline of what's shipping next
+ *
+ * De-echo is a hard rule: each number appears EXACTLY once. 546 in the hero;
+ * 10 stars at the star curve; 16 releases at the cadence line; per-release
+ * counts only in the bars; citegeist's one-line description stated once.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * LAYER 1 + 2 — TOKENS  (carried verbatim from the approved artifact)
+ * ───────────────────────────────────────────────────────────────────────── */
+:root {
+  /* ─── SCALE · Neutrals (warm-tinted ink, never pure #000/#fff) ─────────── */
+  --paper:      #FBFAF7;
+  --paper-2:    #F4F2EC;
+  --surface-1:  #FFFFFF;
+  --surface-2:  #FCFBF8;
+  --ink-900:    #1A1C1A;
+  --ink-700:    #34403A;
+  --ink-500:    #5A655E;
+  --ink-400:    #828D86;
+  --ink-300:    #AEB6B0;
+  --ink-200:    #D8DCD6;
+  --ink-100:    #ECEEE9;
+
+  /* ─── SCALE · Signature — "Swell" teal ────────────────────────────────── */
+  --swell-50:   #E8F4F1;
+  --swell-100:  #CDE9E2;
+  --swell-200:  #9FD4C8;
+  --swell-300:  #5FB6A6;
+  --swell-500:  #1E8C7A;
+  --swell-600:  #137061;
+  --swell-700:  #0E574C;
+  --swell-900:  #0A3A33;
+
+  /* ─── SCALE · Honesty accent — amber ("tracking started") ─────────────── */
+  --amber-50:   #FBF1E0;
+  --amber-200:  #F0D7A8;
+  --amber-500:  #C68A2E;
+  --amber-700:  #8A5A14;
+
+  /* ─── SCALE · Type families ───────────────────────────────────────────── */
+  --serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --sans:  'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono:  'Geist Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Type ramp (weight / size / line-height / family) */
+  --t-statement:   600 clamp(32px, 4.8vw, 64px)/1.05 var(--serif);
+  --t-mega:        600 clamp(64px, 10vw, 138px)/0.92 var(--mono);
+  --t-hero:        600 clamp(40px, 7vw, 76px)/0.98 var(--serif);
+  --t-display:     600 clamp(28px, 3.4vw, 44px)/1.04 var(--serif);
+  --t-heading:     600 22px/1.18 var(--serif);
+  --t-subhead:     600 clamp(20px, 2.4vw, 28px)/1.15 var(--serif);
+  --t-lede:        400 clamp(17px, 1.7vw, 21px)/1.5  var(--serif);
+  --t-body:        400 15px/1.6  var(--sans);
+  --t-body-lg:     400 clamp(15px, 1.5vw, 17px)/1.65 var(--sans);
+  --t-body-strong: 500 15px/1.5  var(--sans);
+  --t-label:       500 13px/1.4  var(--sans);
+  --t-meta:        500 11px/1.3  var(--mono);
+
+  /* Numeric display — tabular mono */
+  --t-data-xl:     500 clamp(34px, 5vw, 52px)/1.0 var(--mono);
+  --t-data-lg:     500 clamp(28px, 3vw, 34px)/1.05 var(--mono);
+  --t-data-md:     500 17px/1.2  var(--mono);
+  --t-data-sm:     500 12px/1.2  var(--mono);
+
+  /* Letter-spacing */
+  --ls-tight:  -0.01em;
+  --ls-mega:   -0.03em;
+  --ls-meta:    0.08em;
+  --ls-wide:    0.18em;
+
+  /* ─── SCALE · Geometry (radii) ────────────────────────────────────────── */
+  --r-xs:    4px;  --r-sm:  8px;  --r-md: 12px;  --r-lg: 16px;
+  --r-xl:   22px;  --r-2xl: 30px;  --r-pill: 999px;
+
+  /* ─── SCALE · Spacing — 4pt base, 8pt rhythm + two editorial steps ─────── */
+  --s-1:  4px;  --s-2:  8px;  --s-3: 12px;  --s-4: 16px;  --s-5: 24px;
+  --s-6: 32px;  --s-7: 40px;  --s-8: 56px;  --s-9: 72px;  --s-10: 96px;
+  --s-11: 128px; --s-12: 160px;
+
+  /* ─── SCALE · Elevation ───────────────────────────────────────────────── */
+  --shadow-hairline: 0 0 0 1px rgba(26,28,26,0.05);
+  --shadow-1: 0 1px 2px rgba(26,40,34,0.04), 0 0 0 1px rgba(26,40,34,0.05);
+  --shadow-2: 0 2px 6px rgba(26,40,34,0.05), 0 14px 30px -12px rgba(26,40,34,0.10);
+  --shadow-3: 0 30px 60px -20px rgba(10,58,51,0.22);
+  --shadow-glow: 0 40px 120px -40px rgba(30,140,122,0.35);
+  --shadow-focus: 0 0 0 3px rgba(30,140,122,0.28);
+
+  /* ─── SCALE · Motion ──────────────────────────────────────────────────── */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-micro:  180ms;
+  --dur-1:      320ms;
+  --dur-curve:  1500ms;
+  --z-overlay: 60;
+
+  /* ─── SCALE · Data-viz palette ────────────────────────────────────────── */
+  --viz-cat-1: #1E8C7A;
+  --viz-cat-2: #3A6EA5;
+  --viz-cat-3: #B5683C;
+  --viz-cat-4: #7A5AA6;
+  --viz-cat-5: #4F8C46;
+  --viz-cat-6: #B59A2E;
+  --viz-axis:  #D8DCD6;
+  --viz-grid:  #ECEEE9;
+  --viz-track: #F0EEE8;
+  --viz-tooltip-bg: #1A1C1A;
+  --viz-tooltip-fg: #FBFAF7;
+  --viz-tracking-start: var(--amber-500);
+
+  /* ─── SEMANTIC (Layer 2) ──────────────────────────────────────────────── */
+  --color-bg:        var(--paper);
+  --color-surface:   var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-ink:       var(--ink-900);
+  --color-ink-2:     var(--ink-500);
+  --color-ink-3:     var(--ink-400);
+  --color-border:    var(--ink-200);
+  --color-action:    var(--swell-500);
+  --color-action-2:  var(--swell-600);
+  --color-accent-ink:var(--swell-700);
+  --color-honest:    var(--amber-500);
+  --color-honest-bg: var(--amber-50);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * LAYER 3 — PRIMITIVES (consume SEMANTIC only)
+ * ───────────────────────────────────────────────────────────────────────── */
+.kicker {
+  font: var(--t-meta); letter-spacing: var(--ls-wide); text-transform: uppercase;
+  color: var(--color-ink-3); display: inline-flex; align-items: center; gap: var(--s-2);
+}
+.kicker--accent { color: var(--color-accent-ink); }
+.kicker::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; }
+.kicker--bare::before { display: none; }
+
+.surface {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--r-xl); box-shadow: var(--shadow-1);
+}
+
+.stat-num { font: var(--t-data-xl); color: var(--color-ink); letter-spacing: var(--ls-tight); font-variant-numeric: tabular-nums; }
+.stat-label { font: var(--t-label); color: var(--color-ink-3); }
+
+/* delta / momentum pill */
+.delta {
+  display: inline-flex; align-items: center; gap: 5px;
+  font: var(--t-data-sm); font-weight: 600;
+  padding: 5px 11px 5px 8px; border-radius: var(--r-pill);
+  background: var(--swell-50); color: var(--swell-700); border: 1px solid var(--swell-100);
+}
+.delta svg { width: 12px; height: 12px; }
+.delta--flat { background: var(--ink-100); color: var(--ink-500); border-color: var(--ink-200); }
+
+/* status chip — honesty cue (pipeline + cold-start) */
+.tracking {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: var(--t-data-sm); color: var(--amber-700);
+  background: var(--amber-50); border: 1px solid var(--amber-200);
+  padding: 5px 11px; border-radius: var(--r-pill);
+}
+.tracking .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber-500); }
+/* neutral variant for "public · no release yet" / "private" framing */
+.tracking--quiet { color: var(--ink-500); background: var(--ink-100); border-color: var(--ink-200); }
+.tracking--quiet .dot { background: var(--ink-400); }
+
+/* cta */
+.cta {
+  font: var(--t-body-strong); color: #fff; background: var(--color-action);
+  border: none; border-radius: var(--r-md); padding: 13px 22px;
+  display: inline-flex; align-items: center; gap: var(--s-2); cursor: pointer;
+  transition: background var(--dur-micro) var(--ease-soft), transform var(--dur-micro) var(--ease-soft), box-shadow var(--dur-micro) var(--ease-soft);
+}
+.cta:hover { background: var(--color-action-2); box-shadow: 0 8px 20px -8px rgba(19,112,97,.5); }
+.cta:active { transform: translateY(1px); }
+.cta--ghost { background: transparent; color: var(--color-accent-ink); border: 1px solid var(--color-border); }
+.cta--ghost:hover { background: var(--swell-50); border-color: var(--swell-200); box-shadow: none; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * DOC CHROME — minimal wrapper
+ * ───────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body); font-family: var(--sans); }
+.doc-bar {
+  max-width: 1400px; margin: 0 auto; padding: var(--s-6) var(--s-6) 0;
+  display: flex; align-items: baseline; gap: var(--s-4); flex-wrap: wrap;
+}
+.doc-bar .badge { font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; font-weight: 600; background: var(--swell-500); color: #fff; padding: 5px 12px; border-radius: var(--r-pill); }
+.doc-bar .ttl { font: var(--t-heading); }
+.doc-bar .sub { font-size: 13px; color: var(--ink-500); }
+.frame-label { max-width: 1400px; margin: var(--s-5) auto var(--s-2); padding: 0 var(--s-6); font: var(--t-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--ink-400); }
+.stage { max-width: 1400px; margin: 0 auto var(--s-8); padding: 0 var(--s-6); }
+.device { background: var(--color-bg); border: 1px solid var(--ink-300); border-radius: var(--r-2xl); overflow: hidden; box-shadow: var(--shadow-2); }
+.device--phone { max-width: 390px; }
+.phones { max-width: 1400px; margin: 0 auto var(--s-10); padding: 0 var(--s-6); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--s-6); align-items: start; }
+
+/* visually-hidden but accessible (offscreen data table) */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * SHOWCASE SCREEN — scoped under .gs.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+.gs { font-family: var(--sans); color: var(--color-ink); position: relative;
+  background:
+    radial-gradient(120% 80% at 88% -8%, rgba(95,182,166,0.16) 0%, rgba(95,182,166,0) 55%),
+    radial-gradient(90% 70% at -5% 4%, rgba(232,244,241,0.7) 0%, rgba(232,244,241,0) 50%),
+    var(--color-bg);
+}
+.gs ::selection { background: var(--swell-100); }
+.gs a { color: inherit; text-decoration: none; }
+.gs-inner { max-width: 1240px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 72px); }
+
+/* ── top bar ── */
+.gs-top { display: flex; align-items: center; justify-content: space-between; padding: var(--s-5) 0; }
+.gs-top-wrap { border-bottom: 1px solid rgba(26,40,34,.07); }
+.gs-brand { display: flex; align-items: center; gap: var(--s-3); }
+.gs-mark { width: 30px; height: 30px; }
+.gs-brand b { font: var(--t-body-strong); font-size: 16px; letter-spacing: .01em; }
+.gs-brand .who { font: var(--t-data-sm); color: var(--color-ink-3); margin-top: 1px; }
+.gs-topnav { display: flex; align-items: center; gap: var(--s-6); }
+.gs-topnav a { font: var(--t-label); color: var(--color-ink-2); }
+.gs-topnav a:hover { color: var(--color-ink); }
+
+/* ── HERO: plain statement → ONE mega number → ONE real curve (stars) ──
+   NOTE: section classes set only vertical padding (longhand) so they never
+   clobber .gs-inner's horizontal gutter when both are on the same element. */
+.gs-hero { padding-top: clamp(48px, 8vw, 104px); padding-bottom: clamp(40px, 6vw, 80px); }
+.gs-eyebrow { margin-bottom: var(--s-6); }
+.gs-statement {
+  font: var(--t-statement); color: var(--color-ink); letter-spacing: var(--ls-tight);
+  max-width: 20ch; margin: 0 0 clamp(40px, 6vw, 72px);
+}
+.gs-statement .em { color: var(--swell-700); font-style: italic; }
+
+/* the single anchor: mega numeral + caption + momentum modifier, beside the curve */
+.gs-anchor-block { display: grid; grid-template-columns: minmax(320px, 0.82fr) 1.18fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.gs-anchor .lead-label { font: var(--t-label); color: var(--color-ink-2); display: flex; align-items: center; gap: var(--s-2); margin-bottom: var(--s-2); }
+.gs-anchor .lead-label svg { width: 16px; height: 16px; color: var(--swell-600); }
+.gs-mega { font: var(--t-mega); color: var(--color-ink); letter-spacing: var(--ls-mega); font-variant-numeric: tabular-nums; display: block; }
+.gs-mega .plus { color: var(--swell-500); }
+.gs-anchor .caption { font: var(--t-lede); color: var(--color-ink-2); margin: var(--s-4) 0 0; max-width: 28ch; }
+.gs-anchor .caption b { color: var(--color-ink); font-weight: 600; }
+.gs-modifier { display: flex; align-items: center; gap: var(--s-3); margin-top: var(--s-5); flex-wrap: wrap; }
+.gs-modifier .delta { font-size: 13px; padding: 6px 13px 6px 10px; }
+.gs-modifier .aside { font: var(--t-label); color: var(--color-ink-3); }
+
+/* the ONE real curve — the star history, the only line chart on the page */
+.gs-curve-wrap { position: relative; }
+.gs-curve-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--s-3); gap: var(--s-4); }
+.gs-curve-head .t { font: var(--t-label); color: var(--color-ink-2); }
+.gs-curve-head .yr { font: var(--t-meta); letter-spacing: var(--ls-meta); color: var(--color-ink-3); }
+.gs-curve svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gs-curve-foot { display: flex; align-items: center; justify-content: space-between; margin-top: var(--s-3); }
+.gs-curve-foot .ax { font: var(--t-data-sm); color: var(--color-ink-3); }
+.gs-curve-foot .mid { font: var(--t-meta); letter-spacing: var(--ls-meta); color: var(--color-ink-2); }
+
+/* ── CADENCE: the real strength — relentless shipping, as per-release bars ── */
+.gs-cadence { padding-top: clamp(48px, 7vw, 96px); padding-bottom: clamp(48px, 7vw, 96px); border-top: 1px solid rgba(26,40,34,.08); }
+.gs-cadence-card {
+  position: relative; border-radius: var(--r-2xl); overflow: hidden;
+  background:
+    radial-gradient(110% 120% at 100% 0%, rgba(14,87,76,0.10) 0%, rgba(14,87,76,0) 50%),
+    var(--color-surface);
+  border: 1px solid var(--color-border); box-shadow: var(--shadow-2);
+}
+.gs-cadence-grid { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: clamp(32px, 5vw, 72px); align-items: center; padding: clamp(32px, 5vw, 64px); }
+.gs-cadence .narr-head { font: var(--t-display); letter-spacing: var(--ls-tight); margin: var(--s-3) 0 var(--s-4); }
+.gs-cadence .narr-head .em { font-style: italic; color: var(--swell-700); }
+.gs-cadence .narr { font: var(--t-body-lg); color: var(--color-ink-2); margin: 0 0 var(--s-5); max-width: 46ch; }
+.gs-cadence .narr b { color: var(--color-ink); font-weight: 600; }
+.gs-cadence .narr-lede { font: var(--t-lede); color: var(--color-ink); max-width: 30ch; margin: 0 0 var(--s-5); }
+.gs-cadence .narr-lede b { color: var(--swell-700); font-weight: 600; }
+
+/* the per-release bar chart — where the per-release counts live, once */
+.gs-bars { }
+.gs-bars-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--s-4); gap: var(--s-4); }
+.gs-bars-head .t { font: var(--t-label); color: var(--color-ink-2); }
+.gs-bars-head .yr { font: var(--t-meta); letter-spacing: var(--ls-meta); color: var(--color-ink-3); }
+.gs-bars svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gs-bars-cap { display: flex; gap: var(--s-5); margin-top: var(--s-4); flex-wrap: wrap; }
+.gs-bars-cap .lg { font: var(--t-data-sm); color: var(--color-ink-3); display: inline-flex; align-items: center; gap: 7px; }
+.gs-bars-cap .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+/* ── PIPELINE: what's shipping next — names + one line + honest status, NO numbers ── */
+.gs-pipeline { padding-top: clamp(48px, 7vw, 88px); padding-bottom: clamp(40px, 6vw, 72px); border-top: 1px solid rgba(26,40,34,.08); }
+.gs-sec-head { margin-bottom: clamp(28px, 4vw, 48px); max-width: 60ch; }
+.gs-sec-head h2 { font: var(--t-display); margin: var(--s-3) 0 var(--s-3); letter-spacing: var(--ls-tight); }
+.gs-sec-head p { font: var(--t-body-lg); color: var(--color-ink-2); margin: 0; max-width: 56ch; }
+
+.gs-pipe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 2vw, 24px); }
+.gs-pipe {
+  position: relative; padding: var(--s-6); border-radius: var(--r-xl);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-1);
+  display: flex; align-items: flex-start; gap: var(--s-4);
+}
+.gs-pipe::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent, var(--swell-500)); opacity: .85; }
+.gs-pipe .badge { width: 42px; height: 42px; border-radius: var(--r-md); display: grid; place-items: center; font: var(--t-data-md); font-weight: 600; color: #fff; flex: none; background: var(--accent, var(--swell-500)); }
+.gs-pipe .body { flex: 1; min-width: 0; }
+.gs-pipe .nm-row { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
+.gs-pipe .nm { font: var(--t-heading); font-size: 19px; }
+.gs-pipe .blurb { font: var(--t-body); color: var(--color-ink-2); margin: var(--s-3) 0 0; }
+
+/* ── footer / sourcing ── */
+.gs-foot { padding-top: clamp(40px, 5vw, 64px); padding-bottom: clamp(48px, 6vw, 80px); border-top: 1px solid rgba(26,40,34,.08); display: flex; justify-content: space-between; gap: var(--s-7); flex-wrap: wrap; }
+.gs-foot .src { font: var(--t-body); color: var(--color-ink-3); max-width: 60ch; line-height: 1.75; }
+.gs-foot .src b { color: var(--color-ink-2); }
+.gs-foot .right { text-align: right; }
+
+/* ── skeleton loading primitive ── */
+.gs .sk { background: linear-gradient(100deg, var(--paper-2) 30%, var(--ink-100) 50%, var(--paper-2) 70%); background-size: 200% 100%; border-radius: var(--r-xs); animation: gsshimmer 1.4s var(--ease-soft) infinite; }
+@keyframes gsshimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* ── animations ── */
+@keyframes gsdraw { from { stroke-dashoffset: var(--len); } to { stroke-dashoffset: 0; } }
+.gs-draw { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: gsdraw var(--dur-curve) var(--ease-out) .35s forwards; }
+@keyframes gsfade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.gs-rise { opacity: 0; animation: gsfade var(--dur-1) var(--ease-out) forwards; }
+@keyframes gsfadeArea { from { opacity: 0; } to { opacity: 1; } }
+.gs-area-in { opacity: 0; animation: gsfadeArea 1100ms var(--ease-soft) .7s forwards; }
+@keyframes gsdot { 0% { opacity: 0; transform: scale(0); } 100% { opacity: 1; transform: scale(1); } }
+.gs-dot-in { opacity: 0; transform-box: fill-box; transform-origin: center; animation: gsdot 420ms var(--ease-out) 1.75s forwards; }
+@keyframes gsbar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.gs-bar { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); animation: gsbar 620ms var(--ease-out) forwards; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * RESPONSIVE — the showcase is a shareable link → mobile is mandatory
+ * ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .gs-anchor-block { grid-template-columns: 1fr; gap: clamp(28px, 6vw, 48px); align-items: start; }
+  .gs-cadence-grid { grid-template-columns: 1fr; gap: var(--s-7); }
+  .gs-pipe-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .gs-topnav a:not(.menu) { display: none; }
+  .gs-modifier .aside { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .gs-draw { stroke-dashoffset: 0 !important; }
+  .gs-rise, .gs-area-in, .gs-dot-in, .gs-bar { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════ DOC WRAPPER (minimal) ════════════════════ -->
+<div class="doc-bar">
+  <span class="badge">REAL data</span>
+  <span class="ttl">Public showcase — citegeist's real story</span>
+  <span class="sub">U5 approval gate · recruiter-facing · proposed visual language v0.1 (tokens unchanged) · numbers snapshotted from GitHub 2026-06-10</span>
+</div>
+
+<div class="frame-label">Desktop · rendered full-bleed (the showcase is its own page, not a framed widget)</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     THE SHOWCASE SCREEN
+     ════════════════════════════════════════════════════════════════════════ -->
+<div class="stage">
+<div class="device gs" role="img" aria-label="Groundswell public showcase. Plain-language summary: research tools I build and ship. Headline figure: citegeist, an open-source Zotero plugin, downloaded 546 times. A single real curve shows its GitHub stars rising to 10 between April and June 2026. Then the real strength: 16 releases shipped in about ten weeks, including a version 2 rewrite this month, shown as per-release download bars. Then an honest pipeline of tools shipping next, with no traction numbers claimed.">
+
+  <!-- TOP BAR -->
+  <div class="gs-top-wrap"><div class="gs-inner"><div class="gs-top">
+    <div class="gs-brand">
+      <svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="8" fill="#0E574C"/>
+        <path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M4 22 C 8 22, 9 7, 14 7 C 19 7, 20 13, 24 13" stroke="#E8F4F1" stroke-width="2.2" stroke-linecap="round" opacity=".85"/>
+      </svg>
+      <div>
+        <b>Groundswell</b>
+        <div class="who">Josh Gonzales · PhD Candidate</div>
+      </div>
+    </div>
+    <nav class="gs-topnav" aria-label="Showcase sections">
+      <a href="#">The work</a>
+      <a href="#">Shipping next</a>
+      <a href="#">About</a>
+      <a href="#" class="cta cta--ghost menu" style="padding:9px 16px">Share ↗</a>
+    </nav>
+  </div></div></div>
+
+  <!-- HERO -->
+  <header class="gs-inner gs-hero">
+    <span class="kicker kicker--accent gs-eyebrow gs-rise" style="animation-delay:.05s">Josh Gonzales · PhD Candidate</span>
+
+    <!-- 1 · PLAIN-LANGUAGE THESIS (human-legible, before any number) -->
+    <h1 class="gs-statement gs-rise" style="animation-delay:.12s">
+      I build and ship <span class="em">research tools</span>.
+    </h1>
+
+    <!-- 2 · ONE anchor (mega absolute = 546, here ONLY) + ONE real curve (stars) -->
+    <div class="gs-anchor-block">
+      <div class="gs-anchor gs-rise" style="animation-delay:.2s">
+        <div class="lead-label">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 11V2.5M8 11l-3-3M8 11l3-3M3 13.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          citegeist · downloaded
+        </div>
+        <span class="gs-mega">546</span>
+        <p class="caption"><b>citegeist</b> maps how the papers in your Zotero library cite each other.</p>
+        <div class="gs-modifier">
+          <span class="delta"><svg viewBox="0 0 12 12" fill="none"><path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>v2 rewrite shipping now</span>
+          <span class="aside">open-source · for Zotero</span>
+        </div>
+      </div>
+
+      <!-- THE one real curve — star history. Appears here and nowhere else. -->
+      <div class="gs-curve-wrap gs-rise" style="animation-delay:.28s">
+        <div class="gs-curve-head">
+          <span class="t">GitHub stars over time</span>
+          <span class="yr">Apr–Jun 2026</span>
+        </div>
+        <div class="gs-curve">
+          <svg viewBox="0 0 920 360" preserveAspectRatio="none" role="img" aria-label="A real, rising star curve reconstructed from GitHub: citegeist's stars climbing one at a time from zero to 10 between early April and early June 2026.">
+            <defs>
+              <linearGradient id="rHeroArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1E8C7A" stop-opacity="0.18"/>
+                <stop offset="0.85" stop-color="#1E8C7A" stop-opacity="0.02"/>
+                <stop offset="1" stop-color="#1E8C7A" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- gridlines (quiet) -->
+            <g stroke="var(--viz-grid)" stroke-width="1">
+              <line x1="8" y1="96" x2="912" y2="96"/>
+              <line x1="8" y1="180" x2="912" y2="180"/>
+              <line x1="8" y1="264" x2="912" y2="264"/>
+            </g>
+            <!-- area + line (the ONE curve) — real 10-point star history -->
+            <path class="gs-area-in" d="M 8.0 320.0 C 10.1 315.5, 12.8 301.0, 21.3 292.0 C 29.8 283.0, 33.5 273.0, 61.2 264.0 C 88.8 255.0, 162.2 245.0, 194.1 236.0 C 226.0 227.0, 205.3 217.0, 260.6 208.0 C 315.9 199.0, 478.1 189.0, 539.8 180.0 C 601.4 171.0, 624.8 161.0, 646.1 152.0 C 667.4 143.0, 662.1 133.0, 672.7 124.0 C 683.3 115.0, 693.4 105.0, 712.6 96.0 C 731.7 87.0, 769.0 77.0, 792.4 68.0 C 815.8 59.0, 848.2 44.5, 858.8 40.0 L 858.8 320.0 L 8.0 320.0 Z" fill="url(#rHeroArea)"/>
+            <path class="gs-draw" style="--len:922" d="M 8.0 320.0 C 10.1 315.5, 12.8 301.0, 21.3 292.0 C 29.8 283.0, 33.5 273.0, 61.2 264.0 C 88.8 255.0, 162.2 245.0, 194.1 236.0 C 226.0 227.0, 205.3 217.0, 260.6 208.0 C 315.9 199.0, 478.1 189.0, 539.8 180.0 C 601.4 171.0, 624.8 161.0, 646.1 152.0 C 667.4 143.0, 662.1 133.0, 672.7 124.0 C 683.3 115.0, 693.4 105.0, 712.6 96.0 C 731.7 87.0, 769.0 77.0, 792.4 68.0 C 815.8 59.0, 848.2 44.5, 858.8 40.0" fill="none" stroke="var(--viz-cat-1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <!-- real star events as dots on the line -->
+            <g fill="#fff" stroke="var(--viz-cat-1)" stroke-width="2">
+              <circle cx="21.3" cy="292.0" r="3"/>
+              <circle cx="61.2" cy="264.0" r="3"/>
+              <circle cx="194.1" cy="236.0" r="3"/>
+              <circle cx="260.6" cy="208.0" r="3"/>
+              <circle cx="539.8" cy="180.0" r="3"/>
+              <circle cx="646.1" cy="152.0" r="3"/>
+              <circle cx="672.7" cy="124.0" r="3"/>
+              <circle cx="712.6" cy="96.0" r="3"/>
+              <circle cx="792.4" cy="68.0" r="3"/>
+            </g>
+            <circle class="gs-dot-in" cx="858.8" cy="40" r="5.5" fill="#fff" stroke="var(--viz-cat-1)" stroke-width="3"/>
+            <!-- inline end-label so the curve is legible without a legend: 10 stars lives HERE -->
+            <text x="858.8" y="24" text-anchor="end" font-family="Geist Mono" font-weight="600" font-size="15" fill="#0E574C">10 ★</text>
+          </svg>
+        </div>
+        <div class="gs-curve-foot">
+          <span class="ax">Apr 2026</span>
+          <span class="mid">reconstructed from GitHub history</span>
+          <span class="ax">Jun 2026</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3 · CADENCE — the real strength: relentless shipping, as per-release bars -->
+  <section class="gs-inner gs-cadence" aria-label="The real strength: how often it ships">
+    <div class="gs-cadence-card">
+      <div class="gs-cadence-grid">
+        <div>
+          <span class="kicker kicker--accent">How it ships</span>
+          <h2 class="narr-head"><span class="em">16 releases</span> in about ten weeks.</h2>
+          <p class="narr-lede">A <b>version 2 rewrite</b> landed this month — already the second-biggest release by installs.</p>
+          <p class="narr">The first version found its footing through April, then a rebuild shipped across a few days in June. Each bar below is the downloads a single tagged release pulled — the shape tells the version&nbsp;1 to version&nbsp;2 story on its own.</p>
+        </div>
+
+        <!-- the per-release bar chart — per-release counts live ONLY here -->
+        <div class="gs-bars">
+          <div class="gs-bars-head">
+            <span class="t">Downloads per release</span>
+            <span class="yr">Apr → Jun 2026</span>
+          </div>
+          <svg viewBox="0 0 560 300" role="img" aria-label="A bar chart of downloads per tagged release. April version 1 releases: v1.0.0 17, v1.0.3 8, v1.1.2 6, v1.2.0 35, v1.2.1 3, and v1.3.0 the tallest at 274. June version 2 releases: v2.0.0 61, v2.0.1 23, v2.0.2 116, v2.0.3 3.">
+            <defs>
+              <linearGradient id="barV1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A6EA5"/><stop offset="1" stop-color="#3A6EA5" stop-opacity="0.78"/></linearGradient>
+              <linearGradient id="barV2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E8C7A"/><stop offset="1" stop-color="#1E8C7A" stop-opacity="0.78"/></linearGradient>
+            </defs>
+            <!-- baseline -->
+            <line x1="8" y1="248" x2="552" y2="248" stroke="var(--viz-axis)" stroke-width="1.4"/>
+            <!-- bars: plot area y top=24 (=274) .. y base=248 (=0); 224px tall scale.
+                 x: 10 bars across [20..540], bar width 34, gap distributes. -->
+            <!-- v1 group (harbor blue) -->
+            <g>
+              <rect class="gs-bar" style="animation-delay:.10s" x="22"  y="234" width="34" height="14"  rx="3" fill="url(#barV1)"/>
+              <rect class="gs-bar" style="animation-delay:.16s" x="74"  y="241" width="34" height="7"   rx="3" fill="url(#barV1)"/>
+              <rect class="gs-bar" style="animation-delay:.22s" x="126" y="243" width="34" height="5"   rx="3" fill="url(#barV1)"/>
+              <rect class="gs-bar" style="animation-delay:.28s" x="178" y="219" width="34" height="29"  rx="3" fill="url(#barV1)"/>
+              <rect class="gs-bar" style="animation-delay:.34s" x="230" y="246" width="34" height="2"   rx="3" fill="url(#barV1)"/>
+              <rect class="gs-bar" style="animation-delay:.40s" x="282" y="24"  width="34" height="224" rx="3" fill="url(#barV1)"/>
+            </g>
+            <!-- v2 group (swell teal) -->
+            <g>
+              <rect class="gs-bar" style="animation-delay:.50s" x="334" y="198" width="34" height="50"  rx="3" fill="url(#barV2)"/>
+              <rect class="gs-bar" style="animation-delay:.56s" x="386" y="229" width="34" height="19"  rx="3" fill="url(#barV2)"/>
+              <rect class="gs-bar" style="animation-delay:.62s" x="438" y="153" width="34" height="95"  rx="3" fill="url(#barV2)"/>
+              <rect class="gs-bar" style="animation-delay:.68s" x="490" y="246" width="34" height="2"   rx="3" fill="url(#barV2)"/>
+            </g>
+            <!-- value labels above the two tallest, so the shape reads instantly -->
+            <text x="299" y="16"  text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="13" fill="#3A6EA5">274</text>
+            <text x="455" y="145" text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="12" fill="#0E574C">116</text>
+            <!-- release tick labels -->
+            <g font-family="Geist Mono" font-size="9.5" fill="var(--ink-400)" text-anchor="middle">
+              <text x="39"  y="266">v1.0</text>
+              <text x="91"  y="266">v1.0.3</text>
+              <text x="143" y="266">v1.1</text>
+              <text x="195" y="266">v1.2</text>
+              <text x="247" y="266">v1.2.1</text>
+              <text x="299" y="266">v1.3</text>
+              <text x="351" y="266">v2.0</text>
+              <text x="403" y="266">v2.0.1</text>
+              <text x="455" y="266">v2.0.2</text>
+              <text x="507" y="266">v2.0.3</text>
+            </g>
+            <!-- group spans -->
+            <g font-family="Geist Mono" font-size="10" letter-spacing="0.06em" text-anchor="middle">
+              <text x="160" y="288" fill="#3A6EA5">VERSION 1 · APRIL</text>
+              <text x="429" y="288" fill="#0E574C">VERSION 2 · JUNE</text>
+            </g>
+          </svg>
+          <div class="gs-bars-cap">
+            <span class="lg"><span class="swatch" style="background:var(--viz-cat-2)"></span>version 1 · April</span>
+            <span class="lg"><span class="swatch" style="background:var(--viz-cat-1)"></span>version 2 · June</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · PIPELINE — what's shipping next. Names + one line + honest status. NO numbers. -->
+  <section class="gs-inner gs-pipeline" aria-label="What's shipping next">
+    <div class="gs-sec-head">
+      <span class="kicker">Shipping next</span>
+      <h2>What's in the workshop</h2>
+      <p>The rest of the toolkit, honestly staged. No traction claimed before it's earned — these are listed by what they do and where they are.</p>
+    </div>
+
+    <div class="gs-pipe-grid">
+      <!-- glimpse — public, no release yet -->
+      <div class="gs-pipe" style="--accent:#7A5AA6">
+        <span class="badge">gl</span>
+        <div class="body">
+          <div class="nm-row">
+            <span class="nm">glimpse</span>
+            <span class="tracking tracking--quiet"><span class="dot"></span>public · no release yet</span>
+          </div>
+          <p class="blurb">Drop in a spreadsheet, get an infographic. Runs locally — nothing leaves your machine.</p>
+        </div>
+      </div>
+
+      <!-- provenance — private, in progress -->
+      <div class="gs-pipe" style="--accent:#3A6EA5">
+        <span class="badge">pr</span>
+        <div class="body">
+          <div class="nm-row">
+            <span class="nm">provenance</span>
+            <span class="tracking"><span class="dot"></span>in progress · private</span>
+          </div>
+          <p class="blurb">Turns Obsidian notes and Zotero sources into cited drafts, with every claim traceable to its evidence.</p>
+        </div>
+      </div>
+
+      <!-- marginalia — private, in progress -->
+      <div class="gs-pipe" style="--accent:#4F8C46">
+        <span class="badge">mg</span>
+        <div class="body">
+          <div class="nm-row">
+            <span class="nm">marginalia</span>
+            <span class="tracking"><span class="dot"></span>in progress · private</span>
+          </div>
+          <p class="blurb">A research IDE built on your Zotero library — read, annotate, and write without it ever leaving your machine.</p>
+        </div>
+      </div>
+
+      <!-- sententia — private, in progress -->
+      <div class="gs-pipe" style="--accent:#B59A2E">
+        <span class="badge">se</span>
+        <div class="body">
+          <div class="nm-row">
+            <span class="nm">sententia</span>
+            <span class="tracking"><span class="dot"></span>in progress · private</span>
+          </div>
+          <p class="blurb">Evidence synthesis for the social sciences — find what the literature actually agrees on.</p>
+        </div>
+      </div>
+
+      <!-- stemma — Obsidian plugin (no GitHub numbers) -->
+      <div class="gs-pipe" style="--accent:#B5683C">
+        <span class="badge">st</span>
+        <div class="body">
+          <div class="nm-row">
+            <span class="nm">stemma</span>
+            <span class="tracking tracking--quiet"><span class="dot"></span>Obsidian plugin</span>
+          </div>
+          <p class="blurb">Draws your Zotero citation network as a living graph, right inside your notes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER / SOURCING -->
+  <footer class="gs-inner gs-foot">
+    <div class="src"><b>How this is measured.</b> The figures here are real, pulled from the GitHub API. Stars are reconstructed from full history; release downloads are GitHub's own counts. <b>Daily download tracking starts when capture goes live</b> — until then there's no day-by-day history to chart, so the page shows the honest totals it has, not a curve it can't yet draw.</div>
+    <div class="right">
+      <span class="kicker kicker--bare" style="color:var(--ink-400);justify-content:flex-end">Snapshot · 10 Jun 2026</span>
+      <div style="margin-top:var(--s-4);display:flex;gap:var(--s-3);justify-content:flex-end">
+        <button class="cta">Share this page <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="cta cta--ghost">View on GitHub ↗</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- offscreen data table — accessibility: the REAL numbers only -->
+  <table class="sr-only">
+    <caption>Groundswell traction data (real, GitHub, snapshot 10 Jun 2026)</caption>
+    <thead><tr><th>Metric</th><th>Value</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>citegeist total release downloads</td><td>546</td><td>Open-source Zotero plugin; GitHub release counts</td></tr>
+      <tr><td>citegeist GitHub stars</td><td>10</td><td>Reconstructed from full history, Apr–Jun 2026</td></tr>
+      <tr><td>citegeist releases shipped</td><td>16</td><td>In about ten weeks, including a v2 rewrite this month</td></tr>
+      <tr><td>Downloads — v1.3.0</td><td>274</td><td>Apr 19 · largest single release</td></tr>
+      <tr><td>Downloads — v2.0.2</td><td>116</td><td>Jun 9 · version 2</td></tr>
+      <tr><td>Downloads — v2.0.0</td><td>61</td><td>Jun 8 · version 2</td></tr>
+      <tr><td>Downloads — v1.2.0</td><td>35</td><td>Apr 10 · version 1</td></tr>
+      <tr><td>Downloads — v2.0.1</td><td>23</td><td>Jun 8 · version 2</td></tr>
+      <tr><td>Downloads — v1.0.0</td><td>17</td><td>Apr 6 · first release</td></tr>
+      <tr><td>Downloads — v1.0.3</td><td>8</td><td>Apr 8 · version 1</td></tr>
+      <tr><td>Downloads — v1.1.2</td><td>6</td><td>Apr 9 · version 1</td></tr>
+      <tr><td>Downloads — v1.2.1</td><td>3</td><td>Apr 19 · version 1</td></tr>
+      <tr><td>Downloads — v2.0.3</td><td>3</td><td>Jun 10 · version 2</td></tr>
+      <tr><td>glimpse</td><td>—</td><td>Public, no release yet</td></tr>
+      <tr><td>provenance</td><td>—</td><td>In progress, private</td></tr>
+      <tr><td>marginalia</td><td>—</td><td>In progress, private</td></tr>
+      <tr><td>sententia</td><td>—</td><td>In progress, private</td></tr>
+      <tr><td>stemma</td><td>—</td><td>Obsidian plugin — installs tracked by Obsidian, not GitHub</td></tr>
+    </tbody>
+  </table>
+
+</div><!-- /.device -->
+</div><!-- /.stage -->
+
+<!-- ════════════════════ MOBILE @ 390px (mandatory — shareable link) ════════════════════ -->
+<div class="frame-label">Mobile · 390px — loaded · loading</div>
+<div class="phones">
+
+  <!-- MOBILE loaded -->
+  <div class="device device--phone gs" role="img" aria-label="Showcase on mobile, loaded, with the same real data">
+    <div class="gs-top-wrap"><div class="gs-inner" style="padding:0 20px"><div class="gs-top">
+      <div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Groundswell</b></div></div>
+      <button class="cta cta--ghost menu" style="padding:7px 12px;font-size:13px">Share ↗</button>
+    </div></div></div>
+    <div class="gs-inner" style="padding:32px 20px 28px">
+      <span class="kicker kicker--accent">PhD Candidate</span>
+      <h1 class="gs-statement" style="font-size:30px;margin:16px 0 28px;max-width:none">I build and ship <span class="em">research tools</span>.</h1>
+      <div class="lead-label" style="font:var(--t-label);color:var(--ink-500);display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <svg viewBox="0 0 16 16" fill="none" style="width:15px;height:15px;color:var(--swell-600)" aria-hidden="true"><path d="M8 11V2.5M8 11l-3-3M8 11l3-3M3 13.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        citegeist · downloaded
+      </div>
+      <span class="gs-mega" style="font-size:76px">546</span>
+      <p class="caption" style="font:var(--t-lede);color:var(--ink-500);margin:12px 0 0"><b style="color:var(--ink-900)">citegeist</b> maps how your Zotero papers cite each other.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+        <span class="delta"><svg viewBox="0 0 12 12" fill="none"><path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>v2 rewrite shipping now</span>
+      </div>
+      <!-- the ONE real curve (stars), full-bleed -->
+      <div style="margin-top:24px">
+        <div class="gs-curve-head"><span class="t">GitHub stars over time</span><span class="yr">Apr–Jun</span></div>
+        <svg viewBox="0 0 350 150" preserveAspectRatio="none" style="display:block;width:100%;overflow:visible" role="img" aria-label="citegeist stars rising to 10 between April and June 2026, reconstructed from GitHub history.">
+          <defs><linearGradient id="rmArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E8C7A" stop-opacity=".18"/><stop offset="1" stop-color="#1E8C7A" stop-opacity="0"/></linearGradient></defs>
+          <path d="M 6.0 132.0 C 6.8 130.2, 7.8 124.2, 11.0 120.6 C 14.2 117.0, 15.5 112.8, 25.9 109.2 C 36.2 105.6, 63.7 101.4, 75.6 97.8 C 87.5 94.2, 79.8 90.0, 100.4 86.4 C 121.1 82.8, 181.8 78.6, 204.8 75.0 C 227.9 71.4, 236.6 67.2, 244.6 63.6 C 252.5 60.0, 250.6 55.8, 254.5 52.2 C 258.5 48.6, 262.3 44.4, 269.4 40.8 C 276.6 37.2, 290.5 33.0, 299.3 29.4 C 308.0 25.8, 320.1 19.8, 324.1 18.0 L 324.1 132.0 L 6.0 132.0 Z" fill="url(#rmArea)"/>
+          <path d="M 6.0 132.0 C 6.8 130.2, 7.8 124.2, 11.0 120.6 C 14.2 117.0, 15.5 112.8, 25.9 109.2 C 36.2 105.6, 63.7 101.4, 75.6 97.8 C 87.5 94.2, 79.8 90.0, 100.4 86.4 C 121.1 82.8, 181.8 78.6, 204.8 75.0 C 227.9 71.4, 236.6 67.2, 244.6 63.6 C 252.5 60.0, 250.6 55.8, 254.5 52.2 C 258.5 48.6, 262.3 44.4, 269.4 40.8 C 276.6 37.2, 290.5 33.0, 299.3 29.4 C 308.0 25.8, 320.1 19.8, 324.1 18.0" fill="none" stroke="#1E8C7A" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          <circle cx="324.1" cy="18" r="4.5" fill="#fff" stroke="#1E8C7A" stroke-width="3"/>
+          <text x="322" y="14" text-anchor="end" font-family="Geist Mono" font-weight="600" font-size="13" fill="#0E574C">10 ★</text>
+        </svg>
+        <div class="gs-curve-foot" style="margin-top:10px"><span class="ax">Apr '26</span><span class="mid" style="font-size:10px">from GitHub history</span><span class="ax">Jun '26</span></div>
+      </div>
+      <button class="cta" style="width:100%;justify-content:center;margin-top:24px">Share this page ↗</button>
+    </div>
+    <!-- cadence on mobile: the 16-releases line + per-release bars -->
+    <div class="gs-inner" style="padding:28px 20px;border-top:1px solid rgba(26,40,34,.08)">
+      <span class="kicker kicker--accent">How it ships</span>
+      <h2 style="font:var(--t-subhead);letter-spacing:var(--ls-tight);margin:12px 0 6px"><span style="font-style:italic;color:var(--swell-700)">16 releases</span> in ~10 weeks.</h2>
+      <p style="font:var(--t-body);color:var(--ink-500);margin:0 0 16px;max-width:34ch">A version 2 rewrite landed this month. Each bar is one release's downloads.</p>
+      <svg viewBox="0 0 350 170" role="img" aria-label="Downloads per release: April version 1 peaking at v1.3.0 with 274, then June version 2 with v2.0.2 at 116.">
+        <defs>
+          <linearGradient id="mBarV1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A6EA5"/><stop offset="1" stop-color="#3A6EA5" stop-opacity="0.78"/></linearGradient>
+          <linearGradient id="mBarV2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E8C7A"/><stop offset="1" stop-color="#1E8C7A" stop-opacity="0.78"/></linearGradient>
+        </defs>
+        <line x1="6" y1="132" x2="344" y2="132" stroke="var(--viz-axis)" stroke-width="1.2"/>
+        <!-- y top=20 (=274) .. base=132 (=0): 112px scale; 10 bars across [12..338], width 22 -->
+        <g>
+          <rect x="14"  y="125" width="22" height="7"   rx="2.5" fill="url(#mBarV1)"/>
+          <rect x="46"  y="129" width="22" height="3"   rx="2.5" fill="url(#mBarV1)"/>
+          <rect x="78"  y="130" width="22" height="2"   rx="2.5" fill="url(#mBarV1)"/>
+          <rect x="110" y="118" width="22" height="14"  rx="2.5" fill="url(#mBarV1)"/>
+          <rect x="142" y="131" width="22" height="1"   rx="2.5" fill="url(#mBarV1)"/>
+          <rect x="174" y="20"  width="22" height="112" rx="2.5" fill="url(#mBarV1)"/>
+        </g>
+        <g>
+          <rect x="206" y="107" width="22" height="25"  rx="2.5" fill="url(#mBarV2)"/>
+          <rect x="238" y="123" width="22" height="9"   rx="2.5" fill="url(#mBarV2)"/>
+          <rect x="270" y="84"  width="22" height="48"  rx="2.5" fill="url(#mBarV2)"/>
+          <rect x="302" y="131" width="22" height="1"   rx="2.5" fill="url(#mBarV2)"/>
+        </g>
+        <text x="185" y="14"  text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="12" fill="#3A6EA5">274</text>
+        <text x="281" y="78"  text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="11" fill="#0E574C">116</text>
+        <g font-family="Geist Mono" font-size="9.5" letter-spacing="0.04em" text-anchor="middle">
+          <text x="100" y="152" fill="#3A6EA5">V1 · APR</text>
+          <text x="265" y="152" fill="#0E574C">V2 · JUN</text>
+        </g>
+      </svg>
+    </div>
+    <!-- pipeline on mobile: a couple of honest, number-free entries -->
+    <div class="gs-inner" style="padding:24px 20px 32px;border-top:1px solid rgba(26,40,34,.08)">
+      <span class="kicker">Shipping next</span>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
+        <div class="gs-pipe" style="--accent:#7A5AA6;padding:18px">
+          <span class="badge" style="width:34px;height:34px">gl</span>
+          <div class="body"><div class="nm-row"><span class="nm" style="font-size:17px">glimpse</span><span class="tracking tracking--quiet" style="font-size:11px;padding:4px 9px"><span class="dot"></span>public · no release yet</span></div><p class="blurb" style="margin-top:8px">Spreadsheet in, infographic out — runs locally.</p></div>
+        </div>
+        <div class="gs-pipe" style="--accent:#3A6EA5;padding:18px">
+          <span class="badge" style="width:34px;height:34px">pr</span>
+          <div class="body"><div class="nm-row"><span class="nm" style="font-size:17px">provenance</span><span class="tracking" style="font-size:11px;padding:4px 9px"><span class="dot"></span>in progress</span></div><p class="blurb" style="margin-top:8px">Cited drafts inside Obsidian, every claim traceable.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE loading (skeleton, never a spinner) -->
+  <div class="device device--phone gs" aria-label="Showcase loading skeleton">
+    <div class="gs-top-wrap"><div class="gs-inner" style="padding:0 20px"><div class="gs-top"><div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28"><rect width="28" height="28" rx="8" fill="#0E574C"/></svg><div><b>Groundswell</b></div></div></div></div></div>
+    <div class="gs-inner" style="padding:32px 20px 28px">
+      <div class="sk" style="width:130px;height:11px"></div>
+      <div class="sk" style="width:90%;height:30px;margin:16px 0 6px;border-radius:var(--r-sm)"></div>
+      <div class="sk" style="width:70%;height:30px;margin-bottom:28px;border-radius:var(--r-sm)"></div>
+      <div class="sk" style="width:140px;height:11px;margin-bottom:14px"></div>
+      <div class="sk" style="width:46%;height:64px;border-radius:var(--r-sm)"></div>
+      <div class="sk" style="width:200px;height:24px;margin-top:16px;border-radius:var(--r-pill)"></div>
+      <div class="sk" style="width:100%;height:120px;margin-top:24px;border-radius:var(--r-md)"></div>
+      <div class="sk" style="width:100%;height:46px;margin-top:24px;border-radius:var(--r-md)"></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
