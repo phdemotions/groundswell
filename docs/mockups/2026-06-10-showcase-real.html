@@ -394,8 +394,8 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
         <path d="M4 22 C 8 22, 9 7, 14 7 C 19 7, 20 13, 24 13" stroke="#E8F4F1" stroke-width="2.2" stroke-linecap="round" opacity=".85"/>
       </svg>
       <div>
-        <b>Groundswell</b>
-        <div class="who">Josh Gonzales · PhD Candidate</div>
+        <b>Josh Gonzales</b>
+        <div class="who">PhD Candidate</div>
       </div>
     </div>
     <nav class="gs-topnav" aria-label="Showcase sections">
@@ -408,9 +408,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 
   <!-- HERO -->
   <header class="gs-inner gs-hero">
-    <span class="kicker kicker--accent gs-eyebrow gs-rise" style="animation-delay:.05s">Josh Gonzales · PhD Candidate</span>
-
-    <!-- 1 · PLAIN-LANGUAGE THESIS (human-legible, before any number) -->
+    <!-- 1 · PLAIN-LANGUAGE THESIS (human-legible, before any number; identity lives once, in the top bar) -->
     <h1 class="gs-statement gs-rise" style="animation-delay:.12s">
       I build and ship <span class="em">research tools</span>.
     </h1>
@@ -561,19 +559,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
       <p>The rest of the toolkit, honestly staged. No traction claimed before it's earned — these are listed by what they do and where they are.</p>
     </div>
 
-    <div class="gs-pipe-grid">
-      <!-- glimpse — public, no release yet -->
-      <div class="gs-pipe" style="--accent:#7A5AA6">
-        <span class="badge">gl</span>
-        <div class="body">
-          <div class="nm-row">
-            <span class="nm">glimpse</span>
-            <span class="tracking tracking--quiet"><span class="dot"></span>public · no release yet</span>
-          </div>
-          <p class="blurb">Drop in a spreadsheet, get an infographic. Runs locally — nothing leaves your machine.</p>
-        </div>
-      </div>
-
+    <div class="gs-pipe-grid" style="grid-template-columns:repeat(2,1fr);max-width:760px">
       <!-- provenance — private, in progress -->
       <div class="gs-pipe" style="--accent:#3A6EA5">
         <span class="badge">pr</span>
@@ -586,39 +572,15 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
         </div>
       </div>
 
-      <!-- marginalia — private, in progress -->
-      <div class="gs-pipe" style="--accent:#4F8C46">
-        <span class="badge">mg</span>
-        <div class="body">
-          <div class="nm-row">
-            <span class="nm">marginalia</span>
-            <span class="tracking"><span class="dot"></span>in progress · private</span>
-          </div>
-          <p class="blurb">A research IDE built on your Zotero library — read, annotate, and write without it ever leaving your machine.</p>
-        </div>
-      </div>
-
-      <!-- sententia — private, in progress -->
+      <!-- arbiter.ac — private, in progress -->
       <div class="gs-pipe" style="--accent:#B59A2E">
-        <span class="badge">se</span>
+        <span class="badge">ar</span>
         <div class="body">
           <div class="nm-row">
-            <span class="nm">sententia</span>
+            <span class="nm">arbiter.ac</span>
             <span class="tracking"><span class="dot"></span>in progress · private</span>
           </div>
           <p class="blurb">Evidence synthesis for the social sciences — find what the literature actually agrees on.</p>
-        </div>
-      </div>
-
-      <!-- stemma — Obsidian plugin (no GitHub numbers) -->
-      <div class="gs-pipe" style="--accent:#B5683C">
-        <span class="badge">st</span>
-        <div class="body">
-          <div class="nm-row">
-            <span class="nm">stemma</span>
-            <span class="tracking tracking--quiet"><span class="dot"></span>Obsidian plugin</span>
-          </div>
-          <p class="blurb">Draws your Zotero citation network as a living graph, right inside your notes.</p>
         </div>
       </div>
     </div>
@@ -654,11 +616,8 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
       <tr><td>Downloads — v1.1.2</td><td>6</td><td>Apr 9 · version 1</td></tr>
       <tr><td>Downloads — v1.2.1</td><td>3</td><td>Apr 19 · version 1</td></tr>
       <tr><td>Downloads — v2.0.3</td><td>3</td><td>Jun 10 · version 2</td></tr>
-      <tr><td>glimpse</td><td>—</td><td>Public, no release yet</td></tr>
       <tr><td>provenance</td><td>—</td><td>In progress, private</td></tr>
-      <tr><td>marginalia</td><td>—</td><td>In progress, private</td></tr>
-      <tr><td>sententia</td><td>—</td><td>In progress, private</td></tr>
-      <tr><td>stemma</td><td>—</td><td>Obsidian plugin — installs tracked by Obsidian, not GitHub</td></tr>
+      <tr><td>arbiter.ac</td><td>—</td><td>In progress, private</td></tr>
     </tbody>
   </table>
 
@@ -672,7 +631,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
   <!-- MOBILE loaded -->
   <div class="device device--phone gs" role="img" aria-label="Showcase on mobile, loaded, with the same real data">
     <div class="gs-top-wrap"><div class="gs-inner" style="padding:0 20px"><div class="gs-top">
-      <div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Groundswell</b></div></div>
+      <div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Josh Gonzales</b></div></div>
       <button class="cta cta--ghost menu" style="padding:7px 12px;font-size:13px">Share ↗</button>
     </div></div></div>
     <div class="gs-inner" style="padding:32px 20px 28px">
@@ -739,13 +698,13 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
     <div class="gs-inner" style="padding:24px 20px 32px;border-top:1px solid rgba(26,40,34,.08)">
       <span class="kicker">Shipping next</span>
       <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
-        <div class="gs-pipe" style="--accent:#7A5AA6;padding:18px">
-          <span class="badge" style="width:34px;height:34px">gl</span>
-          <div class="body"><div class="nm-row"><span class="nm" style="font-size:17px">glimpse</span><span class="tracking tracking--quiet" style="font-size:11px;padding:4px 9px"><span class="dot"></span>public · no release yet</span></div><p class="blurb" style="margin-top:8px">Spreadsheet in, infographic out — runs locally.</p></div>
-        </div>
         <div class="gs-pipe" style="--accent:#3A6EA5;padding:18px">
           <span class="badge" style="width:34px;height:34px">pr</span>
           <div class="body"><div class="nm-row"><span class="nm" style="font-size:17px">provenance</span><span class="tracking" style="font-size:11px;padding:4px 9px"><span class="dot"></span>in progress</span></div><p class="blurb" style="margin-top:8px">Cited drafts inside Obsidian, every claim traceable.</p></div>
+        </div>
+        <div class="gs-pipe" style="--accent:#B59A2E;padding:18px">
+          <span class="badge" style="width:34px;height:34px">ar</span>
+          <div class="body"><div class="nm-row"><span class="nm" style="font-size:17px">arbiter.ac</span><span class="tracking" style="font-size:11px;padding:4px 9px"><span class="dot"></span>in progress</span></div><p class="blurb" style="margin-top:8px">Evidence synthesis for the social sciences.</p></div>
         </div>
       </div>
     </div>
@@ -753,7 +712,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 
   <!-- MOBILE loading (skeleton, never a spinner) -->
   <div class="device device--phone gs" aria-label="Showcase loading skeleton">
-    <div class="gs-top-wrap"><div class="gs-inner" style="padding:0 20px"><div class="gs-top"><div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28"><rect width="28" height="28" rx="8" fill="#0E574C"/></svg><div><b>Groundswell</b></div></div></div></div></div>
+    <div class="gs-top-wrap"><div class="gs-inner" style="padding:0 20px"><div class="gs-top"><div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28"><rect width="28" height="28" rx="8" fill="#0E574C"/></svg><div><b>Josh Gonzales</b></div></div></div></div></div>
     <div class="gs-inner" style="padding:32px 20px 28px">
       <div class="sk" style="width:130px;height:11px"></div>
       <div class="sk" style="width:90%;height:30px;margin:16px 0 6px;border-radius:var(--r-sm)"></div>
