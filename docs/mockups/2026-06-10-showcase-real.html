@@ -262,14 +262,15 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 .gs-statement .em { color: var(--swell-700); font-style: italic; }
 
 /* the single anchor: mega numeral + caption + momentum modifier, beside the curve */
-.gs-anchor-block { display: grid; grid-template-columns: minmax(320px, 0.82fr) 1.18fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.gs-anchor-block { display: grid; grid-template-columns: minmax(320px, 0.82fr) 1.18fr; gap: clamp(32px, 5vw, 72px); align-items: stretch; }
+.gs-anchor { display: flex; flex-direction: column; }
 .gs-anchor .lead-label { font: var(--t-label); color: var(--color-ink-2); display: flex; align-items: center; gap: var(--s-2); margin-bottom: var(--s-2); }
 .gs-anchor .lead-label svg { width: 16px; height: 16px; color: var(--swell-600); }
 .gs-mega { font: var(--t-mega); color: var(--color-ink); letter-spacing: var(--ls-mega); font-variant-numeric: tabular-nums; display: block; }
 .gs-mega .plus { color: var(--swell-500); }
 .gs-anchor .caption { font: var(--t-lede); color: var(--color-ink-2); margin: var(--s-4) 0 0; max-width: 28ch; }
 .gs-anchor .caption b { color: var(--color-ink); font-weight: 600; }
-.gs-modifier { display: flex; align-items: center; gap: var(--s-3); margin-top: var(--s-5); flex-wrap: wrap; }
+.gs-modifier { display: flex; align-items: center; gap: var(--s-3); margin-top: auto; padding-top: var(--s-5); flex-wrap: wrap; }
 .gs-modifier .delta { font-size: 13px; padding: 6px 13px 6px 10px; }
 .gs-modifier .aside { font: var(--t-label); color: var(--color-ink-3); }
 
@@ -361,6 +362,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
  * ───────────────────────────────────────────────────────────────────────── */
 @media (max-width: 960px) {
   .gs-anchor-block { grid-template-columns: 1fr; gap: clamp(28px, 6vw, 48px); align-items: start; }
+  .gs-modifier { margin-top: var(--s-5); padding-top: 0; }
   .gs-cadence-grid { grid-template-columns: 1fr; gap: var(--s-7); }
   .gs-pipe-grid { grid-template-columns: 1fr; }
   .gs-sec-head { grid-template-columns: 1fr; gap: var(--s-4); align-items: start; }
@@ -497,7 +499,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
           <span class="kicker kicker--accent">How it ships</span>
           <h2 class="narr-head"><span class="em">16 releases</span> in about ten weeks.</h2>
           <p class="narr-lede">A <b>version 2 rewrite</b> landed this month — already the second-biggest release by installs.</p>
-          <p class="narr">The first version found its footing through April, then a rebuild shipped across a few days in June. Each bar below is the downloads a single tagged release pulled — the shape tells the version&nbsp;1 to version&nbsp;2 story on its own.</p>
+          <p class="narr">Version 1 found its footing through April; the v2 rebuild shipped over a few days in June. Each bar is one release's downloads.</p>
         </div>
 
         <!-- the per-release bar chart — per-release counts live ONLY here -->
