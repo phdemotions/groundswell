@@ -60,20 +60,20 @@ Load-bearing. U9/U10 and every later surface inherit them.
   client) → append `data/<repo>.ndjson` → commit.
 - **Charts (U9):** hand-rolled `d3-shape` + `motion` + SVG behind a barrel (KTD4),
   rendered client-side from the JSON.
-- **Hosting:** GitHub Pages (static), deployed by `.github/workflows/deploy.yml`.
-- **Error tracking (optional):** Sentry client-only; no-ops without a DSN.
+- **Hosting:** GitHub Pages (static), built + deployed by `.github/workflows/site.yml`
+  (one workflow: push → build + deploy; daily cron → capture + commit + build + deploy).
 
 ---
 
-## CI — runs in the deploy workflow (this repo is not on Vercel)
+## CI — runs in the site workflow (this repo is not on Vercel)
 
 The monorepo default is Vercel-first CI; **Groundswell is the documented exception**
 because it deploys to **GitHub Pages**, not Vercel.
 
-- CI (type-check · lint · test) runs in `.github/workflows/deploy.yml` BEFORE
-  `next build`, on every push. A red check blocks the Pages deploy.
-- Daily capture (`capture.yml`) is the explicitly-allowed "scheduled automation
-  Vercel can't do" exception (per `~/developer/CLAUDE.md`).
+- CI (type-check · lint · test) runs in `.github/workflows/site.yml` BEFORE
+  `next build`. A red check blocks the Pages deploy.
+- The daily capture in that same workflow is the explicitly-allowed "scheduled
+  automation Vercel can't do" exception (per `~/developer/CLAUDE.md`).
 - **Keep the groundswell repo public** → Actions minutes are free/unlimited. (Private
   would be ~30–60 min/month, within the 2,000-min free tier — but public is the
   intended state for a recruiter showcase anyway.)
@@ -85,17 +85,18 @@ because it deploys to **GitHub Pages**, not Vercel.
 
 ## Secret + privacy boundary
 
-- **One secret: the GitHub PAT (`GH_PAT`).** It lives ONLY as a GitHub Actions repo
-  secret, used by `scripts/capture.ts` inside the Action. It is NEVER bundled into
-  the static site — the deployed Pages site ships only the already-captured JSON: no
-  tokens, no runtime secrets.
+- **No secret needed to deploy.** CI capture reads only PUBLIC data, so the built-in
+  Actions `GITHUB_TOKEN` suffices — no PAT to mint. Nothing is bundled into the static
+  site; it ships only the already-captured JSON (no tokens, no runtime secrets).
 - **Public store = public repos only.** Capture commits metrics for PUBLIC repos to
   `data/`. Private-repo traction (provenance, arbiter.ac, marginalia) must NEVER land
   in committed JSON — it goes to gitignored `data/.local/`, read only by the local
   radar. **Leaking private-repo numbers in a public repo is the one unacceptable
-  failure here** (enforced by a guard test — GS-010).
-- **Least-privilege PAT:** fine-grained, `Administration:Read` + `Contents:Read` +
-  `Metadata:Read`, scoped to the tracked repos, 90-day expiry + rotation reminder.
+  failure here** (enforced by `src/lib/store/privacy.test.ts` — GS-010).
+- **A PAT is local/private-only.** To capture private repos for the local radar, use
+  your machine's `gh auth token`. A minted fine-grained PAT (`Administration:Read` +
+  `Contents:Read` + `Metadata:Read`, scoped) is only needed if you ever capture
+  private repos in CI; never commit it.
 - **No service-role / no DB / no auth surface.** The static site has no server — no
   admin client, no RLS, no session middleware to get wrong.
 
@@ -159,8 +160,7 @@ groundswell/
 ├── scripts/
 │   └── capture.ts            # daily — GitHub API → data/<repo>.ndjson + backfill + meta
 ├── .github/workflows/
-│   ├── capture.yml           # cron (daily) → run capture → commit JSON
-│   └── deploy.yml            # on push → CI (type-check·lint·test) → next build → Pages
+│   └── site.yml              # push→build+deploy; daily cron→capture+commit+build+deploy
 ├── data/
 │   ├── meta.json             # repos · visibility · trackingStartedAt · lastCapture
 │   ├── <repo>.ndjson         # daily snapshots (per-release counts inline) = history
@@ -185,13 +185,13 @@ groundswell/
 pnpm install
 pnpm dev            # localhost:3000 — reads data/*.ndjson (+ data/.local for radar)
 pnpm build          # CI chain + static export (next build, output: 'export')
-pnpm capture        # tsx scripts/capture.ts — local capture (needs GH_PAT in env)
+pnpm capture        # tsx scripts/capture.ts — local capture (GH_PAT or `gh auth token`)
 pnpm test           # vitest (NODE_ENV=test)
 ```
 
-Live capture requires GS-001 ops (Josh): mint the fine-grained PAT → repo secret
-`GH_PAT`; enable GitHub Pages (Source: GitHub Actions); set the tracked repos in
-`data/meta.json`. Keep the repo public so Actions stay free.
+Live deploy requires GS-001 ops (Josh, **no PAT**): enable GitHub Pages (Source:
+GitHub Actions); for a project page set the Pages vars `NEXT_PUBLIC_BASE_PATH` +
+`NEXT_PUBLIC_SITE_URL`; push + merge to main. Keep the repo public so Actions stay free.
 
 ---
 

@@ -1,0 +1,71 @@
+name: Build · capture · deploy
+
+# One self-contained workflow — no Personal Access Token required.
+#
+# - On push to main: build the static site + deploy to Pages.
+# - Daily (cron) + manual: ALSO capture fresh GitHub traction first, commit the
+#   JSON, then build + deploy in the same run.
+#
+# Capture only reads PUBLIC data (the showcase repos), so the built-in
+# GITHUB_TOKEN is enough — no PAT to mint. Because capture, commit, build, and
+# deploy all happen in ONE job, there's no cross-workflow trigger to worry about.
+# (Capturing PRIVATE repos in CI — for a future hosted radar — is the only thing
+# that would need a PAT; the local radar uses your machine's `gh` auth instead.)
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * *' # daily ~06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write # commit captured data
+  pages: write
+  id-token: write
+
+concurrency:
+  group: site
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Capture only on schedule/manual (not on a code push).
+      - name: Capture traction
+        if: github.event_name != 'push'
+        run: pnpm capture
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit captured data (if changed)
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "chore(data): capture $(date -u +%F)"
+          git push || true
+
+      - name: Build (CI gate + static export)
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ vars.NEXT_PUBLIC_BASE_PATH }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+      - id: deployment
+        uses: actions/deploy-pages@v4

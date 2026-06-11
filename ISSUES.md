@@ -8,7 +8,7 @@
 
 | ID | Priority | Description | Status |
 |----|----------|-------------|--------|
-| GS-001 | P0 | **Deploy gate (Josh, ~5 min):** mint fine-grained PAT (`Administration`+`Contents`+`Metadata`:Read, scoped to tracked repos, 90-day + rotation) → repo secret `GH_PAT`; Settings → Pages → Source: GitHub Actions; (project page only) repo Actions var `NEXT_PUBLIC_BASE_PATH=/groundswell`; keep repo public; push + merge to main → `deploy.yml` publishes; run `capture.yml` once | Open — gates live deploy + capture |
+| GS-001 | P0 | **Deploy gate (Josh, ~2 min — NO PAT):** Settings → Pages → Source: GitHub Actions; (project page only) repo Actions vars `NEXT_PUBLIC_BASE_PATH=/groundswell` + `NEXT_PUBLIC_SITE_URL=https://<user>.github.io/groundswell`; keep repo public; push + merge to main → `site.yml` builds + deploys (the daily run also captures + redeploys). Capture uses the built-in Actions token (public data only). | Open — gates live deploy |
 | GS-011 | P3 | **U12 private radar** — local-only "what's growing" view reading `data/.local/` (`pnpm dev`). Deferred. | Open — deferred |
 | GS-012 | P4 | citegeist has a stray release tagged literally `release` (shows as a `release` bar). Optional: retag it on GitHub for a cleaner axis — the page faithfully shows reality either way. | Open — optional (Josh) |
 

@@ -11,12 +11,14 @@
 cumulative; traffic is a 14-day rolling window), so we persist a daily snapshot.
 The store is JSON committed to this repo — **git history is the time-series log.**
 
-- **Capture:** `.github/workflows/capture.yml` (daily cron) runs `scripts/capture.ts`
-  (reuses the U3 GitHub client) → writes today's `data/<repo>.ndjson` line +
-  regenerated backfill → commits → push triggers deploy.
-- **Site:** Next.js **static export** (`output: 'export'`) → GitHub Pages via
-  `.github/workflows/deploy.yml` (which also runs the CI gate). `page.tsx` SSGs from
-  `view.ts`; charts render client-side from the JSON.
+- **One workflow** (`.github/workflows/site.yml`, NO PAT): on push to main it builds
+  + deploys; the daily cron (and manual run) ALSO runs `scripts/capture.ts` first
+  (reuses the U3 GitHub client → writes today's `data/<repo>.ndjson` line +
+  regenerated backfill → commits), then builds + deploys in the same job. Capture
+  reads only public data, so the built-in `GITHUB_TOKEN` suffices.
+- **Site:** Next.js **static export** (`output: 'export'`) → GitHub Pages. `site.yml`
+  runs the CI gate (type-check · lint · test) before `next build`. `page.tsx` SSGs
+  from `view.ts`; charts render client-side from the JSON.
 - **Private radar (U12):** static can't server-gate → **local-only** (`pnpm dev`,
   reading gitignored `data/.local/`).
 
@@ -54,13 +56,13 @@ Carried from v1: U3 GitHub client, `derive.ts`, `runBounded` (kept for future ca
 
 ## Next
 
-- **GS-001 (Josh — deploy gate, ~5 min):** mint fine-grained `GH_PAT`
-  (`Administration:Read` + `Contents:Read` + `Metadata:Read`, scoped to tracked
-  repos, 90-day + rotation) → repo **secret** · Settings → Pages → **Source: GitHub
-  Actions** · (project page only) repo Actions **variable**
-  `NEXT_PUBLIC_BASE_PATH=/groundswell` · keep repo **public** (free Actions) · **push
-  + merge to main** → `deploy.yml` publishes; run `capture.yml` once for the first
-  live snapshot.
+- **GS-001 (Josh — deploy gate, ~2 min, NO PAT):** Settings → Pages → **Source:
+  GitHub Actions** · (project page only) repo Actions **variables**
+  `NEXT_PUBLIC_BASE_PATH=/groundswell` + `NEXT_PUBLIC_SITE_URL` · keep repo
+  **public** (free Actions) · **push + merge to main** → `site.yml` builds +
+  deploys; the daily run also captures + redeploys. (Capture uses the built-in
+  Actions token — public data only; a PAT is only needed later to capture private
+  repos in CI for a hosted radar.)
 - **U12 radar** — local-only what's-growing view (deferred).
 
 ---

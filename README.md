@@ -71,17 +71,19 @@ pnpm capture      # one local capture run (needs GH_PAT in the env)
 pnpm test         # vitest
 ```
 
-## Deploy (GitHub Pages)
+## Deploy (GitHub Pages) — no token to mint
 
-1. Add a fine-grained, **read-only** PAT (`Administration:Read` + `Contents:Read` +
-   `Metadata:Read`, scoped to the tracked repos) as the repo secret **`GH_PAT`**.
-2. **Settings → Pages → Source: GitHub Actions.**
-3. For a *project* page (`…github.io/<repo>`), set the repo Actions variable
-   **`NEXT_PUBLIC_BASE_PATH=/<repo>`**. Skip it for a custom domain or user page.
-4. Push to `main` — `deploy.yml` runs the build (CI gate) and publishes. Trigger
-   `capture.yml` once for the first live snapshot.
+1. **Settings → Pages → Source: GitHub Actions.**
+2. For a *project* page (`…github.io/<repo>`), set repo **Actions variables**
+   `NEXT_PUBLIC_BASE_PATH=/<repo>` and
+   `NEXT_PUBLIC_SITE_URL=https://<you>.github.io/<repo>` (the latter makes shared
+   links unfurl). Skip both for a custom domain or user page.
+3. Push to `main`. The `site.yml` workflow builds + deploys; the daily run also
+   captures fresh data and redeploys.
 
-Keep the repo public so Actions stay free.
+Keep the repo public so Actions stay free. **No PAT needed** — capture reads only
+public data via the built-in Actions token. (A PAT would only be needed later to
+capture *private* repos in CI for a hosted radar; the local radar uses your `gh` auth.)
 
 ## Layout
 

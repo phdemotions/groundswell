@@ -14,7 +14,7 @@
 | Stack | Next 16 (App Router, `output: 'export'`) · React 19 · TS strict · Tailwind v4 · next/font · hand-rolled d3-shape + motion charts |
 | Data | Daily GitHub Action → `data/<repo>.ndjson` (git = time-series log). Real: citegeist **576 dl / 10★ / 16 releases** (live-growing). Privates → gitignored `data/.local/`. |
 | Repo | `~/developer/groundswell`, branch `feat/scaffold-and-mockups`, unpushed, tree clean |
-| Live capture + deploy | Gated on **GS-001** (Josh): `GH_PAT` secret · enable Pages · merge to main |
+| Live capture + deploy | Gated on **GS-001** (Josh, no PAT): enable Pages → Actions · set Pages vars · merge to main |
 | Plan | `PLAN.md` (v2 static-first). Canonical mockup: `docs/mockups/2026-06-10-showcase-real.html` |
 
 ---
@@ -34,7 +34,7 @@ Carried from v1 (still used): U3 GitHub client, `derive.ts`, `runBounded`.
 
 ## Next
 
-- **GS-001** (Josh, ~5 min, all on GitHub) — mint `GH_PAT` (Administration+Contents+Metadata:Read, scoped, 90-day) → repo secret · Settings → Pages → Source: GitHub Actions · (project page only) repo Actions var `NEXT_PUBLIC_BASE_PATH=/groundswell` · push + merge to main → `deploy.yml` publishes.
+- **GS-001** (Josh, ~2 min — no PAT) — Settings → Pages → Source: GitHub Actions · (project page only) repo Actions vars `NEXT_PUBLIC_BASE_PATH=/groundswell` + `NEXT_PUBLIC_SITE_URL` · push + merge to main → `site.yml` builds + deploys; the daily run also captures + redeploys (built-in Actions token, public data only).
 - **U12** private radar — local-only "what's growing", deferred.
 
 ## Recent Sessions
