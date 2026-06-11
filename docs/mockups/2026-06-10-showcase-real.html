@@ -109,7 +109,7 @@
   --shadow-2: 0 2px 6px rgba(26,40,34,0.05), 0 14px 30px -12px rgba(26,40,34,0.10);
   --shadow-3: 0 30px 60px -20px rgba(10,58,51,0.22);
   --shadow-glow: 0 40px 120px -40px rgba(30,140,122,0.35);
-  --shadow-focus: 0 0 0 3px rgba(30,140,122,0.28);
+  --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--swell-600);
 
   /* ─── SCALE · Motion ──────────────────────────────────────────────────── */
   --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
@@ -139,7 +139,7 @@
   --color-surface-2: var(--surface-2);
   --color-ink:       var(--ink-900);
   --color-ink-2:     var(--ink-500);
-  --color-ink-3:     var(--ink-400);
+  --color-ink-3:     var(--ink-500); /* muted TEXT must clear WCAG AA on paper; ink-400 reserved for non-text (hairlines/icons) */
   --color-border:    var(--ink-200);
   --color-action:    var(--swell-500);
   --color-action-2:  var(--swell-600);
@@ -200,6 +200,8 @@
 .cta:active { transform: translateY(1px); }
 .cta--ghost { background: transparent; color: var(--color-accent-ink); border: 1px solid var(--color-border); }
 .cta--ghost:hover { background: var(--swell-50); border-color: var(--swell-200); box-shadow: none; }
+.cta--sm { padding: 9px 16px; font-size: 13px; }
+.gs a:focus-visible, .cta:focus-visible, .menu:focus-visible, .gs-topnav a:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: var(--r-sm); }
 
 /* ─────────────────────────────────────────────────────────────────────────
  * DOC CHROME — minimal wrapper
@@ -244,13 +246,14 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 .gs-brand b { font: var(--t-body-strong); font-size: 16px; letter-spacing: .01em; }
 .gs-brand .who { font: var(--t-data-sm); color: var(--color-ink-3); margin-top: 1px; }
 .gs-topnav { display: flex; align-items: center; gap: var(--s-6); }
-.gs-topnav a { font: var(--t-label); color: var(--color-ink-2); }
+.gs-topnav a { font: var(--t-label); color: var(--color-ink-2); display: inline-flex; align-items: center; }
+@media (pointer: coarse) { .gs-topnav a, a.cta, button.cta, .menu { min-height: 44px; box-sizing: border-box; } }
 .gs-topnav a:hover { color: var(--color-ink); }
 
 /* ── HERO: plain statement → ONE mega number → ONE real curve (stars) ──
    NOTE: section classes set only vertical padding (longhand) so they never
    clobber .gs-inner's horizontal gutter when both are on the same element. */
-.gs-hero { padding-top: clamp(48px, 8vw, 104px); padding-bottom: clamp(40px, 6vw, 80px); }
+.gs-hero { padding-top: clamp(48px, 8vw, 104px); padding-bottom: clamp(28px, 4vw, 52px); }
 .gs-eyebrow { margin-bottom: var(--s-6); }
 .gs-statement {
   font: var(--t-statement); color: var(--color-ink); letter-spacing: var(--ls-tight);
@@ -276,12 +279,12 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 .gs-curve-head .t { font: var(--t-label); color: var(--color-ink-2); }
 .gs-curve-head .yr { font: var(--t-meta); letter-spacing: var(--ls-meta); color: var(--color-ink-3); }
 .gs-curve svg { display: block; width: 100%; height: auto; overflow: visible; }
-.gs-curve-foot { display: flex; align-items: center; justify-content: space-between; margin-top: var(--s-3); }
+.gs-curve-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-3); }
 .gs-curve-foot .ax { font: var(--t-data-sm); color: var(--color-ink-3); }
 .gs-curve-foot .mid { font: var(--t-meta); letter-spacing: var(--ls-meta); color: var(--color-ink-2); }
 
 /* ── CADENCE: the real strength — relentless shipping, as per-release bars ── */
-.gs-cadence { padding-top: clamp(48px, 7vw, 96px); padding-bottom: clamp(48px, 7vw, 96px); border-top: 1px solid rgba(26,40,34,.08); }
+.gs-cadence { padding-top: clamp(36px, 5vw, 64px); padding-bottom: clamp(48px, 7vw, 96px); border-top: 1px solid rgba(26,40,34,.08); }
 .gs-cadence-card {
   position: relative; border-radius: var(--r-2xl); overflow: hidden;
   background:
@@ -289,7 +292,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
     var(--color-surface);
   border: 1px solid var(--color-border); box-shadow: var(--shadow-2);
 }
-.gs-cadence-grid { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: clamp(32px, 5vw, 72px); align-items: center; padding: clamp(32px, 5vw, 64px); }
+.gs-cadence-grid { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: clamp(32px, 5vw, 72px); align-items: start; padding: clamp(32px, 5vw, 64px); }
 .gs-cadence .narr-head { font: var(--t-display); letter-spacing: var(--ls-tight); margin: var(--s-3) 0 var(--s-4); }
 .gs-cadence .narr-head .em { font-style: italic; color: var(--swell-700); }
 .gs-cadence .narr { font: var(--t-body-lg); color: var(--color-ink-2); margin: 0 0 var(--s-5); max-width: 46ch; }
@@ -298,18 +301,15 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 .gs-cadence .narr-lede b { color: var(--swell-700); font-weight: 600; }
 
 /* the per-release bar chart — where the per-release counts live, once */
-.gs-bars { }
 .gs-bars-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--s-4); gap: var(--s-4); }
 .gs-bars-head .t { font: var(--t-label); color: var(--color-ink-2); }
 .gs-bars-head .yr { font: var(--t-meta); letter-spacing: var(--ls-meta); color: var(--color-ink-3); }
 .gs-bars svg { display: block; width: 100%; height: auto; overflow: visible; }
-.gs-bars-cap { display: flex; gap: var(--s-5); margin-top: var(--s-4); flex-wrap: wrap; }
-.gs-bars-cap .lg { font: var(--t-data-sm); color: var(--color-ink-3); display: inline-flex; align-items: center; gap: 7px; }
-.gs-bars-cap .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
 
 /* ── PIPELINE: what's shipping next — names + one line + honest status, NO numbers ── */
 .gs-pipeline { padding-top: clamp(48px, 7vw, 88px); padding-bottom: clamp(40px, 6vw, 72px); border-top: 1px solid rgba(26,40,34,.08); }
-.gs-sec-head { margin-bottom: clamp(28px, 4vw, 48px); max-width: 60ch; }
+.gs-sec-head { margin-bottom: clamp(28px, 4vw, 48px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: end; }
+.gs-sec-head-l { min-width: 0; }
 .gs-sec-head h2 { font: var(--t-display); margin: var(--s-3) 0 var(--s-3); letter-spacing: var(--ls-tight); }
 .gs-sec-head p { font: var(--t-body-lg); color: var(--color-ink-2); margin: 0; max-width: 56ch; }
 
@@ -320,7 +320,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
   box-shadow: var(--shadow-1);
   display: flex; align-items: flex-start; gap: var(--s-4);
 }
-.gs-pipe::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent, var(--swell-500)); opacity: .85; }
+.gs-pipe::before { content: ""; position: absolute; left: 0; top: 16px; bottom: 16px; width: 3px; background: var(--accent, var(--swell-500)); opacity: .85; border-radius: 0 3px 3px 0; }
 .gs-pipe .badge { width: 42px; height: 42px; border-radius: var(--r-md); display: grid; place-items: center; font: var(--t-data-md); font-weight: 600; color: #fff; flex: none; background: var(--accent, var(--swell-500)); }
 .gs-pipe .body { flex: 1; min-width: 0; }
 .gs-pipe .nm-row { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
@@ -329,7 +329,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 
 /* ── footer / sourcing ── */
 .gs-foot { padding-top: clamp(40px, 5vw, 64px); padding-bottom: clamp(48px, 6vw, 80px); border-top: 1px solid rgba(26,40,34,.08); display: flex; justify-content: space-between; gap: var(--s-7); flex-wrap: wrap; }
-.gs-foot .src { font: var(--t-body); color: var(--color-ink-3); max-width: 60ch; line-height: 1.75; }
+.gs-foot .src { font: var(--t-body); color: var(--color-ink-2); max-width: 62ch; line-height: 1.75; }
 .gs-foot .src b { color: var(--color-ink-2); }
 .gs-foot .right { text-align: right; }
 
@@ -349,6 +349,13 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 @keyframes gsbar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 .gs-bar { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); animation: gsbar 620ms var(--ease-out) forwards; }
 
+/* safety net: never present a blank hero — e.g. a "Share this page" link opened in a
+   background tab where entrance animations are throttled. A load-script adds .gs-loaded,
+   which forces the end-state regardless of whether the entrance animation ran. */
+.gs-loaded .gs-rise, .gs-loaded .gs-area-in, .gs-loaded .gs-dot-in { opacity: 1 !important; transform: none !important; }
+.gs-loaded .gs-bar { transform: scaleY(1) !important; }
+.gs-loaded .gs-draw { stroke-dashoffset: 0 !important; }
+
 /* ─────────────────────────────────────────────────────────────────────────
  * RESPONSIVE — the showcase is a shareable link → mobile is mandatory
  * ───────────────────────────────────────────────────────────────────────── */
@@ -356,10 +363,14 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
   .gs-anchor-block { grid-template-columns: 1fr; gap: clamp(28px, 6vw, 48px); align-items: start; }
   .gs-cadence-grid { grid-template-columns: 1fr; gap: var(--s-7); }
   .gs-pipe-grid { grid-template-columns: 1fr; }
+  .gs-sec-head { grid-template-columns: 1fr; gap: var(--s-4); align-items: start; }
 }
 @media (max-width: 720px) {
   .gs-topnav a:not(.menu) { display: none; }
   .gs-modifier .aside { display: none; }
+  /* On a real phone viewport, the purpose-built phone frames ARE the mobile spec —
+     hide the desktop device so its reflowed (tiny-text) SVGs don't masquerade as mobile. */
+  .stage, .frame-label { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
@@ -402,7 +413,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
       <a href="#">The work</a>
       <a href="#">Shipping next</a>
       <a href="#">About</a>
-      <a href="#" class="cta cta--ghost menu" style="padding:9px 16px">Share ↗</a>
+      <a href="#" class="cta cta--ghost cta--sm menu">Share <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </nav>
   </div></div></div>
 
@@ -435,7 +446,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
           <span class="yr">Apr–Jun 2026</span>
         </div>
         <div class="gs-curve">
-          <svg viewBox="0 0 920 360" preserveAspectRatio="none" role="img" aria-label="A real, rising star curve reconstructed from GitHub: citegeist's stars climbing one at a time from zero to 10 between early April and early June 2026.">
+          <svg viewBox="0 0 866 360" preserveAspectRatio="none" role="img" aria-label="A real, rising star curve reconstructed from GitHub: citegeist's stars climbing one at a time from zero to 10 between early April and early June 2026.">
             <defs>
               <linearGradient id="rHeroArea" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#1E8C7A" stop-opacity="0.18"/>
@@ -445,9 +456,9 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
             </defs>
             <!-- gridlines (quiet) -->
             <g stroke="var(--viz-grid)" stroke-width="1">
-              <line x1="8" y1="96" x2="912" y2="96"/>
-              <line x1="8" y1="180" x2="912" y2="180"/>
-              <line x1="8" y1="264" x2="912" y2="264"/>
+              <line x1="8" y1="96" x2="858" y2="96"/>
+              <line x1="8" y1="180" x2="858" y2="180"/>
+              <line x1="8" y1="264" x2="858" y2="264"/>
             </g>
             <!-- area + line (the ONE curve) — real 10-point star history -->
             <path class="gs-area-in" d="M 8.0 320.0 C 10.1 315.5, 12.8 301.0, 21.3 292.0 C 29.8 283.0, 33.5 273.0, 61.2 264.0 C 88.8 255.0, 162.2 245.0, 194.1 236.0 C 226.0 227.0, 205.3 217.0, 260.6 208.0 C 315.9 199.0, 478.1 189.0, 539.8 180.0 C 601.4 171.0, 624.8 161.0, 646.1 152.0 C 667.4 143.0, 662.1 133.0, 672.7 124.0 C 683.3 115.0, 693.4 105.0, 712.6 96.0 C 731.7 87.0, 769.0 77.0, 792.4 68.0 C 815.8 59.0, 848.2 44.5, 858.8 40.0 L 858.8 320.0 L 8.0 320.0 Z" fill="url(#rHeroArea)"/>
@@ -466,7 +477,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
             </g>
             <circle class="gs-dot-in" cx="858.8" cy="40" r="5.5" fill="#fff" stroke="var(--viz-cat-1)" stroke-width="3"/>
             <!-- inline end-label so the curve is legible without a legend: 10 stars lives HERE -->
-            <text x="858.8" y="24" text-anchor="end" font-family="Geist Mono" font-weight="600" font-size="15" fill="#0E574C">10 ★</text>
+            <text x="858.8" y="24" text-anchor="end" font-family="Geist Mono" font-weight="600" font-size="15" letter-spacing="-0.3" fill="#0E574C">10 ★</text>
           </svg>
         </div>
         <div class="gs-curve-foot">
@@ -495,13 +506,13 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
             <span class="t">Downloads per release</span>
             <span class="yr">Apr → Jun 2026</span>
           </div>
-          <svg viewBox="0 0 560 300" role="img" aria-label="A bar chart of downloads per tagged release. April version 1 releases: v1.0.0 17, v1.0.3 8, v1.1.2 6, v1.2.0 35, v1.2.1 3, and v1.3.0 the tallest at 274. June version 2 releases: v2.0.0 61, v2.0.1 23, v2.0.2 116, v2.0.3 3.">
+          <svg viewBox="-7 0 560 300" role="img" aria-label="A bar chart of downloads per tagged release. April version 1 releases: v1.0.0 17, v1.0.3 8, v1.1.2 6, v1.2.0 35, v1.2.1 3, and v1.3.0 the tallest at 274. June version 2 releases: v2.0.0 61, v2.0.1 23, v2.0.2 116, v2.0.3 3.">
             <defs>
               <linearGradient id="barV1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A6EA5"/><stop offset="1" stop-color="#3A6EA5" stop-opacity="0.78"/></linearGradient>
               <linearGradient id="barV2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E8C7A"/><stop offset="1" stop-color="#1E8C7A" stop-opacity="0.78"/></linearGradient>
             </defs>
             <!-- baseline -->
-            <line x1="8" y1="248" x2="552" y2="248" stroke="var(--viz-axis)" stroke-width="1.4"/>
+            <line x1="14" y1="248" x2="532" y2="248" stroke="var(--viz-axis)" stroke-width="1.4"/>
             <!-- bars: plot area y top=24 (=274) .. y base=248 (=0); 224px tall scale.
                  x: 10 bars across [20..540], bar width 34, gap distributes. -->
             <!-- v1 group (harbor blue) -->
@@ -510,7 +521,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
               <rect class="gs-bar" style="animation-delay:.16s" x="74"  y="241" width="34" height="7"   rx="3" fill="url(#barV1)"/>
               <rect class="gs-bar" style="animation-delay:.22s" x="126" y="243" width="34" height="5"   rx="3" fill="url(#barV1)"/>
               <rect class="gs-bar" style="animation-delay:.28s" x="178" y="219" width="34" height="29"  rx="3" fill="url(#barV1)"/>
-              <rect class="gs-bar" style="animation-delay:.34s" x="230" y="246" width="34" height="2"   rx="3" fill="url(#barV1)"/>
+              <rect class="gs-bar" style="animation-delay:.34s" x="230" y="244" width="34" height="4"   rx="3" fill="url(#barV1)"/>
               <rect class="gs-bar" style="animation-delay:.40s" x="282" y="24"  width="34" height="224" rx="3" fill="url(#barV1)"/>
             </g>
             <!-- v2 group (swell teal) -->
@@ -518,34 +529,30 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
               <rect class="gs-bar" style="animation-delay:.50s" x="334" y="198" width="34" height="50"  rx="3" fill="url(#barV2)"/>
               <rect class="gs-bar" style="animation-delay:.56s" x="386" y="229" width="34" height="19"  rx="3" fill="url(#barV2)"/>
               <rect class="gs-bar" style="animation-delay:.62s" x="438" y="153" width="34" height="95"  rx="3" fill="url(#barV2)"/>
-              <rect class="gs-bar" style="animation-delay:.68s" x="490" y="246" width="34" height="2"   rx="3" fill="url(#barV2)"/>
+              <rect class="gs-bar" style="animation-delay:.68s" x="490" y="244" width="34" height="4"   rx="3" fill="url(#barV2)"/>
             </g>
             <!-- value labels above the two tallest, so the shape reads instantly -->
             <text x="299" y="16"  text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="13" fill="#3A6EA5">274</text>
             <text x="455" y="145" text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="12" fill="#0E574C">116</text>
             <!-- release tick labels -->
-            <g font-family="Geist Mono" font-size="9.5" fill="var(--ink-400)" text-anchor="middle">
-              <text x="39"  y="266">v1.0</text>
-              <text x="91"  y="266">v1.0.3</text>
-              <text x="143" y="266">v1.1</text>
-              <text x="195" y="266">v1.2</text>
-              <text x="247" y="266">v1.2.1</text>
-              <text x="299" y="266">v1.3</text>
-              <text x="351" y="266">v2.0</text>
-              <text x="403" y="266">v2.0.1</text>
-              <text x="455" y="266">v2.0.2</text>
-              <text x="507" y="266">v2.0.3</text>
+            <g font-family="Geist Mono" font-size="11.5" fill="var(--ink-500)" text-anchor="middle">
+              <text x="39"  y="267">v1.0.0</text>
+              <text x="91"  y="267">v1.0.3</text>
+              <text x="143" y="267">v1.1.2</text>
+              <text x="195" y="267">v1.2.0</text>
+              <text x="247" y="267">v1.2.1</text>
+              <text x="299" y="267">v1.3.0</text>
+              <text x="351" y="267">v2.0.0</text>
+              <text x="403" y="267">v2.0.1</text>
+              <text x="455" y="267">v2.0.2</text>
+              <text x="507" y="267">v2.0.3</text>
             </g>
             <!-- group spans -->
             <g font-family="Geist Mono" font-size="10" letter-spacing="0.06em" text-anchor="middle">
-              <text x="160" y="288" fill="#3A6EA5">VERSION 1 · APRIL</text>
+              <text x="169" y="288" fill="#3A6EA5">VERSION 1 · APRIL</text>
               <text x="429" y="288" fill="#0E574C">VERSION 2 · JUNE</text>
             </g>
           </svg>
-          <div class="gs-bars-cap">
-            <span class="lg"><span class="swatch" style="background:var(--viz-cat-2)"></span>version 1 · April</span>
-            <span class="lg"><span class="swatch" style="background:var(--viz-cat-1)"></span>version 2 · June</span>
-          </div>
         </div>
       </div>
     </div>
@@ -554,8 +561,10 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
   <!-- 4 · PIPELINE — what's shipping next. Names + one line + honest status. NO numbers. -->
   <section class="gs-inner gs-pipeline" aria-label="What's shipping next">
     <div class="gs-sec-head">
-      <span class="kicker">Shipping next</span>
-      <h2>What's in the workshop</h2>
+      <div class="gs-sec-head-l">
+        <span class="kicker">Shipping next</span>
+        <h2>What's in the workshop</h2>
+      </div>
       <p>The rest of the toolkit, honestly staged. No traction claimed before it's earned — these are listed by what they do and where they are.</p>
     </div>
 
@@ -590,7 +599,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
   <footer class="gs-inner gs-foot">
     <div class="src"><b>How this is measured.</b> The figures here are real, pulled from the GitHub API. Stars are reconstructed from full history; release downloads are GitHub's own counts. <b>Daily download tracking starts when capture goes live</b> — until then there's no day-by-day history to chart, so the page shows the honest totals it has, not a curve it can't yet draw.</div>
     <div class="right">
-      <span class="kicker kicker--bare" style="color:var(--ink-400);justify-content:flex-end">Snapshot · 10 Jun 2026</span>
+      <span class="kicker kicker--bare" style="justify-content:flex-end">Snapshot · 10 Jun 2026</span>
       <div style="margin-top:var(--s-4);display:flex;gap:var(--s-3);justify-content:flex-end">
         <button class="cta">Share this page <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="cta cta--ghost">View on GitHub ↗</button>
@@ -632,11 +641,11 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
   <div class="device device--phone gs" role="img" aria-label="Showcase on mobile, loaded, with the same real data">
     <div class="gs-top-wrap"><div class="gs-inner" style="padding:0 20px"><div class="gs-top">
       <div class="gs-brand"><svg class="gs-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#0E574C"/><path d="M4 19 C 8 19, 9 11, 14 11 C 19 11, 20 16, 24 16" stroke="#5FB6A6" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Josh Gonzales</b></div></div>
-      <button class="cta cta--ghost menu" style="padding:7px 12px;font-size:13px">Share ↗</button>
+      <button class="cta cta--ghost menu" style="padding:7px 12px;font-size:13px">Share <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div></div></div>
     <div class="gs-inner" style="padding:32px 20px 28px">
       <span class="kicker kicker--accent">PhD Candidate</span>
-      <h1 class="gs-statement" style="font-size:30px;margin:16px 0 28px;max-width:none">I build and ship <span class="em">research tools</span>.</h1>
+      <h1 class="gs-statement" style="font-size:30px;margin:16px 0 28px;max-width:none">I build and ship <span class="em">research&nbsp;tools</span>.</h1>
       <div class="lead-label" style="font:var(--t-label);color:var(--ink-500);display:flex;gap:8px;align-items:center;margin-bottom:8px">
         <svg viewBox="0 0 16 16" fill="none" style="width:15px;height:15px;color:var(--swell-600)" aria-hidden="true"><path d="M8 11V2.5M8 11l-3-3M8 11l3-3M3 13.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         citegeist · downloaded
@@ -658,7 +667,7 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
         </svg>
         <div class="gs-curve-foot" style="margin-top:10px"><span class="ax">Apr '26</span><span class="mid" style="font-size:10px">from GitHub history</span><span class="ax">Jun '26</span></div>
       </div>
-      <button class="cta" style="width:100%;justify-content:center;margin-top:24px">Share this page ↗</button>
+      <button class="cta" style="width:100%;justify-content:center;margin-top:24px">Share this page <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
     <!-- cadence on mobile: the 16-releases line + per-release bars -->
     <div class="gs-inner" style="padding:28px 20px;border-top:1px solid rgba(26,40,34,.08)">
@@ -670,26 +679,26 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
           <linearGradient id="mBarV1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A6EA5"/><stop offset="1" stop-color="#3A6EA5" stop-opacity="0.78"/></linearGradient>
           <linearGradient id="mBarV2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E8C7A"/><stop offset="1" stop-color="#1E8C7A" stop-opacity="0.78"/></linearGradient>
         </defs>
-        <line x1="6" y1="132" x2="344" y2="132" stroke="var(--viz-axis)" stroke-width="1.2"/>
+        <line x1="8" y1="132" x2="330" y2="132" stroke="var(--viz-axis)" stroke-width="1.2"/>
         <!-- y top=20 (=274) .. base=132 (=0): 112px scale; 10 bars across [12..338], width 22 -->
         <g>
           <rect x="14"  y="125" width="22" height="7"   rx="2.5" fill="url(#mBarV1)"/>
           <rect x="46"  y="129" width="22" height="3"   rx="2.5" fill="url(#mBarV1)"/>
-          <rect x="78"  y="130" width="22" height="2"   rx="2.5" fill="url(#mBarV1)"/>
+          <rect x="78"  y="129" width="22" height="3"   rx="1.5" fill="url(#mBarV1)"/>
           <rect x="110" y="118" width="22" height="14"  rx="2.5" fill="url(#mBarV1)"/>
-          <rect x="142" y="131" width="22" height="1"   rx="2.5" fill="url(#mBarV1)"/>
+          <rect x="142" y="129" width="22" height="3"   rx="1.5" fill="url(#mBarV1)"/>
           <rect x="174" y="20"  width="22" height="112" rx="2.5" fill="url(#mBarV1)"/>
         </g>
         <g>
           <rect x="206" y="107" width="22" height="25"  rx="2.5" fill="url(#mBarV2)"/>
           <rect x="238" y="123" width="22" height="9"   rx="2.5" fill="url(#mBarV2)"/>
           <rect x="270" y="84"  width="22" height="48"  rx="2.5" fill="url(#mBarV2)"/>
-          <rect x="302" y="131" width="22" height="1"   rx="2.5" fill="url(#mBarV2)"/>
+          <rect x="302" y="129" width="22" height="3"   rx="1.5" fill="url(#mBarV2)"/>
         </g>
         <text x="185" y="14"  text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="12" fill="#3A6EA5">274</text>
         <text x="281" y="78"  text-anchor="middle" font-family="Geist Mono" font-weight="600" font-size="11" fill="#0E574C">116</text>
         <g font-family="Geist Mono" font-size="9.5" letter-spacing="0.04em" text-anchor="middle">
-          <text x="100" y="152" fill="#3A6EA5">V1 · APR</text>
+          <text x="105" y="152" fill="#3A6EA5">V1 · APR</text>
           <text x="265" y="152" fill="#0E574C">V2 · JUN</text>
         </g>
       </svg>
@@ -727,5 +736,16 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 
 </div>
 
+<script>
+  /* Safety net: never present a blank hero — a "Share this page" link opened in a
+     background tab throttles CSS entrance animations. After load, force the end-state. */
+  (function () {
+    function reveal() { document.documentElement.classList.add('gs-loaded'); }
+    function arm() { setTimeout(reveal, 2400); }
+    if (document.readyState === 'complete') arm();
+    else window.addEventListener('load', arm);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) setTimeout(reveal, 2400); });
+  })();
+</script>
 </body>
 </html>
