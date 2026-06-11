@@ -188,6 +188,9 @@
 /* neutral variant for "public · no release yet" / "private" framing */
 .tracking--quiet { color: var(--ink-500); background: var(--ink-100); border-color: var(--ink-200); }
 .tracking--quiet .dot { background: var(--ink-400); }
+/* soft inline status — quiet roadmap cue (no chunky pill) */
+.tracking--soft { display: inline-flex; align-items: center; gap: 7px; font: var(--t-data-sm); color: var(--ink-500); background: none; border: none; padding: 0; white-space: nowrap; }
+.tracking--soft .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber-500); box-shadow: 0 0 0 3px var(--amber-50); }
 
 /* cta */
 .cta {
@@ -318,15 +321,13 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 .gs-pipe {
   position: relative; padding: var(--s-6); border-radius: var(--r-xl);
   background: var(--color-surface); border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-1);
-  display: flex; align-items: flex-start; gap: var(--s-4);
+  display: flex; flex-direction: column;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
-.gs-pipe::before { content: ""; position: absolute; left: 0; top: 16px; bottom: 16px; width: 3px; background: var(--accent, var(--swell-500)); opacity: .85; border-radius: 0 3px 3px 0; }
-.gs-pipe .badge { width: 42px; height: 42px; border-radius: var(--r-md); display: grid; place-items: center; font: var(--t-data-md); font-weight: 600; color: #fff; flex: none; background: var(--accent, var(--swell-500)); }
-.gs-pipe .body { flex: 1; min-width: 0; }
-.gs-pipe .nm-row { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
-.gs-pipe .nm { font: var(--t-heading); font-size: 19px; }
-.gs-pipe .blurb { font: var(--t-body); color: var(--color-ink-2); margin: var(--s-3) 0 0; }
+.gs-pipe:hover { border-color: var(--ink-300); box-shadow: var(--shadow-1); transform: translateY(-1px); }
+.gs-pipe .pipe-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; row-gap: 6px; }
+.gs-pipe .nm { font: var(--t-heading); font-size: 20px; letter-spacing: -.01em; }
+.gs-pipe .blurb { font: var(--t-body); color: var(--color-ink-2); margin: var(--s-4) 0 0; max-width: 44ch; }
 
 /* ── footer / sourcing ── */
 .gs-foot { padding-top: clamp(40px, 5vw, 64px); padding-bottom: clamp(48px, 6vw, 80px); border-top: 1px solid rgba(26,40,34,.08); display: flex; justify-content: space-between; gap: var(--s-7); flex-wrap: wrap; }
@@ -572,27 +573,21 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
 
     <div class="gs-pipe-grid">
       <!-- provenance — private, in progress -->
-      <div class="gs-pipe" style="--accent:#3A6EA5">
-        <span class="badge">pr</span>
-        <div class="body">
-          <div class="nm-row">
-            <span class="nm">provenance</span>
-            <span class="tracking"><span class="dot"></span>in progress · private</span>
-          </div>
-          <p class="blurb">Turns Obsidian notes and Zotero sources into cited drafts, with every claim traceable to its evidence.</p>
+      <div class="gs-pipe">
+        <div class="pipe-head">
+          <span class="nm">provenance</span>
+          <span class="tracking--soft"><span class="dot"></span>in progress · private</span>
         </div>
+        <p class="blurb">Turns Obsidian notes and Zotero sources into cited drafts, with every claim traceable to its evidence.</p>
       </div>
 
       <!-- arbiter.ac — private, in progress -->
-      <div class="gs-pipe" style="--accent:#B59A2E">
-        <span class="badge">ar</span>
-        <div class="body">
-          <div class="nm-row">
-            <span class="nm">arbiter.ac</span>
-            <span class="tracking"><span class="dot"></span>in progress · private</span>
-          </div>
-          <p class="blurb">Evidence synthesis for the social sciences — find what the literature actually agrees on.</p>
+      <div class="gs-pipe">
+        <div class="pipe-head">
+          <span class="nm">arbiter.ac</span>
+          <span class="tracking--soft"><span class="dot"></span>in progress · private</span>
         </div>
+        <p class="blurb">Evidence synthesis for the social sciences — find what the literature actually agrees on.</p>
       </div>
     </div>
   </section>
@@ -709,13 +704,13 @@ body { margin: 0; background: #E4E2DB; color: var(--ink-900); font: var(--t-body
     <div class="gs-inner" style="padding:24px 20px 32px;border-top:1px solid rgba(26,40,34,.08)">
       <span class="kicker">Shipping next</span>
       <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
-        <div class="gs-pipe" style="--accent:#3A6EA5;padding:18px">
-          <span class="badge" style="width:34px;height:34px">pr</span>
-          <div class="body"><div class="nm-row"><span class="nm" style="font-size:17px">provenance</span><span class="tracking" style="font-size:11px;padding:4px 9px"><span class="dot"></span>in progress</span></div><p class="blurb" style="margin-top:8px">Cited drafts inside Obsidian, every claim traceable.</p></div>
+        <div class="gs-pipe" style="padding:18px">
+          <div class="pipe-head"><span class="nm" style="font-size:17px">provenance</span><span class="tracking--soft" style="font-size:11px"><span class="dot"></span>in progress</span></div>
+          <p class="blurb" style="margin-top:10px">Cited drafts inside Obsidian, every claim traceable.</p>
         </div>
-        <div class="gs-pipe" style="--accent:#B59A2E;padding:18px">
-          <span class="badge" style="width:34px;height:34px">ar</span>
-          <div class="body"><div class="nm-row"><span class="nm" style="font-size:17px">arbiter.ac</span><span class="tracking" style="font-size:11px;padding:4px 9px"><span class="dot"></span>in progress</span></div><p class="blurb" style="margin-top:8px">Evidence synthesis for the social sciences.</p></div>
+        <div class="gs-pipe" style="padding:18px">
+          <div class="pipe-head"><span class="nm" style="font-size:17px">arbiter.ac</span><span class="tracking--soft" style="font-size:11px"><span class="dot"></span>in progress</span></div>
+          <p class="blurb" style="margin-top:10px">Evidence synthesis for the social sciences.</p>
         </div>
       </div>
     </div>
