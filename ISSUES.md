@@ -8,7 +8,6 @@
 
 | ID | Priority | Description | Status |
 |----|----------|-------------|--------|
-| GS-001 | P0 | **Deploy gate (Josh, ~2 min — NO PAT):** Settings → Pages → Source: GitHub Actions; (project page only) repo Actions vars `NEXT_PUBLIC_BASE_PATH=/groundswell` + `NEXT_PUBLIC_SITE_URL=https://<user>.github.io/groundswell`; keep repo public; push + merge to main → `site.yml` builds + deploys (the daily run also captures + redeploys). Capture uses the built-in Actions token (public data only). | Open — gates live deploy |
 | GS-011 | P3 | **U12 private radar** — local-only "what's growing" view reading `data/.local/` (`pnpm dev`). Deferred. | Open — deferred |
 | GS-012 | P4 | citegeist has a stray release tagged literally `release` (shows as a `release` bar). Optional: retag it on GitHub for a cleaner axis — the page faithfully shows reality either way. | Open — optional (Josh) |
 
@@ -25,6 +24,7 @@
 | GS-009 | Pivot: remove the Supabase/Vercel/Sentry layer | Done — commit `fe76c78` (−7.7k LOC); CI now runs in `deploy.yml` |
 | GS-010 | Privacy guard: committed `data/` = public repos only | Done — `src/lib/store/privacy.test.ts` (3 tests; private repos confined to gitignored `data/.local/`) |
 | GS-003 | Populate `data/meta.json` roster | Done for v1 — citegeist (public) + provenance + arbiter.ac (private); expand later if needed |
+| GS-001 | Deploy (Josh) | **Done 2026-06-11** — repo `phdemotions/groundswell` created public; Pages→Actions + vars set; `main` pushed; `site.yml` green (49s). Live: https://phdemotions.github.io/groundswell/ |
 
 ---
 

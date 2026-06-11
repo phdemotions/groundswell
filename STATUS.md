@@ -1,8 +1,8 @@
 # Groundswell — Status
 
 > **Last Updated:** 2026-06-11
-> **Phase:** Public showcase BUILT + shippable (static-first). Live deploy gated on GS-001 (Josh).
-> **Build:** Full `pnpm build` GREEN — static export to `out/`; 105 tests; tree clean.
+> **Phase:** 🟢 LIVE — https://phdemotions.github.io/groundswell/ (deployed 2026-06-11). Daily capture + auto-redeploy.
+> **Build:** `site.yml` green (build + deploy 49s); 105 tests; static export.
 
 ---
 
@@ -13,8 +13,8 @@
 | Architecture | **Static-first** — GitHub Pages + Actions + JSON-in-repo. NO Supabase, NO Vercel, NO server. |
 | Stack | Next 16 (App Router, `output: 'export'`) · React 19 · TS strict · Tailwind v4 · next/font · hand-rolled d3-shape + motion charts |
 | Data | Daily GitHub Action → `data/<repo>.ndjson` (git = time-series log). Real: citegeist **576 dl / 10★ / 16 releases** (live-growing). Privates → gitignored `data/.local/`. |
-| Repo | `~/developer/groundswell`, branch `feat/scaffold-and-mockups`, unpushed, tree clean |
-| Live capture + deploy | Gated on **GS-001** (Josh, no PAT): enable Pages → Actions · set Pages vars · merge to main |
+| Repo | **github.com/phdemotions/groundswell** (public) · branch `main` · tree clean |
+| Live site | **https://phdemotions.github.io/groundswell/** — `site.yml` builds+deploys on push; daily cron recaptures + redeploys |
 | Plan | `PLAN.md` (v2 static-first). Canonical mockup: `docs/mockups/2026-06-10-showcase-real.html` |
 
 ---
@@ -34,8 +34,9 @@ Carried from v1 (still used): U3 GitHub client, `derive.ts`, `runBounded`.
 
 ## Next
 
-- **GS-001** (Josh, ~2 min — no PAT) — Settings → Pages → Source: GitHub Actions · (project page only) repo Actions vars `NEXT_PUBLIC_BASE_PATH=/groundswell` + `NEXT_PUBLIC_SITE_URL` · push + merge to main → `site.yml` builds + deploys; the daily run also captures + redeploys (built-in Actions token, public data only).
-- **U12** private radar — local-only "what's growing", deferred.
+- **U12** private radar — local-only "what's growing", deferred (build when there's private traction).
+- Low-priority: GitHub's Node-20-actions deprecation (forced to Node 24 on 2026-06-16) — maintained `@v4` actions transition automatically; bump action majors when convenient.
+- Verify the live page visually + share the link with a recruiter or two.
 
 ## Recent Sessions
 
