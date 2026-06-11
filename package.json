@@ -11,6 +11,7 @@
     "dev": "next dev --turbopack",
     "build": "pnpm run type-check && pnpm run lint && pnpm run test && next build",
     "build:next": "next build",
+    "capture": "tsx scripts/capture.ts",
     "start": "next start",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",

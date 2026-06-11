@@ -47,3 +47,6 @@ next-env.d.ts
 
 # generated preview root (cp of the canonical mockup for the "/" route)
 /docs/mockups/index.html
+
+# private-repo capture (radar-only) — NEVER commit private traction (GS-010)
+/data/.local/

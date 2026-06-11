@@ -1,0 +1,35 @@
+{
+  "repos": [
+    {
+      "name": "citegeist",
+      "owner": "phdemotions",
+      "repo": "zotero-citegeist",
+      "visibility": "public",
+      "displayName": "citegeist",
+      "tagline": "Zotero citation intelligence — counts, networks, and one-click imports.",
+      "homepageUrl": null,
+      "trackingStartedAt": "2026-06-11"
+    },
+    {
+      "name": "provenance",
+      "owner": "phdemotions",
+      "repo": "provenance",
+      "visibility": "private",
+      "displayName": "provenance",
+      "tagline": "Turns Obsidian notes and Zotero sources into cited drafts, with every claim traceable to its evidence.",
+      "homepageUrl": null,
+      "trackingStartedAt": "2026-06-11"
+    },
+    {
+      "name": "arbiter",
+      "owner": "phdemotions",
+      "repo": "arbiter",
+      "visibility": "private",
+      "displayName": "arbiter.ac",
+      "tagline": "Evidence synthesis for the social sciences — find what the literature actually agrees on.",
+      "homepageUrl": null,
+      "trackingStartedAt": "2026-06-11"
+    }
+  ],
+  "lastCapture": "2026-06-11T04:07:18.913Z"
+}
