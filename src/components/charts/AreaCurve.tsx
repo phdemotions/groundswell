@@ -13,7 +13,7 @@
  */
 
 import { motion } from 'motion/react'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 
 import { ChartTooltip } from './ChartTooltip'
 import { areaPath, linePath, type PixelPoint } from './geometry'
@@ -69,6 +69,7 @@ export function AreaCurve({
   className,
 }: AreaCurveProps) {
   const [hover, setHover] = useState<HoverState | null>(null)
+  const gradId = useId()
 
   const pad = { t: 16, r: 18, b: 28, l: 18 }
   const innerW = width - pad.l - pad.r
@@ -100,6 +101,12 @@ export function AreaCurve({
         width="100%"
         style={{ display: 'block', overflow: 'visible' }}
       >
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={color} stopOpacity={0.18} />
+            <stop offset="0.9" stopColor={color} stopOpacity={0} />
+          </linearGradient>
+        </defs>
         {ticks(yMax, 4).map((t) => (
           <line
             key={t}
@@ -115,9 +122,9 @@ export function AreaCurve({
         {dArea.length > 0 && (
           <motion.path
             d={dArea}
-            fill={color}
+            fill={`url(#${gradId})`}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.12 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           />
         )}

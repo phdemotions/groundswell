@@ -1,9 +1,9 @@
 import { BarChart } from '@/components/charts'
 import { monthShortYear, monthYear } from '@/lib/format'
-import type { ShowcaseProject } from '@/lib/store/view'
+import { buildReleaseChart, type ShowcaseProject } from '@/lib/store/view'
 
 export function Cadence({ lead }: { lead: ShowcaseProject }) {
-  const bars = lead.releaseBars.map((b) => ({ label: b.tag, value: b.downloads }))
+  const chart = buildReleaseChart(lead.releaseBars)
   const first = lead.cadence.at(0)?.publishedAt ?? null
   const last = lead.cadence.at(-1)?.publishedAt ?? null
   const range = first && last ? `${monthShortYear(first)} → ${monthShortYear(last)}` : ''
@@ -34,9 +34,9 @@ export function Cadence({ lead }: { lead: ShowcaseProject }) {
               <span className="yr">{range}</span>
             </div>
             <BarChart
-              bars={bars}
+              bars={chart.bars}
+              groups={chart.groups}
               ariaLabel={`Downloads per release across ${lead.releaseCount} releases shipped between ${range}.`}
-              color="var(--viz-cat-1)"
               gridColor="var(--viz-grid)"
               axisColor="var(--color-ink-3)"
               height={300}

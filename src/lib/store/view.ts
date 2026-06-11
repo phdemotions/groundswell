@@ -186,3 +186,131 @@ export function buildShowcaseModel(
     pipeline,
   }
 }
+
+// ============================================================================
+// Release-bar chart derivation (general, data-driven — no per-repo hardcoding)
+// ============================================================================
+
+/** Latest-major releases get the accent; earlier majors a secondary tone. */
+const VIZ_LATEST = 'var(--viz-cat-1)' // swell teal — the current major
+const VIZ_PRIOR = 'var(--viz-cat-2)' //  harbor blue — earlier majors
+const VIZ_OTHER = 'var(--ink-300)' //    un-versioned tags (e.g. a stray "release")
+
+const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+/** A release bar prepared for the chart: color + whether to print its value. */
+export interface ChartBar {
+  label: string
+  value: number
+  color: string
+  showValue: boolean
+}
+
+/** A contiguous major-version run, for the group span labels under the bars. */
+export interface ChartGroup {
+  label: string
+  /** Month (or month range) the run shipped in, e.g. "Apr" or "Apr–Jun". */
+  sublabel: string
+  fromIndex: number
+  toIndex: number
+  color: string
+}
+
+export interface ReleaseChart {
+  bars: ChartBar[]
+  groups: ChartGroup[]
+}
+
+/** Major version from a tag (`v2.0.4` → 2), or null for un-versioned tags. */
+function majorOf(tag: string): number | null {
+  const m = /^v?(\d+)\./.exec(tag)
+  return m ? Number.parseInt(m[1], 10) : null
+}
+
+function shortMonth(iso: string): string {
+  const ms = Date.parse(iso)
+  if (Number.isNaN(ms)) return ''
+  return MONTHS_SHORT[new Date(ms).getUTCMonth()]
+}
+
+function colorForMajor(major: number | null, latestMajor: number | null): string {
+  if (major === null) return VIZ_OTHER
+  return major === latestMajor ? VIZ_LATEST : VIZ_PRIOR
+}
+
+/**
+ * Turn ordered release bars into a colored, grouped chart spec — GENERAL, not
+ * citegeist-specific: the newest major version is accented, earlier majors are
+ * secondary, runs of the same major become group bands labeled with their ship
+ * month(s), and each group's tallest bar is value-labeled. A repo with one major
+ * collapses to a single tone + band; a repo with five majors still reads as
+ * "current vs prior". `bars` must already be in chronological (ship) order.
+ */
+export function buildReleaseChart(bars: ReleaseBar[]): ReleaseChart {
+  const majors = bars.map((b) => majorOf(b.tag))
+  const latestMajor = majors.reduce<number | null>(
+    (mx, m) => (m !== null && (mx === null || m > mx) ? m : mx),
+    null
+  )
+
+  // Effective major for GROUPING: an un-versioned tag (e.g. a stray "release")
+  // inherits the surrounding major (forward-fill, then back-fill leading gaps) so
+  // it blends into a version's run instead of fragmenting it into separate bands.
+  const eff = [...majors]
+  let prev: number | null = null
+  for (let k = 0; k < eff.length; k++) {
+    if (eff[k] === null) eff[k] = prev
+    else prev = eff[k]
+  }
+  let next: number | null = null
+  for (let k = eff.length - 1; k >= 0; k--) {
+    if (eff[k] === null) eff[k] = next
+    else next = eff[k]
+  }
+
+  const chartBars: ChartBar[] = bars.map((b, i) => ({
+    label: b.tag,
+    value: b.downloads,
+    color: colorForMajor(eff[i], latestMajor),
+    showValue: false,
+  }))
+
+  // Contiguous runs of the same effective major → group bands.
+  const groups: ChartGroup[] = []
+  let i = 0
+  while (i < bars.length) {
+    let j = i
+    while (j + 1 < bars.length && eff[j + 1] === eff[i]) j++
+    const runMonths = bars
+      .slice(i, j + 1)
+      .map((b) => b.publishedAt)
+      .filter((d): d is string => d !== null)
+      .map(shortMonth)
+      .filter((m) => m.length > 0)
+    const sublabel =
+      runMonths.length === 0
+        ? ''
+        : runMonths[0] === runMonths[runMonths.length - 1]
+          ? runMonths[0]
+          : `${runMonths[0]}–${runMonths[runMonths.length - 1]}`
+    groups.push({
+      label: eff[i] === null ? 'Other' : `Version ${eff[i]}`,
+      sublabel,
+      fromIndex: i,
+      toIndex: j,
+      color: colorForMajor(eff[i], latestMajor),
+    })
+    i = j + 1
+  }
+
+  // Value-label each group's tallest (nonzero) bar.
+  for (const g of groups) {
+    let maxIndex = g.fromIndex
+    for (let k = g.fromIndex + 1; k <= g.toIndex; k++) {
+      if (chartBars[k].value > chartBars[maxIndex].value) maxIndex = k
+    }
+    if (chartBars[maxIndex].value > 0) chartBars[maxIndex].showValue = true
+  }
+
+  return { bars: chartBars, groups }
+}
