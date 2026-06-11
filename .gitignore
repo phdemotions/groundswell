@@ -41,3 +41,9 @@ next-env.d.ts
 
 # local agent skills and caches
 /.agents/
+
+# local preview config (Claude Preview launch.json — not shared)
+/.claude/launch.json
+
+# generated preview root (cp of the canonical mockup for the "/" route)
+/docs/mockups/index.html
