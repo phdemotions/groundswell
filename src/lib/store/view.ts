@@ -56,6 +56,10 @@ export interface ShowcaseProject {
   downloadsCurve: CurvePoint[]
   /** Ship-cadence: each release's tag + publish date. */
   cadence: Backfill['cadence']
+  /** Total published releases (incl. zero-download) — the cadence headline. */
+  releaseCount: number
+  /** Most recent release (tag + ISO date), or null. */
+  latestRelease: { tag: string; publishedAt: string } | null
 }
 
 /** A "Shipping next" item — private/in-progress, NO metrics (honesty). */
@@ -139,6 +143,8 @@ function buildProject(rd: RepoData, config: DeriveConfig): ShowcaseProject {
     starsCurve: eventCumulativeCurve((rd.backfill?.stars ?? []).map((e) => ({ at: e.at }))),
     downloadsCurve: cumulativeCurve(downloadPoints),
     cadence,
+    releaseCount: cadence.length,
+    latestRelease: cadence.at(-1) ?? null,
   }
 }
 

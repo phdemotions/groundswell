@@ -30,6 +30,8 @@ export interface BarChartProps {
   gridColor?: string
   axisColor?: string
   formatValue?: (v: number) => string
+  /** Serializable suffix appended in the tooltip — Server-Component-safe. */
+  valueSuffix?: string
   className?: string
 }
 
@@ -48,6 +50,7 @@ export function BarChart({
   gridColor = 'rgba(0, 0, 0, 0.08)',
   axisColor = 'rgba(0, 0, 0, 0.45)',
   formatValue = (v) => v.toLocaleString('en-US'),
+  valueSuffix = '',
   className,
 }: BarChartProps) {
   const [hover, setHover] = useState<HoverState | null>(null)
@@ -123,7 +126,10 @@ export function BarChart({
       <ChartTooltip x={hover?.x ?? 0} y={hover?.y ?? 0} visible={hover !== null}>
         {hover !== null && bars[hover.i] ? (
           <>
-            <strong>{formatValue(bars[hover.i].value)}</strong>
+            <strong>
+              {formatValue(bars[hover.i].value)}
+              {valueSuffix}
+            </strong>
             <span style={{ opacity: 0.7 }}>{bars[hover.i].label}</span>
           </>
         ) : null}

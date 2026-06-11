@@ -36,6 +36,8 @@ export interface AreaCurveProps {
   gridColor?: string
   axisColor?: string
   formatValue?: (v: number) => string
+  /** Serializable suffix appended in the tooltip (e.g. " ★") — Server-Component-safe. */
+  valueSuffix?: string
   className?: string
 }
 
@@ -63,6 +65,7 @@ export function AreaCurve({
   gridColor = 'rgba(0, 0, 0, 0.08)',
   axisColor = 'rgba(0, 0, 0, 0.45)',
   formatValue = (v) => v.toLocaleString('en-US'),
+  valueSuffix = '',
   className,
 }: AreaCurveProps) {
   const [hover, setHover] = useState<HoverState | null>(null)
@@ -170,7 +173,10 @@ export function AreaCurve({
       <ChartTooltip x={hover?.x ?? 0} y={hover?.y ?? 0} visible={hover !== null}>
         {hover !== null && points[hover.i] ? (
           <>
-            <strong>{formatValue(points[hover.i].value)}</strong>
+            <strong>
+              {formatValue(points[hover.i].value)}
+              {valueSuffix}
+            </strong>
             <span style={{ opacity: 0.7 }}>{monthLabel(points[hover.i].day)}</span>
           </>
         ) : null}
