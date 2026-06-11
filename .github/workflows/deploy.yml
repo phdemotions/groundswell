@@ -1,0 +1,54 @@
+name: Deploy showcase to Pages
+
+# Build + deploy the static showcase to GitHub Pages on every push to main.
+# This is Groundswell's CI gate: `pnpm build` runs type-check + lint + test before
+# `next build` (output: 'export'), so a red check blocks the deploy. (Groundswell
+# is the documented exception to the monorepo Vercel-first CI rule — it deploys to
+# Pages, not Vercel. See groundswell/CLAUDE.md.)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; let an in-flight run finish (don't cancel a deploy).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build (CI chain + static export)
+        run: pnpm build
+        env:
+          # Set to "/groundswell" (repo Actions variable) for a project Pages site;
+          # leave unset for a custom domain or user/organization Pages.
+          NEXT_PUBLIC_BASE_PATH: ${{ vars.NEXT_PUBLIC_BASE_PATH }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
