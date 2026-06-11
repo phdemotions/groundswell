@@ -56,7 +56,7 @@ Load-bearing. U9/U10 and every later surface inherit them.
   Design tokens land in `globals.css` (`@theme`) when U10 ports the approved mockup.
 - **Store:** JSON in `data/` (NDJSON daily snapshots). **Git history is the
   time-series log.** No database.
-- **Capture:** daily **GitHub Action** → `scripts/capture.mjs` (reuses the U3 GitHub
+- **Capture:** daily **GitHub Action** → `scripts/capture.ts` (reuses the U3 GitHub
   client) → append `data/<repo>.ndjson` → commit.
 - **Charts (U9):** hand-rolled `d3-shape` + `motion` + SVG behind a barrel (KTD4),
   rendered client-side from the JSON.
@@ -86,7 +86,7 @@ because it deploys to **GitHub Pages**, not Vercel.
 ## Secret + privacy boundary
 
 - **One secret: the GitHub PAT (`GH_PAT`).** It lives ONLY as a GitHub Actions repo
-  secret, used by `scripts/capture.mjs` inside the Action. It is NEVER bundled into
+  secret, used by `scripts/capture.ts` inside the Action. It is NEVER bundled into
   the static site — the deployed Pages site ships only the already-captured JSON: no
   tokens, no runtime secrets.
 - **Public store = public repos only.** Capture commits metrics for PUBLIC repos to
@@ -149,7 +149,7 @@ Carry these from the approved mockup into real components.
 
 ---
 
-## Structure (target — v2 static-first)
+## Structure (v2 static-first — as built)
 
 ```
 groundswell/
@@ -157,8 +157,7 @@ groundswell/
 ├── next.config.ts            # output: 'export' (static) · basePath for project Pages
 ├── postcss.config.mjs · eslint.config.mjs · vitest.config.ts
 ├── scripts/
-│   ├── capture.mjs           # daily — GitHub API → append data/<repo>.ndjson
-│   └── backfill.mjs          # one-time — starred_at + release dates → data/backfill/
+│   └── capture.ts            # daily — GitHub API → data/<repo>.ndjson + backfill + meta
 ├── .github/workflows/
 │   ├── capture.yml           # cron (daily) → run capture → commit JSON
 │   └── deploy.yml            # on push → CI (type-check·lint·test) → next build → Pages
@@ -170,14 +169,13 @@ groundswell/
 └── src/
     ├── app/                  # layout · page · globals.css (static showcase)
     ├── lib/
-    │   ├── github/           # U3 client (reused by scripts/capture.mjs)
+    │   ├── github/           # U3 client (reused by scripts/capture.ts)
     │   └── metrics/derive.ts # reads data/*.ndjson → SSG figures
     └── components/charts/    # d3-shape + motion + SVG barrel (U9)
 ```
 
-> The Supabase/Vercel scaffold (`src/lib/supabase/`, `supabase/migrations/`,
-> `src/app/api/cron/`, `proxy.ts`, `vercel.json`, `@supabase/*`) is being removed in
-> the pivot — see **GS-009**. Git history preserves it if ever needed.
+> The v1 Supabase/Vercel/Sentry scaffold was removed in **GS-009** (commit
+> `fe76c78`, 2026-06-11); git history preserves it if ever needed.
 
 ---
 
@@ -187,7 +185,7 @@ groundswell/
 pnpm install
 pnpm dev            # localhost:3000 — reads data/*.ndjson (+ data/.local for radar)
 pnpm build          # CI chain + static export (next build, output: 'export')
-pnpm capture        # node scripts/capture.mjs — local capture (needs GH_PAT in env)
+pnpm capture        # tsx scripts/capture.ts — local capture (needs GH_PAT in env)
 pnpm test           # vitest (NODE_ENV=test)
 ```
 

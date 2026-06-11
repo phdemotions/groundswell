@@ -1,8 +1,8 @@
 # Groundswell — Status
 
-> **Last Updated:** 2026-06-10
-> **Phase:** Implementation — Phase A capture spine + derived metrics committed; mockup approval gate is the next action
-> **Build:** Full `pnpm build` GREEN; tree clean
+> **Last Updated:** 2026-06-11
+> **Phase:** Public showcase BUILT + shippable (static-first). Live deploy gated on GS-001 (Josh).
+> **Build:** Full `pnpm build` GREEN — static export to `out/`; 105 tests; tree clean.
 
 ---
 
@@ -10,25 +10,37 @@
 
 | Attribute | Value |
 |-----------|-------|
-| Phase | Capture + derived committed; showcase UI (U9–U12) blocked on mockup approval |
-| Stack | Next 16 App Router + Supabase (own project, pending GS-001) + Vercel Pro; hand-rolled d3-shape+motion charts; CI in the `pnpm build` chain |
-| Repo | `~/developer/groundswell`, branch `feat/scaffold-and-mockups`, 9 commits, unpushed, tree clean |
-| Plan | `docs/plans/2026-06-10-001-feat-groundswell-traction-showcase-plan.md` |
-| Open issues | `ISSUES.md` — GS-008 mockup gate (next), GS-001/002 (Josh), GS-003/007 |
+| Architecture | **Static-first** — GitHub Pages + Actions + JSON-in-repo. NO Supabase, NO Vercel, NO server. |
+| Stack | Next 16 (App Router, `output: 'export'`) · React 19 · TS strict · Tailwind v4 · next/font · hand-rolled d3-shape + motion charts |
+| Data | Daily GitHub Action → `data/<repo>.ndjson` (git = time-series log). Real: citegeist **576 dl / 10★ / 16 releases** (live-growing). Privates → gitignored `data/.local/`. |
+| Repo | `~/developer/groundswell`, branch `feat/scaffold-and-mockups`, unpushed, tree clean |
+| Live capture + deploy | Gated on **GS-001** (Josh): `GH_PAT` secret · enable Pages · merge to main |
+| Plan | `PLAN.md` (v2 static-first). Canonical mockup: `docs/mockups/2026-06-10-showcase-real.html` |
 
 ---
 
-## Built (all committed, build green)
+## Built (committed, build green)
 
-U1 scaffold (Next 16 + Supabase + Vercel + CI build chain, 3-layer server-only admin guard) · U2 schema/RLS (18/18 pgTAP on real PG; anon = revoked grant) · U3 GitHub client (19) · U4 capture cron + watchdog (34, mutation-tested) · U5 ranked mockups v1 + refined Rank-1 v2 · U7 backfill (30) · U8 derived metrics (35 vitest + 16 pgTAP on real PG).
+**Static-first build (2026-06-11):**
+- **U4′** capture — `scripts/capture.ts` (reuses U3 GitHub client) + `data/meta.json`; pure transforms (`src/lib/store/transform.ts`) tested; real citegeist seed.
+- **U8′** read bridge — `read.ts` (public-only loader) + `view.ts` (`buildShowcaseModel` + data-driven `buildReleaseChart`) over the unchanged pure `derive.ts`.
+- **U9** chart primitives — `AreaCurve` + `BarChart` (d3-shape + motion, behind a barrel) + portal tooltip; pure scales/geometry tested.
+- **U10** public showcase — design system ported verbatim to `globals.css`; `page.tsx` SSG from the model; sections + sr-only a11y table; every number real.
+- **GS-009** — removed the v1 Supabase/Vercel/Sentry layer (−7.7k LOC).
+- **U11′** — `output: 'export'` + `.github/workflows/{deploy,capture}.yml`.
+- **GS-010** — privacy guard test: committed `data/` = public repos only.
 
-## Sequencing left
+Carried from v1 (still used): U3 GitHub client, `derive.ts`, `runBounded`.
 
-**Mockup gate (Josh)** → U9 charts → U10 showcase → U11 curation + auth → U12 radar. Live capture needs GS-001 ops.
+## Next
+
+- **GS-001** (Josh, ~5 min, all on GitHub) — mint `GH_PAT` (Administration+Contents+Metadata:Read, scoped, 90-day) → repo secret · Settings → Pages → Source: GitHub Actions · (project page only) repo Actions var `NEXT_PUBLIC_BASE_PATH=/groundswell` · push + merge to main → `deploy.yml` publishes.
+- **U12** private radar — local-only "what's growing", deferred.
 
 ## Recent Sessions
 
-| # | Date | What | Skills |
-|---|------|------|--------|
-| 1 | 2026-06-10 | Brainstorm → plan (v2, 7-persona review) → memory | ce-brainstorm · ce-plan · ce-doc-review · learn |
-| 2 | 2026-06-10 | ce-work Phase A + derived: U1-U5,U7,U8 committed (9 commits, build green) via background subagents; Rank-1 mockup refined | ce-work · design-iterator · learn |
+| # | Date | What |
+|---|------|------|
+| 1 | 2026-06-10 | Brainstorm → plan (v2, 7-persona review) → memory |
+| 2 | 2026-06-10 | ce-work Phase A (v1 Supabase): U1–U5, U7, U8 committed |
+| 3 | 2026-06-11 | Shipping-next polish → mockup gate approved → **static-first pivot** → built U4′ · U8′ · U9 · U10 · GS-009 cleanup · U11′ export + workflows · GS-010 guard |
