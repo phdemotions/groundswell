@@ -89,12 +89,24 @@ async function main(): Promise<void> {
     process.exit(1)
   }
 
+  // Private repos need a token that can READ them (a local `gh auth token` or a
+  // fine-grained PAT). CI's built-in GITHUB_TOKEN can't read other private repos
+  // (it 404s), and their metrics would only go to gitignored data/.local anyway.
+  // So capture PRIVATE repos ONLY when explicitly opted in — the public CI capture
+  // skips them and succeeds; a local radar run sets CAPTURE_PRIVATE=1.
+  const includePrivate =
+    process.env.CAPTURE_PRIVATE === '1' || process.env.CAPTURE_PRIVATE === 'true'
+
   const client = new GitHubClient({ token })
   const meta = await readMeta()
   const capturedAt = new Date().toISOString()
 
   let failed = 0
   for (const repo of meta.repos) {
+    if (repo.visibility === 'private' && !includePrivate) {
+      console.log(`· ${repo.name} (private) → skipped (set CAPTURE_PRIVATE=1 to include)`)
+      continue
+    }
     try {
       const snap = await captureRepo(client, repo, capturedAt)
       console.log(

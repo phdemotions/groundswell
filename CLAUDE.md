@@ -185,7 +185,7 @@ groundswell/
 pnpm install
 pnpm dev            # localhost:3000 — reads data/*.ndjson (+ data/.local for radar)
 pnpm build          # CI chain + static export (next build, output: 'export')
-pnpm capture        # tsx scripts/capture.ts — local capture (GH_PAT or `gh auth token`)
+pnpm capture        # local capture, PUBLIC repos (CI default). CAPTURE_PRIVATE=1 + `gh auth token` adds private repos (local radar)
 pnpm test           # vitest (NODE_ENV=test)
 ```
 
