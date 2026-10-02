@@ -53,7 +53,7 @@ Load-bearing. U9/U10 and every later surface inherit them.
 - **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5.8 (strict),
   **static export** (`output: 'export'`) — no server at runtime.
 - **Styling:** Tailwind CSS v4 (`@import "tailwindcss" source(none)` + `@source "./src"`).
-  Design tokens land in `globals.css` (`@theme`) when U10 ports the approved mockup.
+  Design tokens live in `globals.css` as `:root` custom properties, ported from the approved mockup in U10.
 - **Store:** JSON in `data/` (NDJSON daily snapshots). **Git history is the
   time-series log.** No database.
 - **Capture:** daily **GitHub Action** → `scripts/capture.ts` (reuses the U3 GitHub
@@ -125,8 +125,8 @@ Hard-won; getting any of these wrong silently corrupts the curves.
 Any user-facing UI surface goes through a ranked HTML mockup + owner approval
 **before** implementation. The showcase mockup (**U5**) was approved 2026-06-10
 (`docs/mockups/2026-06-10-showcase-real.html`). Recruiter validation (**U6**) was
-waived by Josh ("assume recruiter thinks it's fine"). `src/app/page.tsx` is a
-deliberate placeholder until U10 ports the mockup to components.
+waived by Josh ("assume recruiter thinks it's fine"). U10 ported it: `src/app/page.tsx`
+renders `components/showcase/Showcase` from the captured JSON.
 
 ---
 
