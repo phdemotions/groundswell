@@ -11,3 +11,6 @@ allowBuilds:
   sharp: true
   simple-git-hooks: true
   unrs-resolver: true
+# Refuse a Node outside engines.node on install and on `pnpm run`; without this pnpm only warns.
+# Canon: ~/developer/docs/standards/platform-configs.md, rule 3.
+engineStrict: true
